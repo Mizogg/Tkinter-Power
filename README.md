@@ -2,4 +2,4 @@
 Bitcoin&amp;Crypto  Tkinter  GUI Hunter
 
 
-![image](https://user-images.githubusercontent.com/88630056/195188583-bfc42d49-ef42-4198-82d5-f3a9516c1a01.png)
+![image](https://user-images.githubusercontent.com/88630056/195188746-fea98052-cade-4fc3-809a-35f189773f0c.png)
