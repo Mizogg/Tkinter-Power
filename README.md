@@ -23,7 +23,16 @@ max_p = 115792089237316195423570985008687907852837564279074904382605163141518161
 startdec = 1
 ```
 
-![image](https://user-images.githubusercontent.com/88630056/195188746-fea98052-cade-4fc3-809a-35f189773f0c.png)
+![image](https://user-images.githubusercontent.com/88630056/196295280-3c00727d-05b9-4bf0-a334-b12c4a9089b2.png)
+
+![image](https://user-images.githubusercontent.com/88630056/196295350-a4716e90-bfe5-4fdb-aaca-de8c3a1db953.png)
+
+![image](https://user-images.githubusercontent.com/88630056/196295395-ae779b93-c32b-4884-9180-2c04514203d0.png)
+
+![image](https://user-images.githubusercontent.com/88630056/196295437-a229bd76-35b1-4d5e-98d5-1e7a228036e7.png)
+
+![image](https://user-images.githubusercontent.com/88630056/196295505-3b147d01-01f6-4c9b-a3db-71c9c7e520f7.png)
+
 
 
 When the program starts on sequence it will create a startdec.txt this starting from 1. This will save the number of where it stops. If then the random and the sequence will start from that number in the save txt file. If you want to start from 1 again you have to delete that file.
