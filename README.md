@@ -22,8 +22,12 @@ max_p = 115792089237316195423570985008687907852837564279074904382605163141518161
 ```
 startdec = 1
 ```
-# BitcoinHunter.exe With Bitcoin Hunter game
+# BitcoinHunter.py With Bitcoin Hunter game
 ![image](https://user-images.githubusercontent.com/88630056/196685906-618ea23d-d6c7-44a0-8c10-de081e33948e.png)
+
+
+# 16x16.py
+![image](https://user-images.githubusercontent.com/88630056/197380397-72d88a40-3789-4037-b6f1-bde4d6927df3.png)
 
 ![image](https://user-images.githubusercontent.com/88630056/196916583-931c1048-ddff-46cd-81ce-1c4c5f6f5421.png)
 
