@@ -1,11 +1,12 @@
+import random
 import numpy as np
-import time
-from tkinter import * 
+from tkinter import *
 from tkinter import ttk
 import tkinter.messagebox
 import tkinter.scrolledtext as tkst
 from tkinter.ttk import *
-import secp256k1 as ice
+from bit import *
+from bit.format import bytes_to_wif
 from bloomfilter import BloomFilter, ScalableBloomFilter, SizeGrowthRate
 
 with open('puzzle.bf', "rb") as fp:
@@ -17,7 +18,7 @@ with open('puzzle.bf', "rb") as fp:
 def popwin(WINTEXT):
     global popwin
     popwin = Toplevel()
-    popwin.title("BitcoinHunter.py")
+    popwin.title("BitcoinHunter 16x16.py")
     popwin.iconbitmap('images/miz.ico')
     popwin.geometry("700x250")
     widgetwin = tkinter.Label(popwin, compound='top')
@@ -27,7 +28,6 @@ def popwin(WINTEXT):
     widgetwin.place(x=380,y=180)
     widgetwin2 = tkinter.Label(popwin, compound='top')
     widgetwin2.miz_image_png = tkinter.PhotoImage(file='images/congratulations.gif')
-    # widgetwin2['text'] = "congratulations"
     widgetwin2['image'] = widgetwin2.miz_image_png
     widgetwin2.place(x=10,y=165)
     editArea = tkst.ScrolledText(master = popwin, wrap = tkinter.WORD, width  = 70, height = 6,font=("Arial",12))
@@ -38,57 +38,125 @@ def popwin(WINTEXT):
 
     button1 = Button(frame, text=" Close ", command=popwin.destroy)
     button1.grid(row=0, column=1)
+        
+def btc_hunter(self):
+    arr = np.array(self.grid)
+    binstring = ''.join(''.join(map(str, l)) for l in arr)
+    self.binstringvar = tkinter.StringVar()
+    self.binstringvar.set(binstring)
+    self.binstring_update.config(textvariable = self.binstringvar, relief='flat')
+    self.binstring_update.update()
     
-# Window Class
-class App(Tk):
-    def __init__(self, *args,**kwargs):
-        Tk.__init__(self,*args,**kwargs)
-        self.n = 16 
-        self.a = np.zeros((self.n, self.n))
-        self.b = np.zeros((self.n, self.n))
-        self.cells = {}
-        self.running = True
-        #Content Frame
-        self.title('Hunter of Bitcoin')
-        self.iconbitmap('images/miz.ico')
-        self.content = ttk.Frame(self, padding=(5))
-        self.content.grid(row =0, column=0, sticky=(N,S,E,W))
-        self.content1 = ttk.Frame(self, padding=(5))
-        self.content1.grid(row =0, column=1)
-        #Cells Frame
-        self.canvas = Canvas(self.content, width=500, height=500,
-                borderwidth=0, highlightthickness=0,
-                background='white')
-        self.canvas1 = Canvas(self.content1, width=600, height=500,
+    dec = int(binstring, 2)
+    decstringvar = tkinter.StringVar()
+    decstringvar.set(dec)
+    self.decstring_update.config(textvariable = decstringvar, relief='flat')
+    self.decstring_update.update()
+    
+    HEX = hex(int(binstring, 2))
+    hexstringvar = tkinter.StringVar()
+    hexstringvar.set(HEX)
+    self.hexstring_update.config(textvariable = hexstringvar, relief='flat')
+    self.hexstring_update.update()
+
+    key = Key.from_int(dec)
+    wifu = bytes_to_wif(key.to_bytes(), compressed=False) # Uncompressed WIF
+    wifc = bytes_to_wif(key.to_bytes(), compressed=True) # Compressed WIF
+    key1 = Key(wifu)
+    caddr = key.address
+    uaddr = key1.address
+    
+    caddrstringvar = tkinter.StringVar()
+    caddrstringvar.set(caddr)
+    self.caddrstring_update.config(textvariable = caddrstringvar, relief='flat')
+    self.caddrstring_update.update()
+    
+    wifcstringvar = tkinter.StringVar()
+    wifcstringvar.set(wifc)
+    self.wifcstring_update.config(textvariable = wifcstringvar, relief='flat')
+    self.wifcstring_update.update()
+    
+    uaddrstringvar = tkinter.StringVar()
+    uaddrstringvar.set(uaddr)
+    self.uaddrstring_update.config(textvariable = uaddrstringvar, relief='flat')
+    self.uaddrstring_update.update()
+    
+    wifustringvar = tkinter.StringVar()
+    wifustringvar.set(wifu)
+    self.wifustring_update.config(textvariable = wifustringvar, relief='flat')
+    self.wifustring_update.update()
+    if caddr in bloom_filterbtc:
+        WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc} \nBinary Data: \n {binstring}")
+        with open("found.txt", "a", encoding="utf-8") as f:
+            f.write(WINTEXT)
+        popwin(WINTEXT)
+    if uaddr in bloom_filterbtc:
+        WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu} \nBinary Data: \n {binstring}")
+        with open("found.txt", "a", encoding="utf-8") as f:
+            f.write(WINTEXT)
+        popwin(WINTEXT)
+        
+class Hunter:
+    def __init__(self):
+        self.is_active = False
+        self.in_tick = False
+
+        self.cols = 16
+        self.rows = 16
+        self.size = 30
+
+        self.grid = []
+        self.initial_state = []
+        self.tick_count = 0
+        self.off_cells = 0
+        self.on_cells = 0
+        self.tick_delay = 0 #in ms
+        self.seed_ratio = 33
+
+    def init_tk(self):
+        self.root = Tk()
+        self.root.title('BitcoinHunter 16x16.py')
+        self.root.iconbitmap('images/miz.ico')
+        self.canvas = Canvas(self.root)
+        self.canvas.grid(row=0, columnspan=6)
+        self.canvas.bind('<Button-1>', self.canvas_click)
+        
+        self.content1 = Frame(self.root, padding=(5))
+        self.content1.grid(row =0, column=6)
+        
+        self.lbl_edt_seed_ratio = Label(self.root, text='Seed Ratio % start On ')
+        self.lbl_edt_seed_ratio.grid(row=1, column=0, sticky=E)
+
+        self.edt_seed_ratio = Entry(self.root, width=4)
+        self.edt_seed_ratio.insert(0, str(self.seed_ratio))
+        self.edt_seed_ratio.grid(row=1, column=1, sticky=W)
+
+        self.btn_seed = Button(self.root, text='Seed', command=self.seed)
+        self.btn_seed.grid(row=1, column=2)
+
+        self.btn_clear = Button(self.root, text='Clear', command=self.clear_canvas)
+        self.btn_clear.grid(row=1, column=3)
+
+        self.btn_start_stop = Button(self.root, text='Start', command=self.start_stop)
+        self.btn_start_stop.grid(row=1, column=4)
+
+        self.btn_tick = Button(self.root, text='>>', command=self.tick)
+        self.btn_tick.grid(row=1, column=5)
+
+        self.lbl_tickno = Label(self.root, text='Total Scanned :0')
+        self.lbl_tickno.grid(row=1, column=6)
+
+        self.on_cell_color = 'purple'
+        self.off_cell_color = '#FFFFFF'
+        self.grid_color = '#808080'
+        
+        self.canvas1 = Canvas(self.content1, width=600, height=600,
                 borderwidth=1, highlightthickness=1,
                 background='white')
-        self.canvas.grid(row=0, column=0, sticky=(N,S,E,W))
-        self.canvas.bind('<Configure>', self.draw)
-        self.controls = ttk.Frame(self.content, padding=(5))
-        self.controls.grid(row=1, column=0, sticky=(N,S,E,W))
-        self.start = ttk.Button(self.controls, text='Start',
-                command=self.start_hunter)
-        self.start.grid(row=0, column=0, sticky=(W))
-        self.stop = ttk.Button(self.controls, text='Stop',
-                command=self.stop_hunter)
-        self.stop.grid(row=0, column=2, sticky=(E))
-        self.random = ttk.Button(self.controls, text='random',
-                command=self.randgen)
-        self.random.grid(row=0, column=1, sticky=(E,W))
-        #Size Configuration
-        self.columnconfigure(0, weight=1)
-        self.rowconfigure(0, weight=1)
-        self.content.columnconfigure(0, weight=1)
-        self.content.rowconfigure(0, weight=4)
-        self.content.rowconfigure(1, weight=1)
-        self.controls.columnconfigure(0,weight=1)
-        self.controls.columnconfigure(1,weight=1)
-        self.controls.columnconfigure(2,weight=1)
-        self.controls.rowconfigure(0,weight=1)
-        
+                
         hunter_win = tkinter.Frame(self.content1, bg = '#A1A1A1')
-        hunter_win.pack(fill='both', expand='yes')
-        
+        hunter_win.pack(fill='both', expand='yes')  
+
         Binary_data = "Binary Data"
         Binarylable = tkinter.Label(hunter_win, text=Binary_data, font=("Arial",12),bg='#A1A1A1',fg="Black")
         Binarylable.pack(padx=10, pady=5)
@@ -130,289 +198,128 @@ class App(Tk):
         wifulable.pack(padx=10, pady=5)
         self.wifustring_update = tkinter.Entry(hunter_win, state='readonly', bg="#F0F0F0",font=("Arial",10),text="", width=80, fg="Purple")
         self.wifustring_update.pack(padx=10, pady=2)
+
+    def init_grid(self):
+        self.grid = [[0 for x in range(self.cols)] for y in range(self.rows)]
+
+    def start(self):
+        self.init_grid()
+        self.init_tk()
+        self.clear_canvas()
+        self.root.mainloop()
         
-        p2sh_data = "Address P2SH"
-        p2shlable = tkinter.Label(hunter_win, text=p2sh_data, font=("Arial",12),bg='#A1A1A1',fg="Black")
-        p2shlable.pack(padx=10, pady=5)
-        self.p2shstring_update = tkinter.Entry(hunter_win, state='readonly', bg="#F0F0F0",font=("Arial",10),text="", width=80, fg="Purple")
-        self.p2shstring_update.pack(padx=10, pady=2)
-        
-        bc1_data = "Address P2WPKH"
-        bc1lable = tkinter.Label(hunter_win, text=bc1_data, font=("Arial",12),bg='#A1A1A1',fg="Black")
-        bc1lable.pack(padx=10, pady=5)
-        self.bech32string_update = tkinter.Entry(hunter_win, state='readonly', bg="#F0F0F0",font=("Arial",10),text="", width=80, fg="Purple")
-        self.bech32string_update.pack(padx=10, pady=2)
-            
-    def draw(self, event=None):
-        self.canvas.delete('rect')
-        width = int(self.canvas.winfo_width()/self.n)
-        height = int(self.canvas.winfo_height()/self.n)
-        for col in range(self.n):
-            for row in range(self.n):
-                x1 = col*width
-                x2 = x1 + width
-                y1 = row*height
-                y2 = y1 + height
-                if self.a[row][col]==0:
-                    cell = self.canvas.create_rectangle(x1, y1, x2, y2,
-                            fill='white', tags='cell')
+    def canvas_click(self, e):
+        cl = int(e.x // self.size)
+        rw = int(e.y // self.size)
+        if self.is_active is False:
+            if self.grid[rw][cl]:
+                self.grid[rw][cl] = 0
+                color = self.off_cell_color
+                self.on_cells -= 1
+                self.off_cells += 1
+            else:
+                self.grid[rw][cl] = 1
+                color = self.on_cell_color
+                self.on_cells += 1
+                self.off_cells -= 1
+            self.put_rect(rw, cl, color)
+            self.update_labels()
+            if self.on_cells:
+                self.btn_start_stop.config(state=NORMAL)
+                self.btn_tick.config(state=NORMAL)
+            else:
+                self.btn_start_stop.config(state=DISABLED)
+                self.btn_tick.config(state=DISABLED)
+        btc_hunter(self)
+
+    def put_rect(self, rw, cl, color):
+        x1 = cl * self.size
+        y1 = rw * self.size
+        x2 = x1 + self.size
+        y2 = y1 + self.size
+        self.canvas.create_rectangle(x1, y1, x2, y2, fill=color, outline=self.grid_color, tags='cell')
+
+    def update_canvas(self):
+        self.off_cells = 0
+        self.on_cells = 0
+        self.canvas.delete('all')
+        for rw in range(self.rows):
+            for cl in range(self.cols):
+                if self.grid[rw][cl]:
+                    color = self.on_cell_color
+                    self.on_cells += 1
                 else:
-                    cell = self.canvas.create_rectangle(x1, y1, x2, y2,
-                            fill='Purple', tags='cell')
-                self.cells[row, col] = cell
-                self.canvas.tag_bind(cell, '<Button-1>', lambda event,
-                        row=row, col=col: self.click(row, col))
+                    color = self.off_cell_color
+                    self.off_cells += 1
+                self.put_rect(rw, cl, color)
+        self.update_labels()
 
-    def click(self, row, col):
-        #Changes the value and color of a cell when is clicked
-        cell = self.cells[row,col]
-        color = 'white' if self.a[row, col] == 1. else 'Purple'
-        if self.a[row,col] == 0:
-            self.a[row, col]=1
+    def clear_canvas(self):
+        self.size = 30
+        self.seed_ratio = int(self.edt_seed_ratio.get())
+        self.tick_count = 0
+        self.init_grid()
+        self.canvas.config(width=self.cols*self.size, height=self.rows*self.size)
+        self.update_canvas()
+        self.btn_start_stop.config(state=DISABLED)
+        self.btn_tick.config(state=DISABLED)
+
+    def seed(self):
+        self.clear_canvas()
+        for rw in range(self.rows):
+            for cl in range(self.cols):
+                seed_chance = random.randint(1, 100)
+                if seed_chance <= self.seed_ratio:
+                    self.grid[rw][cl] = 1
+                else:
+                    self.grid[rw][cl] = 0
+        btc_hunter(self)
+        self.update_canvas()
+        self.btn_start_stop.config(state=NORMAL)
+        self.btn_tick.config(state=NORMAL)
+
+    def start_stop(self):
+        if self.is_active:
+            self.is_active = False
+            self.btn_start_stop.config(text='Start')
+            self.btn_tick.config(state=NORMAL)
+            self.btn_seed.config(state=NORMAL)
+            self.btn_clear.config(state=NORMAL)
         else:
-            self.a[row,col]=0
-        self.canvas.itemconfigure(cell, fill=color)
-        arr = np.array(self.a)
-        ts = arr.tobytes()
-        binstring = np.frombuffer(ts)
-        binstring = np.round(binstring.transpose()).astype(int)
-        binstring = ''.join(map(str, binstring))
-        binstringvar = tkinter.StringVar()
-        binstringvar.set(binstring)
-        self.binstring_update.config(textvariable = binstringvar, relief='flat')
-        self.binstring_update.update()
-        dec = int(binstring, 2)
-        decstringvar = tkinter.StringVar()
-        decstringvar.set(dec)
-        self.decstring_update.config(textvariable = decstringvar, relief='flat')
-        self.decstring_update.update()
-        HEX = hex(int(binstring, 2))
-        hexstringvar = tkinter.StringVar()
-        hexstringvar.set(HEX)
-        self.hexstring_update.config(textvariable = hexstringvar, relief='flat')
-        self.hexstring_update.update()
-        caddr = ice.privatekey_to_address(0, True, dec)
-        caddrstringvar = tkinter.StringVar()
-        caddrstringvar.set(caddr)
-        self.caddrstring_update.config(textvariable = caddrstringvar, relief='flat')
-        self.caddrstring_update.update()
-        uaddr = ice.privatekey_to_address(0, False, dec)
-        uaddrstringvar = tkinter.StringVar()
-        uaddrstringvar.set(uaddr)
-        self.uaddrstring_update.config(textvariable = uaddrstringvar, relief='flat')
-        self.uaddrstring_update.update()
-        wifc = ice.btc_pvk_to_wif(HEX)
-        wifcstringvar = tkinter.StringVar()
-        wifcstringvar.set(wifc)
-        self.wifcstring_update.config(textvariable = wifcstringvar, relief='flat')
-        self.wifcstring_update.update()
-        wifu = ice.btc_pvk_to_wif(HEX, False)
-        wifustringvar = tkinter.StringVar()
-        wifustringvar.set(wifu)
-        self.wifustring_update.config(textvariable = wifustringvar, relief='flat')
-        self.wifustring_update.update()
-        p2sh = ice.privatekey_to_address(1, True, dec)
-        p2shstringvar = tkinter.StringVar()
-        p2shstringvar.set(p2sh)
-        self.p2shstring_update.config(textvariable = p2shstringvar, relief='flat')
-        self.p2shstring_update.update()
-        bech32 = ice.privatekey_to_address(2, True, dec)
-        bech32stringvar = tkinter.StringVar()
-        bech32stringvar.set(bech32)
-        self.bech32string_update.config(textvariable = bech32stringvar, relief='flat')
-        self.bech32string_update.update()
-        if caddr in bloom_filterbtc:
-            WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc} \nBinary Data: \n {binstring}")
-            with open("found.txt", "a", encoding="utf-8") as f:
-                f.write(WINTEXT)
-            popwin(WINTEXT)
-        if uaddr in bloom_filterbtc:
-            WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu} \nBinary Data: \n {binstring}")
-            with open("found.txt", "a", encoding="utf-8") as f:
-                f.write(WINTEXT)
-            popwin(WINTEXT)
-        if p2sh in bloom_filterbtc:
-            WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address p2sh: {p2sh} \nBinary Data: \n {binstring}")
-            with open("found.txt", "a", encoding="utf-8") as f:
-                f.write(WINTEXT)
-            popwin(WINTEXT)
-        if bech32 in bloom_filterbtc:
-            WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Bc1: {bech32} \nBinary Data: \n {binstring}")
-            with open("found.txt", "a", encoding="utf-8") as f:
-                f.write(WINTEXT)
-            popwin(WINTEXT)
+            self.tick_delay = 0
+            self.is_active = True
+            self.root.after(self.tick_delay, self.tick)
+            self.btn_start_stop.config(text='Stop')
+            self.btn_tick.config(state=DISABLED)
+            self.btn_seed.config(state=DISABLED)
+            self.btn_clear.config(state=DISABLED)
 
-
-    def hunter(self):
-        self.draw()
-        n = self.n
-        if self.running: 
-            cellstogen = np.random.randint(0, int(n*n/2))
-            self.b = np.zeros((n, n))
-            arr = np.array(self.a)
-            ts = arr.tobytes()
-            binstring = np.frombuffer(ts)
-            binstring = np.round(binstring.transpose()).astype(int)
-            binstring = ''.join(map(str, binstring))
-            binstringvar = tkinter.StringVar()
-            binstringvar.set(binstring)
-            self.binstring_update.config(textvariable = binstringvar, relief='flat')
-            self.binstring_update.update()
-            dec = int(binstring, 2)
-            decstringvar = tkinter.StringVar()
-            decstringvar.set(dec)
-            self.decstring_update.config(textvariable = decstringvar, relief='flat')
-            self.decstring_update.update()
-            HEX = hex(int(binstring, 2))
-            hexstringvar = tkinter.StringVar()
-            hexstringvar.set(HEX)
-            self.hexstring_update.config(textvariable = hexstringvar, relief='flat')
-            self.hexstring_update.update()
-            caddr = ice.privatekey_to_address(0, True, dec)
-            caddrstringvar = tkinter.StringVar()
-            caddrstringvar.set(caddr)
-            self.caddrstring_update.config(textvariable = caddrstringvar, relief='flat')
-            self.caddrstring_update.update()
-            uaddr = ice.privatekey_to_address(0, False, dec)
-            uaddrstringvar = tkinter.StringVar()
-            uaddrstringvar.set(uaddr)
-            self.uaddrstring_update.config(textvariable = uaddrstringvar, relief='flat')
-            self.uaddrstring_update.update()
-            wifc = ice.btc_pvk_to_wif(HEX)
-            wifcstringvar = tkinter.StringVar()
-            wifcstringvar.set(wifc)
-            self.wifcstring_update.config(textvariable = wifcstringvar, relief='flat')
-            self.wifcstring_update.update()
-            wifu = ice.btc_pvk_to_wif(HEX, False)
-            wifustringvar = tkinter.StringVar()
-            wifustringvar.set(wifu)
-            self.wifustring_update.config(textvariable = wifustringvar, relief='flat')
-            self.wifustring_update.update()
-            p2sh = ice.privatekey_to_address(1, True, dec)
-            p2shstringvar = tkinter.StringVar()
-            p2shstringvar.set(p2sh)
-            self.p2shstring_update.config(textvariable = p2shstringvar, relief='flat')
-            self.p2shstring_update.update()
-            bech32 = ice.privatekey_to_address(2, True, dec)
-            bech32stringvar = tkinter.StringVar()
-            bech32stringvar.set(bech32)
-            self.bech32string_update.config(textvariable = bech32stringvar, relief='flat')
-            self.bech32string_update.update()
-            if caddr in bloom_filterbtc:
-                WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc} \nBinary Data: \n {binstring}")
-                with open("found.txt", "a", encoding="utf-8") as f:
-                    f.write(WINTEXT)
-                popwin(WINTEXT)
-            if uaddr in bloom_filterbtc:
-                WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu} \nBinary Data: \n {binstring}")
-                with open("found.txt", "a", encoding="utf-8") as f:
-                    f.write(WINTEXT)
-                popwin(WINTEXT)
-            if p2sh in bloom_filterbtc:
-                WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address p2sh: {p2sh} \nBinary Data: \n {binstring}")
-                with open("found.txt", "a", encoding="utf-8") as f:
-                    f.write(WINTEXT)
-                popwin(WINTEXT)
-            if bech32 in bloom_filterbtc:
-                WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Bc1: {bech32} \nBinary Data: \n {binstring}")
-                with open("found.txt", "a", encoding="utf-8") as f:
-                    f.write(WINTEXT)
-                popwin(WINTEXT)
-            for cell in range(cellstogen):
-                i = np.random.randint(0, n-1)
-                j = np.random.randint(0, n-1)
-                self.b[i,j] = 1
-            self.a = self.b
-            self.after(1, self.hunter)
-
-    def start_hunter(self):
-        self.running = True
-        self.hunter()
-
-    def stop_hunter(self):
-        self.running = False
-
-    def randgen(self):
-        n = self.n
-        cellstogen = np.random.randint(0, int(n*n/2))
-        self.b = np.zeros((n, n))
-        for cell in range(cellstogen):
-            i = np.random.randint(0, n-1)
-            j = np.random.randint(0, n-1)
-            self.b[i,j] = 1
-        self.a = self.b
-        self.draw()
-        arr = np.array(self.a)
-        ts = arr.tobytes()
-        binstring = np.frombuffer(ts)
-        binstring = np.round(binstring.transpose()).astype(int)
-        binstring = ''.join(map(str, binstring))
-        binstringvar = tkinter.StringVar()
-        binstringvar.set(binstring)
-        self.binstring_update.config(textvariable = binstringvar, relief='flat')
-        self.binstring_update.update()
-        dec = int(binstring, 2)
-        decstringvar = tkinter.StringVar()
-        decstringvar.set(dec)
-        self.decstring_update.config(textvariable = decstringvar, relief='flat')
-        self.decstring_update.update()
-        HEX = hex(int(binstring, 2))
-        hexstringvar = tkinter.StringVar()
-        hexstringvar.set(HEX)
-        self.hexstring_update.config(textvariable = hexstringvar, relief='flat')
-        self.hexstring_update.update()
-        caddr = ice.privatekey_to_address(0, True, dec)
-        caddrstringvar = tkinter.StringVar()
-        caddrstringvar.set(caddr)
-        self.caddrstring_update.config(textvariable = caddrstringvar, relief='flat')
-        self.caddrstring_update.update()
-        uaddr = ice.privatekey_to_address(0, False, dec)
-        uaddrstringvar = tkinter.StringVar()
-        uaddrstringvar.set(uaddr)
-        self.uaddrstring_update.config(textvariable = uaddrstringvar, relief='flat')
-        self.uaddrstring_update.update()
-        wifc = ice.btc_pvk_to_wif(HEX)
-        wifcstringvar = tkinter.StringVar()
-        wifcstringvar.set(wifc)
-        self.wifcstring_update.config(textvariable = wifcstringvar, relief='flat')
-        self.wifcstring_update.update()
-        wifu = ice.btc_pvk_to_wif(HEX, False)
-        wifustringvar = tkinter.StringVar()
-        wifustringvar.set(wifu)
-        self.wifustring_update.config(textvariable = wifustringvar, relief='flat')
-        self.wifustring_update.update()
-        p2sh = ice.privatekey_to_address(1, True, dec)
-        p2shstringvar = tkinter.StringVar()
-        p2shstringvar.set(p2sh)
-        self.p2shstring_update.config(textvariable = p2shstringvar, relief='flat')
-        self.p2shstring_update.update()
-        bech32 = ice.privatekey_to_address(2, True, dec)
-        bech32stringvar = tkinter.StringVar()
-        bech32stringvar.set(bech32)
-        self.bech32string_update.config(textvariable = bech32stringvar, relief='flat')
-        self.bech32string_update.update()
-        if caddr in bloom_filterbtc:
-            WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc} \nBinary Data: \n {binstring}")
-            with open("found.txt", "a", encoding="utf-8") as f:
-                f.write(WINTEXT)
-            popwin(WINTEXT)
-        if uaddr in bloom_filterbtc:
-            WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu} \nBinary Data: \n {binstring}")
-            with open("found.txt", "a", encoding="utf-8") as f:
-                f.write(WINTEXT)
-            popwin(WINTEXT)
-        if p2sh in bloom_filterbtc:
-            WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address p2sh: {p2sh} \nBinary Data: \n {binstring}")
-            with open("found.txt", "a", encoding="utf-8") as f:
-                f.write(WINTEXT)
-            popwin(WINTEXT)
-        if bech32 in bloom_filterbtc:
-            WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Bc1: {bech32} \nBinary Data: \n {binstring}")
-            with open("found.txt", "a", encoding="utf-8") as f:
-                f.write(WINTEXT)
-            popwin(WINTEXT)
+    def update_labels(self):
+        self.lbl_tickno.config(text='Total Scanned : %d' %(self.tick_count))
+        
+    def tick(self):
+        if self.in_tick:
+            return
+        self.in_tick = True
+        self.on_cells = 0
+        self.off_cells = 0
+        self.canvas.delete('all')
+        for rw in range(self.rows):
+            for cl in range(self.cols):
+                seed_chance = random.randint(1, 100)
+                if seed_chance <= self.seed_ratio:
+                    self.grid[rw][cl] = 1
+                else:
+                    self.grid[rw][cl] = 0
+        self.update_canvas()
+        btc_hunter(self)
+        self.in_tick = False
+        self.tick_count += 1
+        self.update_labels()
+        if self.is_active:
+            self.root.after(self.tick_delay, self.tick)
 
 
 if __name__ == '__main__':
-    hunter_btc = App()
-    hunter_btc.mainloop()
+    hunter = Hunter()
+    hunter.start()
