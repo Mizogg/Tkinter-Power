@@ -46,9 +46,8 @@ except ImportError:
 # ============================================================================= 
 # Bitcoin Price chart
 # =============================================================================
-def price(symbol, comparison_symbols=['GBP'], exchange=''):
-    url = 'https://min-api.cryptocompare.com/data/price?fsym={}&tsyms={}'\
-            .format(symbol.upper(), ','.join(comparison_symbols).upper())
+def price(exchange=''):
+    url = 'https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=GBP,USD,EUR'
     page = requests.get(url)
     data = page.json()
     return data
@@ -1129,7 +1128,7 @@ class MainWindow():
         about1.pack(fill='both', expand='yes')
         pricelable_data = f"Todays Bitcoin Price £ {price('BTC')} "
         pricelable = tkinter.Label(master = about1, text=pricelable_data, font=("Arial",14),bg="#F0F0F0",fg="purple")
-        pricelable.place(x=220, y=530)
+        pricelable.place(x=90, y=530)
         editArea = tkst.ScrolledText(master = about1, wrap = tkinter.WORD, width  = 40, height = 16,font=("Arial",12))
         editArea.pack(padx=10, pady=90, fill=tkinter.BOTH, expand=True)
         editArea.insert(tkinter.INSERT, information)
@@ -1140,7 +1139,7 @@ class MainWindow():
         credits1.pack(fill='both', expand='yes')
         pricelable_data = f"Todays Bitcoin Price £ {price('BTC')} "
         pricelable = tkinter.Label(master = credits1, text=pricelable_data, font=("Arial",14),bg="#F0F0F0",fg="purple")
-        pricelable.place(x=220, y=530)
+        pricelable.place(x=90, y=530)
         editArea = tkst.ScrolledText(master = credits1, wrap = tkinter.WORD, width  = 40, height = 16,font=("Arial",12))
         editArea.pack(padx=10, pady=90, fill=tkinter.BOTH, expand=True)
         editArea.insert(tkinter.INSERT, creditsinfo)
@@ -1228,7 +1227,7 @@ class MainWindow():
         self.l8 = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",23),text="0")
         pricelable_data = f"Todays Bitcoin Price £ {price('BTC')} "
         pricelable = tkinter.Label(self.bitcoin_frame, text=pricelable_data, font=("Arial",14),bg="#F0F0F0",fg="purple")
-        pricelable.place(x=220, y=530)
+        pricelable.place(x=90, y=530)
         # =============================================================================
         self.l1.place(x=100,y=70)
         self.t1.place(x=80,y=110)
