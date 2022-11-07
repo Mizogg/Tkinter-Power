@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 06.11.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 07.11.2022 https://t.me/CryptoCrackersUK
 from tkinter import * 
 from tkinter import ttk
 import tkinter.messagebox
 import tkinter.scrolledtext as tkst
 from tkinter.ttk import *
 from time import strftime, sleep
-from pathlib import Path
 import secp256k1 as ice
 import random
 import webbrowser
@@ -478,6 +477,7 @@ creditsinfo = ('''
             New Conversion BITS to HEX DEC Binary
             Plus and Minus Ranges in conversion
         Updates to brain and Words auto start input
+    Input start and stop Decimal main Bitcoin Generator
                     
                         Version = 1.6
                 16x16Hunter speed improvements
@@ -601,17 +601,8 @@ with open('files/words.txt', newline='', encoding='utf-8') as f:
 max_p = 115792089237316195423570985008687907852837564279074904382605163141518161494336
 totaladd = total = found =0
 run = run1 = run2 = True
-# SAVE and Sart
-filenamestart = 'startdec.txt'
-path = Path(filenamestart)
 
-if path.is_file():
-    with open(filenamestart, newline='', encoding='utf-8') as f:
-        contents = f.readline()
-        startdec = int(contents)
-
-else:
-    startdec = 1
+startdec = 1
 stopdec = max_p
 
 class MainWindow():
@@ -714,7 +705,20 @@ class MainWindow():
                     result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address bech32: {bech32}')
                 WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address bech32: {bech32}")
                 popwin(WINTEXT)
-            self.l2.config(text = f'\n DEC Key: {dec}\n Bits {length} \n\n HEX Key: {HEX} \n\n BTC Address Compressed: {caddr} \n WIF Compressed: {wifc} \n\n BTC Address Uncompressed: {uaddr} \n WIF Compressed: {wifu} \n\n BTC Address p2sh: {p2sh} \n\n BTC Address bech32: {bech32}')
+            scantext = f'''
+            *** DEC Key ***
+ {dec}
+        Bits {length}
+        *** HEY Key ***
+    {HEX}
+ BTC Address Compressed: {caddr}
+        WIF Compressed: {wifc}
+ BTC Address Uncompressed: {uaddr}
+        WIF Compressed: {wifu}
+ BTC Address p2sh: {p2sh}
+ BTC Address bech32: {bech32}
+====================================='''
+            self.l2.config(text = scantext)
             self.l2.update()
             total+=1
             totaladd+=4
@@ -722,18 +726,20 @@ class MainWindow():
             self.l6.config(text = f'{totaladd}')
 
         def Random_Bruteforce_Speed():
+            startdec = self._txt_inputstart.get().strip().replace(" ", "")
+            stopdec = self._txt_inputstop.get().strip().replace(" ", "")
             while run:
-                dec =int(RandomInteger(startdec, stopdec))
+                dec =int(RandomInteger(int(startdec), int(stopdec)))
                 brute_results(dec)
 
         def Sequential_Bruteforce_speed():
+            startdec = self._txt_inputstart.get().strip().replace(" ", "")
+            stopdec = self._txt_inputstop.get().strip().replace(" ", "")
+            mag = self._txt_inputmag.get().strip().replace(" ", "")
             while run:
-                global startdec
-                START = startdec
-                STOP = stopdec
-                dec = int(START)
+                dec = int(startdec)
                 brute_results(dec)
-                startdec = startdec +1
+                startdec = int(startdec) + int(mag)
         # ============================================================================= 
         #  Brain Program Main
         # =============================================================================
@@ -1073,7 +1079,7 @@ class MainWindow():
         self._window.menubar = Menu(self._window)
         self._window.filemenu = Menu(self._window.menubar, tearoff=0)
         # self._window.filemenu.add_command(label="New", command=donothing)
-        # self._window.filemenu.add_command(label="Edit Start DEC", command=donothing)
+        # self._window.filemenu.add_command(label="Edit", command=donothing)
         # self._window.filemenu.add_command(label="Save", command=donothing)
         self._window.filemenu.add_separator()
         self._window.filemenu.add_command(label="Exit", command=self._window.quit)
@@ -1108,9 +1114,10 @@ class MainWindow():
         # ============================================================================= 
         #  Main Tab
         # ============================================================================= 
-        label = tkinter.Label(self.main_frame, text=" Type:", font=MainWindow.C_FONT)
-        label.place(x=5,y=100)
+        label = tkinter.Label(self.main_frame, text=" Type \n Data \n Here ", font=MainWindow.C_FONT)
+        label.place(x=5,y=70)
         self._txt_input = tkinter.Entry(self.main_frame, width=56, font=MainWindow.C_FONT)
+        self._txt_input.insert(0, '1FeexV6bAHb8ybZjqQMjJrcCrHGW9sb6uF')
         self._txt_input.place(x=80,y=100)
         self._txt_input.focus()
         self._btc_bin = tkinter.Button(self.main_frame, text="Bin", font=MainWindow.C_FONT, command=self.evt_btc_bin)
@@ -1123,25 +1130,20 @@ class MainWindow():
         self._btc_hex.place(x=390,y=45)
         self._rd_dec = tkinter.Button(self.main_frame, text="Random", font=MainWindow.C_FONT, command=self.evt_rd_dec)
         self._rd_dec.place(x=15,y=150)
-        
-        
+
         self._jump_input = tkinter.Entry(self.main_frame, width=7, font=MainWindow.C_FONT)
         self._jump_input.insert(0, '1')
         self._jump_input.place(x=200,y=150)
         self._jump_input.focus()
-        
         self._jump1_dec = tkinter.Button(self.main_frame, text=" + ", font=MainWindow.C_FONT, command=self.evt_jump1_dec)
         self._jump1_dec.place(x=300,y=150)
-        
         self._jump_dec = tkinter.Button(self.main_frame, text=" - ", font=MainWindow.C_FONT, command=self.evt_jump_rm1_dec)
         self._jump_dec.place(x=140,y=150)
-        
-        
-        
-        labeladdr = tkinter.Label(self.main_frame, text=" When Searching for adress it will generate a random private key this will not match the address", font=("Arial", 8))
-        labeladdr.place(x=350,y=130)
+
+        labeladdr = tkinter.Label(self.main_frame, text=" When Searching for adress \n it will generate \n a random private key \n this will not match the address ", font=("Arial", 8))
+        labeladdr.place(x=670,y=135)
         self._bt_ip = tkinter.Button(self.main_frame, text="Address", font=MainWindow.C_FONT, command=self.evt_btc_add)
-        self._bt_ip.place(x=600,y=150)
+        self._bt_ip.place(x=570,y=150)
         label = tkinter.Label(self.main_frame, text="  Binary ", font=MainWindow.C_FONT)
         label.place(x=5,y=200)
         self._stringvar_bin = tkinter.StringVar()
@@ -1280,20 +1282,42 @@ class MainWindow():
         # =============================================================================
         # bitcoin_frame
         # =============================================================================
-        self.l1 = tkinter.Label(self.bitcoin_frame, text="Random Wallet Generator ",font=("Arial",20),bg="#F0F0F0",fg="Black")
+        self.l1 = tkinter.Label(self.bitcoin_frame, text="Bitcoin Wallet Generator ",font=("Arial",20),bg="#F0F0F0",fg="Black")
         self.l1.place(x=100,y=70)
         self.t1 = tkinter.Label(self.bitcoin_frame, text=addr_count_print,font=("Arial",14),bg="#F0F0F0",fg="Black")
         self.t1.place(x=80,y=110)
+        
+        labelstart = tkinter.Label(self.bitcoin_frame, text="Start \nDec ", font=("Arial",13))
+        labelstart.place(x=5,y=140)
+        self._txt_inputstart = tkinter.Entry(self.bitcoin_frame, width=50, font=MainWindow.C_FONT)
+        self._txt_inputstart.insert(0, '1')
+        self._txt_inputstart.place(x=65,y=145)
+        self._txt_inputstart.focus()
+        
+        labelstop = tkinter.Label(self.bitcoin_frame, text="Stop \nDec ", font=("Arial",13))
+        labelstop.place(x=5,y= 180)
+        self._txt_inputstop = tkinter.Entry(self.bitcoin_frame, width=50, font=MainWindow.C_FONT)
+        self._txt_inputstop.insert(0, max_p)
+        self._txt_inputstop.place(x=65,y=185)
+        self._txt_inputstop.focus()
+        
+        labelmag = tkinter.Label(self.bitcoin_frame, text="Jump \nMag ", font=("Arial",13))
+        labelmag.place(x=640,y= 220)
+        self._txt_inputmag = tkinter.Entry(self.bitcoin_frame, width=8, font=MainWindow.C_FONT)
+        self._txt_inputmag.insert(0, '1')
+        self._txt_inputmag.place(x=690,y=225)
+        self._txt_inputmag.focus()
+        
         self.r1 = tkinter.Button(self.bitcoin_frame, text="Generate Random Wallets ",font=("Arial",15),bg="#A3E4D7",command=Random_Bruteforce_Speed)
-        self.r1.place(x=60,y=140)
+        self.r1.place(x=60,y=220)
         self.s1 = tkinter.Button(self.bitcoin_frame, text="Generate Sequential Wallets ",font=("Arial",15),bg="#A3E4D7",command=Sequential_Bruteforce_speed)
-        self.s1.place(x=360,y=140)
+        self.s1.place(x=360,y=220)
         self.start= tkinter.Button(self.bitcoin_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= start)
         self.start.place(x=690,y=180)
         self.stop= tkinter.Button(self.bitcoin_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= stop)
         self.stop.place(x=750,y=180)
         self.l2 = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",12),text="")
-        self.l2.place(x=30,y=220)
+        self.l2.place(x=50,y=270)
         self.l3 = tkinter.Label(self.bitcoin_frame, text="Total Private Keys : ",font=("Arial",12),bg="#F0F0F0",fg="Black")
         self.l3.place(x=240,y=5)
         self.l4 = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",12),text="")
