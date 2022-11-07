@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 04.11.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 06.11.2022 https://t.me/CryptoCrackersUK
 from tkinter import * 
 from tkinter import ttk
 import tkinter.messagebox
@@ -89,18 +89,44 @@ def bin2dec(value):
 
 def bin2hex(value):
     return hex(int(value, 2))
+    
+def bin2bit(value):
+    length = len(bin(int(value, 2)))
+    length -=2
+    return length
+    
+def bit2dec(value):
+    return 2**(int(value))
+
+def bit2hex(value):
+    value = 2**(int(value))
+    return hex(value)
+    
+def bit2bin(value):
+    value = 2**(int(value))
+    return bin(value)
 
 def dec2bin(value):
     return bin(int(value))
 
 def dec2hex(value):
     return hex(int(value))
+    
+def dec2bit(value):
+    length = len(bin(int(value)))
+    length -=2
+    return length
 
 def hex2bin(value):
     return bin(int(value, 16))
 
 def hex2dec(value):
     return int(value, 16)
+    
+def hex2bit(value):
+    length = len(bin(int(value, 16)))
+    length -=2
+    return length
 
 def addr2int(value):
     source_code = get_balance(value)
@@ -324,6 +350,7 @@ def bip39seed_to_private_key3(bip39seed, n=1):
     return private_key
 
 def random_word_results(self, mnem):
+    global total, totaladd, found
     seed = mnem_to_seed(mnem)
     pvk = bip39seed_to_private_key(seed, derivation_total_path_to_check)
     pvk2 = bip39seed_to_private_key2(seed, derivation_total_path_to_check)
@@ -398,6 +425,17 @@ Hexadecimal Private Key : {HEX3}
     self.word_update1.config(textvariable = wordvartext, relief='flat')
     self.word_update1.update()
     self.word_update.update()
+    if int(txs) > 0 or int(txs2) > 0 or int(txs3) > 0:
+        found+=1
+        self.l888.config(text = f'{found}')
+        WINTEXT = f'\n Mnemonic : {mnem} \n\n {wordvartext1}'
+        with open('found.txt', 'a', encoding='utf-8') as f:
+            f.write(WINTEXT)
+    total+=1
+    totaladd+=1
+    self.l444.config(text = f'{total}')
+    self.l666.config(text = f'{totaladd}')
+    
 # ============================================================================= 
 
 
@@ -436,10 +474,15 @@ creditsinfo = ('''
             Look for Bitcoin with tkinter and python in GUI.
 
                     Made By Mizogg.co.uk
+                        Version = 1.7
+            New Conversion BITS to HEX DEC Binary
+            Plus and Minus Ranges in conversion
+        Updates to brain and Words auto start input
+                    
                         Version = 1.6
-                    16x16Hunter speed improvements
-                Other Fixes and code reduced in size
-                    removed Puzzle Tab and block game
+                16x16Hunter speed improvements
+            Other Fixes and code reduced in size
+                removed Puzzle Tab and block game
                     
                         Version = 1.5
                     16x16Hunter added Offline
@@ -640,7 +683,7 @@ class MainWindow():
             length = len(bin(dec))
             length -=2
             if caddr in bloom_filterbtc:
-                self.l2.config(text = f' WINNER WINNER Check found.txt \n Instance: Random_Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc}')
+                self.l2.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc}')
                 found+=1
                 self.l8.config(text = f'{found}')
                 with open('found.txt', 'a') as result:
@@ -648,7 +691,7 @@ class MainWindow():
                 WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc}")
                 popwin(WINTEXT)
             if uaddr in bloom_filterbtc:
-                self.l2.config(text = f' WINNER WINNER Check found.txt \n Instance: Random_Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu}')
+                self.l2.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu}')
                 found+=1
                 self.l8.config(text = f'{found}')
                 with open('found.txt', 'a') as result:
@@ -656,7 +699,7 @@ class MainWindow():
                 WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu}")
                 popwin(WINTEXT)
             if p2sh in bloom_filterbtc:
-                self.l2.config(text = f' WINNER WINNER Check found.txt \n Instance: Random_Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address p2sh: {p2sh}')
+                self.l2.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address p2sh: {p2sh}')
                 found+=1
                 self.l8.config(text = f'{found}')
                 with open('found.txt', 'a') as result:
@@ -664,11 +707,11 @@ class MainWindow():
                 WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address p2sh: {p2sh}")
                 popwin(WINTEXT)
             if bech32 in bloom_filterbtc:
-                self.l2.config(text = f' WINNER WINNER Check found.txt \n Instance: Random_Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address bech32: {bech32}')
+                self.l2.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address bech32: {bech32}')
                 found+=1
                 self.l8.config(text = f'{found}')
                 with open('found.txt', 'a') as result:
-                    result.write(f'\n Instance: Random_Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address bech32: {bech32}')
+                    result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address bech32: {bech32}')
                 WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address bech32: {bech32}")
                 popwin(WINTEXT)
             self.l2.config(text = f'\n DEC Key: {dec}\n Bits {length} \n\n HEX Key: {HEX} \n\n BTC Address Compressed: {caddr} \n WIF Compressed: {wifc} \n\n BTC Address Uncompressed: {uaddr} \n WIF Compressed: {wifu} \n\n BTC Address p2sh: {p2sh} \n\n BTC Address bech32: {bech32}')
@@ -1067,41 +1110,65 @@ class MainWindow():
         # ============================================================================= 
         label = tkinter.Label(self.main_frame, text=" Type:", font=MainWindow.C_FONT)
         label.place(x=5,y=100)
-        self._txt_input = tkinter.Entry(self.main_frame, width=46, font=MainWindow.C_FONT)
+        self._txt_input = tkinter.Entry(self.main_frame, width=56, font=MainWindow.C_FONT)
         self._txt_input.place(x=80,y=100)
         self._txt_input.focus()
-        self._bt_bin = tkinter.Button(self.main_frame, text="Bin", font=MainWindow.C_FONT, command=self.evt_bt_bin)
-        self._bt_bin.place(x=645,y=100)
-        self._bt_dec = tkinter.Button(self.main_frame, text="Dec", font=MainWindow.C_FONT, command=self.evt_bt_dec)
-        self._bt_dec.place(x=715,y=100)
-        self._bt_hex = tkinter.Button(self.main_frame, text="Hex", font=MainWindow.C_FONT, command=self.evt_bt_hex)
-        self._bt_hex.place(x=785,y=100)
+        self._btc_bin = tkinter.Button(self.main_frame, text="Bin", font=MainWindow.C_FONT, command=self.evt_btc_bin)
+        self._btc_bin.place(x=270,y=45)
+        self._btc_dec = tkinter.Button(self.main_frame, text="Dec", font=MainWindow.C_FONT, command=self.evt_btc_dec)
+        self._btc_dec.place(x=330,y=45)
+        self._btc_bit = tkinter.Button(self.main_frame, text="Bits", font=MainWindow.C_FONT, command=self.evt_btc_bit)
+        self._btc_bit.place(x=450,y=45)
+        self._btc_hex = tkinter.Button(self.main_frame, text="Hex", font=MainWindow.C_FONT, command=self.evt_btc_hex)
+        self._btc_hex.place(x=390,y=45)
         self._rd_dec = tkinter.Button(self.main_frame, text="Random", font=MainWindow.C_FONT, command=self.evt_rd_dec)
         self._rd_dec.place(x=15,y=150)
-        labeladdr = tkinter.Label(self.main_frame, text=" When Searching for adress it will generate a random private key this will not match the address", font=("Arial", 10))
-        labeladdr.place(x=150,y=150)
-        self._bt_ip = tkinter.Button(self.main_frame, text="Address", font=MainWindow.C_FONT, command=self.evt_bt_ip)
-        self._bt_ip.place(x=715,y=150)
+        
+        
+        self._jump_input = tkinter.Entry(self.main_frame, width=7, font=MainWindow.C_FONT)
+        self._jump_input.insert(0, '1')
+        self._jump_input.place(x=200,y=150)
+        self._jump_input.focus()
+        
+        self._jump1_dec = tkinter.Button(self.main_frame, text=" + ", font=MainWindow.C_FONT, command=self.evt_jump1_dec)
+        self._jump1_dec.place(x=300,y=150)
+        
+        self._jump_dec = tkinter.Button(self.main_frame, text=" - ", font=MainWindow.C_FONT, command=self.evt_jump_rm1_dec)
+        self._jump_dec.place(x=140,y=150)
+        
+        
+        
+        labeladdr = tkinter.Label(self.main_frame, text=" When Searching for adress it will generate a random private key this will not match the address", font=("Arial", 8))
+        labeladdr.place(x=350,y=130)
+        self._bt_ip = tkinter.Button(self.main_frame, text="Address", font=MainWindow.C_FONT, command=self.evt_btc_add)
+        self._bt_ip.place(x=600,y=150)
         label = tkinter.Label(self.main_frame, text="  Binary ", font=MainWindow.C_FONT)
         label.place(x=5,y=200)
         self._stringvar_bin = tkinter.StringVar()
-        txt_output = tkinter.Entry(self.main_frame, textvariable=self._stringvar_bin, width=56, font=MainWindow.C_FONT)
-        txt_output.place(x=130,y=200)
+        txt_outputbin = tkinter.Entry(self.main_frame, textvariable=self._stringvar_bin, width=56, font=MainWindow.C_FONT)
+        txt_outputbin.place(x=130,y=200)
+        
+        label = tkinter.Label(self.main_frame, text="  Bits ", font=MainWindow.C_FONT)
+        label.place(x=730,y=240)
+        self._stringvar_bit = tkinter.StringVar()
+        txt_outputbit = tkinter.Entry(self.main_frame, textvariable=self._stringvar_bit, width=5, font=MainWindow.C_FONT)
+        txt_outputbit.place(x=745,y=280)
+        
         label = tkinter.Label(self.main_frame, text=" Decimal ", font=MainWindow.C_FONT)
         label.place(x=5,y=240)
         self._stringvar_dec = tkinter.StringVar()
-        txt_output = tkinter.Entry(self.main_frame, textvariable=self._stringvar_dec, width=56, font=MainWindow.C_FONT)
-        txt_output.place(x=130,y=240)
+        self.txt_outputdec = tkinter.Entry(self.main_frame, textvariable=self._stringvar_dec, width=50, font=MainWindow.C_FONT)
+        self.txt_outputdec.place(x=130,y=240)
         label = tkinter.Label(self.main_frame, text="Hexadecimal ", font=MainWindow.C_FONT)
         label.place(x=2,y=280)
         self._stringvar_hex = tkinter.StringVar()
-        txt_output = tkinter.Entry(self.main_frame, textvariable=self._stringvar_hex, width=48, font=MainWindow.C_FONT)
-        txt_output.place(x=150,y=280)
+        txt_outputhex = tkinter.Entry(self.main_frame, textvariable=self._stringvar_hex, width=48, font=MainWindow.C_FONT)
+        txt_outputhex.place(x=150,y=280)
         label1 = tkinter.Label(self.main_frame, text=" BTC Address ", font=MainWindow.C_FONT)
         label1.place(x=300,y=310)
         self._stringvar_addr = tkinter.StringVar()
-        txt_output = tkinter.Label(self.main_frame, textvariable=self._stringvar_addr, font=("Arial", 12))
-        txt_output.place(x=50,y=350)
+        txt_outputaddr = tkinter.Label(self.main_frame, textvariable=self._stringvar_addr, font=("Arial", 12))
+        txt_outputaddr.place(x=50,y=350)
         # =============================================================================
         #  Widgets 
         # =============================================================================
@@ -1118,7 +1185,7 @@ class MainWindow():
         self.widgetsnake.place(x=30,y=590)
         self.widgetHunter = tkinter.Button(self._window, text= "16x16 BTC Hunter ",font=("Arial",10),bg="gold", command= hunter16x16)
         self.widgetHunter.place(x=690,y=590)
-        lbl = tkinter.Label(self._window, font = ('calibri', 40, 'bold'), background = '#F0F0F0', foreground = 'purple')
+        lbl = tkinter.Label(self._window, font = ('calibri', 28, 'bold'), background = '#F0F0F0', foreground = 'purple')
         lbl.place(x=10,y=30)
         time()
         # =============================================================================
@@ -1153,10 +1220,10 @@ class MainWindow():
         self.l77 = tkinter.Label(self.brain_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple")
         self.l88 = tkinter.Label(self.brain_frame, bg="#F0F0F0",font=("Arial",23),text="0")
         # =============================================================================
-        self.l33.place(x=330,y=5)
-        self.l44.place(x=470,y=5)
-        self.l55.place(x=330,y=25)
-        self.l66.place(x=470,y=25)
+        self.l33.place(x=240,y=5)
+        self.l44.place(x=380,y=5)
+        self.l55.place(x=240,y=25)
+        self.l66.place(x=380,y=25)
         self.l77.place(x=680,y=70)
         self.l88.place(x=740,y=120)
         self.brain_update = tkinter.Entry(self.brain_frame, state='readonly', bg="#F0F0F0",font=("Arial",12),text="", width=80, fg="Red")
@@ -1170,10 +1237,11 @@ class MainWindow():
         labelbrain = tkinter.Label(self.brain_frame, text="Brain \nWords ", font=("Arial",13))
         labelbrain.place(x=5,y=75)
         self._txt_inputbrain = tkinter.Entry(self.brain_frame, width=36, font=MainWindow.C_FONT)
+        self._txt_inputbrain.insert(0, 'how much wood could a woodchuck chuck if a woodchuck could chuck wood')
         self._txt_inputbrain.place(x=80,y=80)
         self._txt_inputbrain.focus()
-        self._bt_bin = tkinter.Button(self.brain_frame, text="Enter", font=MainWindow.C_FONT, command=self.Random_brain_single)
-        self._bt_bin.place(x=545,y=75)
+        self._btc_bin = tkinter.Button(self.brain_frame, text="Enter", font=MainWindow.C_FONT, command=self.Random_brain_single)
+        self._btc_bin.place(x=545,y=75)
         self.titleb = tkinter.Label(self.brain_frame, text="Brain Wallet Words ",font=("Arial",16),bg="#F0F0F0",fg="Black")
         self.titleb.place(x=380,y=270)
         self.title1 = tkinter.Label(self.brain_frame, text="Random Brain Wallet Generator Online Pick Ammount of Words to Generate",font=("Arial",12),bg="#F0F0F0",fg="Black")
@@ -1213,50 +1281,48 @@ class MainWindow():
         # bitcoin_frame
         # =============================================================================
         self.l1 = tkinter.Label(self.bitcoin_frame, text="Random Wallet Generator ",font=("Arial",20),bg="#F0F0F0",fg="Black")
+        self.l1.place(x=100,y=70)
         self.t1 = tkinter.Label(self.bitcoin_frame, text=addr_count_print,font=("Arial",14),bg="#F0F0F0",fg="Black")
+        self.t1.place(x=80,y=110)
         self.r1 = tkinter.Button(self.bitcoin_frame, text="Generate Random Wallets ",font=("Arial",15),bg="#A3E4D7",command=Random_Bruteforce_Speed)
+        self.r1.place(x=60,y=140)
         self.s1 = tkinter.Button(self.bitcoin_frame, text="Generate Sequential Wallets ",font=("Arial",15),bg="#A3E4D7",command=Sequential_Bruteforce_speed)
+        self.s1.place(x=360,y=140)
         self.start= tkinter.Button(self.bitcoin_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= start)
+        self.start.place(x=690,y=180)
         self.stop= tkinter.Button(self.bitcoin_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= stop)
+        self.stop.place(x=750,y=180)
         self.l2 = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",12),text="")
+        self.l2.place(x=30,y=220)
         self.l3 = tkinter.Label(self.bitcoin_frame, text="Total Private Keys : ",font=("Arial",12),bg="#F0F0F0",fg="Black")
+        self.l3.place(x=240,y=5)
         self.l4 = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",12),text="")
+        self.l4.place(x=380,y=5)
         self.l5 = tkinter.Label(self.bitcoin_frame, text="Total Addresses   : ",font=("Arial",12),bg="#F0F0F0",fg="Black")
+        self.l5.place(x=240,y=25)
         self.l6 = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",12),text="")
+        self.l6.place(x=380,y=25)
         self.l7 = tkinter.Label(self.bitcoin_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple")
+        self.l7.place(x=680,y=70)
         self.l8 = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",23),text="0")
+        self.l8.place(x=740,y=120)
         pricelable_data = f"Todays Bitcoin Price £ {price('BTC')} "
         pricelable = tkinter.Label(self.bitcoin_frame, text=pricelable_data, font=("Arial",14),bg="#F0F0F0",fg="purple")
         pricelable.place(x=90, y=530)
         # =============================================================================
-        self.l1.place(x=100,y=70)
-        self.t1.place(x=80,y=110)
-        self.r1.place(x=60,y=140)
-        self.s1.place(x=360,y=140)
-        self.start.place(x=690,y=180)
-        self.stop.place(x=750,y=180)
-        self.l2.place(x=30,y=220)
-        self.l3.place(x=300,y=5)
-        self.l4.place(x=440,y=5)
-        self.l5.place(x=300,y=25)
-        self.l6.place(x=440,y=25)
-        self.l7.place(x=680,y=70)
-        self.l8.place(x=740,y=120)
-        # =============================================================================
         # word_frame
         # =============================================================================
         self.l333 = tkinter.Label(self.word_frame, text="Total Private Keys : ",font=("Arial",12),bg="#F0F0F0",fg="Black")
+        self.l333.place(x=240,y=5)
         self.l444 = tkinter.Label(self.word_frame, bg="#F0F0F0",font=("Arial",12),text="")
+        self.l444.place(x=380,y=5)
         self.l555 = tkinter.Label(self.word_frame, text="Total Addresses   : ",font=("Arial",12),bg="#F0F0F0",fg="Black")
+        self.l555.place(x=240,y=25)
         self.l666 = tkinter.Label(self.word_frame, bg="#F0F0F0",font=("Arial",12),text="")
+        self.l666.place(x=380,y=25)
         self.l777 = tkinter.Label(self.word_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple")
-        self.l888 = tkinter.Label(self.word_frame, bg="#F0F0F0",font=("Arial",23),text="0")
-        # =============================================================================
-        self.l333.place(x=330,y=5)
-        self.l444.place(x=470,y=5)
-        self.l555.place(x=330,y=25)
-        self.l666.place(x=470,y=25)
         self.l777.place(x=680,y=70)
+        self.l888 = tkinter.Label(self.word_frame, bg="#F0F0F0",font=("Arial",23),text="0")
         self.l888.place(x=740,y=120)
         self.word_update = tkinter.Entry(self.word_frame, state='readonly', bg="#F0F0F0",font=("Arial",12),text="", width=80,fg="Red")
         self.word_update.place(x=30,y=280)
@@ -1269,6 +1335,7 @@ class MainWindow():
         labelword = tkinter.Label(self.word_frame, text="Mnemonic", font=("Arial",13))
         labelword.place(x=5,y=75)
         self._txt_inputword = tkinter.Entry(self.word_frame, width=36, font=MainWindow.C_FONT)
+        self._txt_inputword.insert(0, 'witch collapse practice feed shame open despair creek road again ice least')
         self._txt_inputword.place(x=90,y=80)
         self._txt_inputword.focus()
         self._word_bin = tkinter.Button(self.word_frame, text="Enter", font=MainWindow.C_FONT, command=self.Random_word_single)
@@ -1330,7 +1397,7 @@ class MainWindow():
         widget['image'] = widget.miz_image_png
         widget.place(x=220,y=180)
         # Create a Label Text
-        label = Label(pop, text='Welcome to BitHunter...... \n\n Made By Mizogg.co.uk \n\n Version 1.5 04/11/22')
+        label = Label(pop, text='Welcome to BitHunter...... \n\n Made By Mizogg.co.uk \n\n Version 1.7 07/11/22')
         label.pack(pady=10)
         Label(pop, text= "This window will get closed after 3 seconds...", font=('Helvetica 8 bold')).pack(pady=10)
         # Add a Frame
@@ -1347,7 +1414,40 @@ class MainWindow():
    
     def Random_brain_single(self):
         passphrase = self._txt_inputbrain.get().strip()
-        brain_results_online(passphrase)
+        global total, totaladd, found
+        wallet = BrainWallet()
+        private_key, caddr = wallet.generate_address_from_passphrase(passphrase)
+        source_code = get_balance(caddr)
+        received_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
+        receivedid = source_code.xpath(received_id)
+        totalReceived = str(receivedid[0].text_content())
+        sent_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[2]/td[2]'
+        sentid = source_code.xpath(sent_id)
+        totalSent = str(sentid[0].text_content())
+        balance_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[3]/td[2]'
+        balanceid = source_code.xpath(balance_id)
+        balance = str(balanceid[0].text_content())
+        txs_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
+        txsid = source_code.xpath(txs_id)
+        txs = str(txsid[0].text_content())
+        brainvar = tkinter.StringVar()
+        brainvar.set(passphrase)
+        brainvartext = tkinter.StringVar()
+        brainvartext1 = (f'\n Private Key In HEX : \n\n {private_key} \n\n Bitcoin Adress : {caddr} \n Balance  [{balance}] \n TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]')
+        brainvartext.set(brainvartext1)
+        self.brain_update.config(textvariable = brainvar, relief='flat')
+        self.brain_update1.config(textvariable = brainvartext, relief='flat')
+        if int(txs) > 0 :
+            found+=1
+            self.l88.config(text = f'{found}')
+            with open("found.txt", "a", encoding="utf-8") as f:
+                f.write(f'\n BrainWallet: {passphrase} \n Private Key In HEX : {private_key} \n Bitcoin Adress : {caddr} \n Balance  [{balance}] TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}] \n')
+        self.brain_update.update()
+        self.brain_update1.update()
+        total+=1
+        totaladd+=1
+        self.l44.config(text = f'{total}')
+        self.l66.config(text = f'{totaladd}')
         
     def Random_word_single(self):
         mnem = self._txt_inputword.get()
@@ -1359,24 +1459,38 @@ class MainWindow():
         mnem = create_valid_mnemonics(strength=int(rnds))
         random_word_results(self, mnem)
     
-    def evt_bt_bin(self):
+    def evt_btc_bin(self):
         try:
             bin_value = self._txt_input.get().strip().replace(" ", "")
             dec_value = bin2dec(bin_value)
             hex_value = bin2hex(bin_value)
+            bit_value = bin2bit(bin_value)
             btc_value = int2addr(dec_value)
-            self._set_values(bin_value, dec_value, hex_value, btc_value)
+            self._set_values(bin_value, dec_value, hex_value, bit_value, btc_value)
         except Exception:
             tkinter.messagebox.showerror("Error", "Invalid Binary conversion")
             print(ex, file=sys.stderr)
+            
+    def evt_btc_bit(self):
+        try:
+            bit_value = self._txt_input.get().strip().replace(" ", "")
+            bin_value = bit2bin(bit_value)
+            dec_value = bit2dec(bit_value)
+            hex_value = bit2hex(bit_value)
+            btc_value = int2addr(dec_value)
+            self._set_values(bin_value, dec_value, hex_value, bit_value, btc_value)
+        except Exception:
+            tkinter.messagebox.showerror("Error", "Invalid Bits conversion")
+            print(ex, file=sys.stderr)
     
-    def evt_bt_dec(self):
+    def evt_btc_dec(self):
         try:
             dec_value = self._txt_input.get().strip().replace(" ", "")
             bin_value = dec2bin(dec_value)
             hex_value = dec2hex(dec_value)
+            bit_value = dec2bit(dec_value)
             btc_value = int2addr(dec_value)
-            self._set_values(bin_value, dec_value, hex_value, btc_value)
+            self._set_values(bin_value, dec_value, hex_value, bit_value, btc_value)
         except Exception as ex:
             tkinter.messagebox.showerror("Error", "Invalid Decimal conversion")
             print(ex, file=sys.stderr)
@@ -1386,45 +1500,71 @@ class MainWindow():
             dec_value = int(random.randrange(startdec, stopdec))
             bin_value = dec2bin(dec_value)
             hex_value = dec2hex(dec_value)
+            bit_value = dec2bit(dec_value)
             btc_value = int2addr(dec_value)
-            self._set_values(bin_value, dec_value, hex_value, btc_value)
+            self._set_values(bin_value, dec_value, hex_value, bit_value, btc_value)
         except Exception as ex:
             tkinter.messagebox.showerror("Error", "Invalid Decimal conversion")
             print(ex, file=sys.stderr)
-        
-    def evt_bt_hex(self):
+    
+    def evt_jump1_dec(self):
+        try:
+            dec_value = int(self.txt_outputdec.get().strip().replace(" ", ""))
+            dec_value += int(self._jump_input.get().strip().replace(" ", ""))
+            bin_value = dec2bin(dec_value)
+            hex_value = dec2hex(dec_value)
+            bit_value = dec2bit(dec_value)
+            btc_value = int2addr(dec_value)
+            self._set_values(bin_value, dec_value, hex_value, bit_value, btc_value)
+        except Exception as ex:
+            tkinter.messagebox.showerror("Error", "Invalid Decimal conversion")
+            print(ex, file=sys.stderr)
+            
+    def evt_jump_rm1_dec(self):
+        try:
+            dec_value = int(self.txt_outputdec.get().strip().replace(" ", ""))
+            dec_value -= int(self._jump_input.get().strip().replace(" ", ""))
+            bin_value = dec2bin(dec_value)
+            hex_value = dec2hex(dec_value)
+            bit_value = dec2bit(dec_value)
+            btc_value = int2addr(dec_value)
+            self._set_values(bin_value, dec_value, hex_value, bit_value, btc_value)
+        except Exception as ex:
+            tkinter.messagebox.showerror("Error", "Invalid Decimal conversion")
+            print(ex, file=sys.stderr) 
+            
+    def evt_btc_hex(self):
         try:
             hex_value = self._txt_input.get().strip().replace(" ", "")
             bin_value = hex2bin(hex_value)
             dec_value = hex2dec(hex_value)
+            bit_value = hex2bit(hex_value)
             btc_value = int2addr(dec_value)
-            self._set_values(bin_value, dec_value, hex_value, btc_value)
+            self._set_values(bin_value, dec_value, hex_value, bit_value, btc_value)
         except Exception as ex:
             tkinter.messagebox.showerror("Error", "Invalid Hexadecimal conversion")
             print(ex, file=sys.stderr)
     
-    def evt_bt_ip(self):
+    def evt_btc_add(self):
         try:
             btc_value = self._txt_input.get().strip().replace(" ", "")
-            dec_value = int(random.randrange(1, max_p))
+            dec_value = int(random.randrange(startdec, max_p))
             bin_value = dec2bin(dec_value)
             hex_value = dec2hex(dec_value)
+            bit_value = dec2bit(dec_value)
             btc_value = addr2int(btc_value)
-            self._set_values(bin_value, dec_value, hex_value, btc_value)
+            self._set_values(bin_value, dec_value, hex_value, bit_value, btc_value)
         except Exception as ex:
             tkinter.messagebox.showerror("Error", "Invalid Address conversion")
             print(ex, file=sys.stderr)
     
-    def _set_values(self, bin_value, dec_value, hex_value, btc_value):
+    def _set_values(self, bin_value, dec_value, hex_value, bit_value, btc_value):
         if not bin_value.startswith("0b"):
             bin_value = "0b" + bin_value
         if not hex_value.startswith("0x"):
             hex_value = "0x" + hex_value
         self._stringvar_bin.set(bin_value)
-        self._stringvar_dec.set(dec_value)
-        self._stringvar_hex.set(hex_value)
-        self._stringvar_addr.set(btc_value)
-        self._stringvar_bin.set(bin_value)
+        self._stringvar_bit.set(bit_value)
         self._stringvar_dec.set(dec_value)
         self._stringvar_hex.set(hex_value)
         self._stringvar_addr.set(btc_value)
