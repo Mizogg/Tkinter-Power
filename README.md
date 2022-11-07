@@ -1,5 +1,5 @@
 # Tkinter-Power
-Bitcoin&amp;Crypto  Tkinter  GUI Hunter NEW EthereumHunter.py
+Bitcoin&amp;Crypto  Tkinter  GUI Hunter
 
 MADE IN 🐍 PYTHON 🐍
 
