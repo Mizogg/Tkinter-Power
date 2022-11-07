@@ -3,47 +3,55 @@ Bitcoin&amp;Crypto  Tkinter  GUI Hunter NEW EthereumHunter.py
 
 MADE IN 🐍 PYTHON 🐍
 
+Microsoft C++ Build Tools required on Windows 
+https://visualstudio.microsoft.com/visual-cpp-build-tools/
+
+## download and install 
+
+![image](https://user-images.githubusercontent.com/88630056/200416296-e268a869-5353-432e-b572-82ef66400f97.png)
+
+
+
 Install Libaries
 ```
+pip install bit
+pip install numpy
+pip install base58
+pip install ecdsa
 pip install simplebloomfilter
 pip install bitarray==1.9.2
+pip install lxml
+pip install requests
 ```
 
 To Run
 ```
 python BitcoinHunter.py
 ```
+# Main Bitcoin Wallet Generator
+![image](https://user-images.githubusercontent.com/88630056/200414772-041f15bb-2bbb-4b86-9e09-a12922adc684.png)
 
-Edit Lines 46 and 60 for Start and Stop if require different range.
-```
-max_p = 115792089237316195423570985008687907852837564279074904382605163141518161494336
-```
+# Winner  Display
+![image](https://user-images.githubusercontent.com/88630056/200414842-a319d22e-6eca-4d97-bfd8-82183a7450de.png)
 
-```
-startdec = 1
-```
-# BitcoinHunter.py With Bitcoin Hunter game
-![image](https://user-images.githubusercontent.com/88630056/196685906-618ea23d-d6c7-44a0-8c10-de081e33948e.png)
+# Conversion Tools
+![image](https://user-images.githubusercontent.com/88630056/200415114-372d0afe-79c8-4115-b33d-b08c69a2ead8.png)
 
+# Brain Wallet Tools
+![image](https://user-images.githubusercontent.com/88630056/200415184-4a4a14fe-f501-48ce-83d0-9be41599ee13.png)
+
+
+# Mnemonic Wallet Tools
+![image](https://user-images.githubusercontent.com/88630056/200415271-29d7d26e-749d-4ee2-b57a-6f0d659ed7e7.png)
 
 # 16x16.py
-![image](https://user-images.githubusercontent.com/88630056/197380397-72d88a40-3789-4037-b6f1-bde4d6927df3.png)
+![image](https://user-images.githubusercontent.com/88630056/200414998-15fffecf-8cd3-4f11-aaf9-9e18587a398c.png)
 
-![image](https://user-images.githubusercontent.com/88630056/196916583-931c1048-ddff-46cd-81ce-1c4c5f6f5421.png)
+# About Bitcoin
+![image](https://user-images.githubusercontent.com/88630056/200415376-bc5d01ce-cf64-403b-aac8-da131a965eb6.png)
 
-![image](https://user-images.githubusercontent.com/88630056/196295280-3c00727d-05b9-4bf0-a334-b12c4a9089b2.png)
-
-![image](https://user-images.githubusercontent.com/88630056/196295350-a4716e90-bfe5-4fdb-aaca-de8c3a1db953.png)
-
-![image](https://user-images.githubusercontent.com/88630056/196295395-ae779b93-c32b-4884-9180-2c04514203d0.png)
-
-![image](https://user-images.githubusercontent.com/88630056/196295437-a229bd76-35b1-4d5e-98d5-1e7a228036e7.png)
-
-![image](https://user-images.githubusercontent.com/88630056/196295505-3b147d01-01f6-4c9b-a3db-71c9c7e520f7.png)
-
-
-
-When the program starts on sequence it will create a startdec.txt this starting from 1. This will save the number of where it stops. If then the random and the sequence will start from that number in the save txt file. If you want to start from 1 again you have to delete that file.
+# Some Fun 
+![image](https://user-images.githubusercontent.com/88630056/200417289-851ae053-d838-4e1b-807c-f3714cb9a677.png)
 
 ## More Information please join me on Telegram https://t.me/CryptoCrackersUK
 
