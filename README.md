@@ -41,7 +41,7 @@ To Run Bitcoin Hunter from cmd or powershell.
 python BitcoinHunter.py
 ```
 # Main Bitcoin Wallet Generator
-![image](https://user-images.githubusercontent.com/88630056/200414772-041f15bb-2bbb-4b86-9e09-a12922adc684.png)
+![image](https://user-images.githubusercontent.com/88630056/200659616-1c189fb9-83ab-42bc-8a44-119561d0d97a.png)
 
 # Winner  Display
 ![image](https://user-images.githubusercontent.com/88630056/200414842-a319d22e-6eca-4d97-bfd8-82183a7450de.png)
