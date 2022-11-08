@@ -23,8 +23,20 @@ pip install bitarray==1.9.2
 pip install lxml
 pip install requests
 ```
+Make a Bloomfilter database. Within the file folder is Cbloom.py file will convert any bitcoin text file to a bloomfile.
 
-To Run
+You will have to run the command below.
+
+Example 1
+```
+python Cbloom.py btc.txt btc.bf
+```
+Example 2
+```
+python Cbloom.py puzzle.txt puzzle.bf
+```
+
+To Run Bitcoin Hunter from cmd or powershell.
 ```
 python BitcoinHunter.py
 ```
