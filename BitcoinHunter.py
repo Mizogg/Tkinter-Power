@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 07.11.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 08.11.2022 https://t.me/CryptoCrackersUK
 from tkinter import * 
 from tkinter import ttk
 import tkinter.messagebox
@@ -265,7 +265,6 @@ def mnem_to_seed(words):
     seed = hashlib.pbkdf2_hmac("sha512",words.encode("utf-8"), salt.encode("utf-8"), 2048)
     return seed
 
-
 def bip39seed_to_bip32masternode(seed):
     h = hmac.new(b'Bitcoin seed', seed, hashlib.sha512).digest()
     key, chain_code = h[:32], h[32:]
@@ -300,7 +299,6 @@ def derive_bip32childkey(parent_key, parent_chain_code, i):
     if (i & 0x80000000) != 0:
         key = b'\x00' + parent_key
     else:
-#        key = bytes(PublicKey(parent_key))
         key = bit.Key.from_bytes(parent_key).public_key
     d = key + struct.pack('>L', i)
     while True:
@@ -317,7 +315,6 @@ def derive_bip32childkey(parent_key, parent_chain_code, i):
     
 def bip39seed_to_private_key(bip39seed, n=1):
     const = "m/44'/0'/0'/0/"
-#    str_derivation_path = const + str(n-1)
     str_derivation_path = "m/44'/0'/0'/0/0"
     derivation_path = parse_derivation_path(str_derivation_path)
     master_private_key, master_chain_code = bip39seed_to_bip32masternode(bip39seed)
@@ -328,7 +325,6 @@ def bip39seed_to_private_key(bip39seed, n=1):
     
 def bip39seed_to_private_key2(bip39seed, n=1):
     const = "m/49'/0'/0'/0/"
-#    str_derivation_path = const + str(n-1)
     str_derivation_path = "m/49'/0'/0'/0/0"
     derivation_path = parse_derivation_path2(str_derivation_path)
     master_private_key, master_chain_code = bip39seed_to_bip32masternode(bip39seed)
@@ -339,7 +335,6 @@ def bip39seed_to_private_key2(bip39seed, n=1):
 
 def bip39seed_to_private_key3(bip39seed, n=1):
     const = "m/84'/0'/0'/0/"
-#    str_derivation_path = const + str(n-1)
     str_derivation_path = "m/84'/0'/0'/0/0"
     derivation_path = parse_derivation_path2(str_derivation_path)
     master_private_key, master_chain_code = bip39seed_to_bip32masternode(bip39seed)
@@ -434,10 +429,7 @@ Hexadecimal Private Key : {HEX3}
     totaladd+=1
     self.l444.config(text = f'{total}')
     self.l666.config(text = f'{totaladd}')
-    
 # ============================================================================= 
-
-
 information = ('''
 https://en.wikipedia.org/wiki/Bitcoin
 
@@ -470,41 +462,41 @@ which is the smallest possible division, and named in homage to bitcoin's creato
 ''')
 
 creditsinfo = ('''
-            Look for Bitcoin with tkinter and python in GUI.
+                Look for Bitcoin with tkinter and python in GUI.
+                        Made By Mizogg.co.uk
+                            Version = 1.8
+                    New features added to Bitcoin Generator
 
-                    Made By Mizogg.co.uk
-                        Version = 1.7
-            New Conversion BITS to HEX DEC Binary
-            Plus and Minus Ranges in conversion
-        Updates to brain and Words auto start input
-    Input start and stop Decimal main Bitcoin Generator
-                    
-                        Version = 1.6
-                16x16Hunter speed improvements
-            Other Fixes and code reduced in size
-                removed Puzzle Tab and block game
-                    
-                        Version = 1.5
-                    16x16Hunter added Offline
-                    
-                        Version = 1.4
-                        Pop Up boxes
+                            Version = 1.7
+                New Conversion BITS to HEX DEC Binary
+                Plus and Minus Ranges in conversion
+                Updates to brain and Words auto start input
+            Input start and stop Decimal main Bitcoin Generator
         1 Brain word from list TODO make stop function on 1 Brain
 
-                        Version = 1.3
-                    Mnemonic added NEW Feature
-                Added Random Button To Convertor Tab
-        Added Start and Stop to Brain Wallet also Added Input screen
-                    Puzzle page Updated
+                            Version = 1.6
+                    16x16Hunter speed improvements
+                Other Fixes and code reduced in size
+                    removed Puzzle Tab and block game
+                        
+                            Version = 1.5
+                        16x16Hunter added Offline
 
-                        Version = 1.2
-                Added Brain Online and Oflline
-                    Added Conversion Tools
-                    Added Atomic Wallet API
+                            Version = 1.4
+                            Pop Up boxes
 
-            Big Thanks TO @Clintsoff and CryptoCrackers
+                            Version = 1.3
+                        Mnemonic added NEW Feature
+                    Added Random Button To Convertor Tab
+            Added Start and Stop to Brain Wallet also Added Input screen
+                        Puzzle page Updated
 
-        More Information and help please check links in menu help !!!
+                            Version = 1.2
+                    Added Brain Online and Oflline
+                        Added Conversion Tools
+                        Added Atomic Wallet API
+                Big Thanks TO @Clintsoff and CryptoCrackers
+            More Information and help please check links in menu help !!!
 ''')
 # =============================================================================
 # BrainWallet
@@ -527,12 +519,10 @@ class BrainWallet:
     @staticmethod
     def __private_to_public(private_key):
         private_key_bytes = codecs.decode(private_key, 'hex')
-        # Get ECDSA public key
         key = ecdsa.SigningKey.from_string(
             private_key_bytes, curve=ecdsa.SECP256k1).verifying_key
         key_bytes = key.to_string()
         key_hex = codecs.encode(key_bytes, 'hex')
-        # Add bitcoin byte
         bitcoin_byte = b'04'
         public_key = bitcoin_byte + key_hex
         return public_key
@@ -540,27 +530,22 @@ class BrainWallet:
     @staticmethod
     def __public_to_address(public_key):
         public_key_bytes = codecs.decode(public_key, 'hex')
-        # Run SHA256 for the public key
         sha256_bpk = hashlib.sha256(public_key_bytes)
         sha256_bpk_digest = sha256_bpk.digest()
-        # Run ripemd160 for the SHA256
         ripemd160_bpk = hashlib.new('ripemd160')
         ripemd160_bpk.update(sha256_bpk_digest)
         ripemd160_bpk_digest = ripemd160_bpk.digest()
         ripemd160_bpk_hex = codecs.encode(ripemd160_bpk_digest, 'hex')
-        # Add network byte
         network_byte = b'00'
         network_bitcoin_public_key = network_byte + ripemd160_bpk_hex
         network_bitcoin_public_key_bytes = codecs.decode(
             network_bitcoin_public_key, 'hex')
-        # Double SHA256 to get checksum
         sha256_nbpk = hashlib.sha256(network_bitcoin_public_key_bytes)
         sha256_nbpk_digest = sha256_nbpk.digest()
         sha256_2_nbpk = hashlib.sha256(sha256_nbpk_digest)
         sha256_2_nbpk_digest = sha256_2_nbpk.digest()
         sha256_2_hex = codecs.encode(sha256_2_nbpk_digest, 'hex')
         checksum = sha256_2_hex[:8]
-        # Concatenate public key and checksum to get the address
         address_hex = (network_bitcoin_public_key + checksum).decode('utf-8')
         wallet = BrainWallet.base58(address_hex)
         return wallet
@@ -569,17 +554,13 @@ class BrainWallet:
     def base58(address_hex):
         alphabet = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
         b58_string = ''
-        # Get the number of leading zeros and convert hex to decimal
         leading_zeros = len(address_hex) - len(address_hex.lstrip('0'))
-        # Convert hex to decimal
         address_int = int(address_hex, 16)
-        # Append digits to the start of string
         while address_int > 0:
             digit = address_int % 58
             digit_char = alphabet[digit]
             b58_string = digit_char + b58_string
             address_int //= 58
-        # Add '1' for each 2 leading zeros
         ones = leading_zeros // 2
         for one in range(ones):
             b58_string = '1' + b58_string
@@ -649,7 +630,6 @@ class MainWindow():
             widgetwin.place(x=380,y=180)
             widgetwin2 = tkinter.Label(popwin, compound='top')
             widgetwin2.miz_image_png = tkinter.PhotoImage(file='images/congratulations.gif')
-            # widgetwin2['text'] = "congratulations"
             widgetwin2['image'] = widgetwin2.miz_image_png
             widgetwin2.place(x=10,y=165)
             editArea = tkst.ScrolledText(master = popwin, wrap = tkinter.WORD, width  = 70, height = 6,font=("Arial",12))
@@ -738,8 +718,23 @@ class MainWindow():
             mag = self._txt_inputmag.get().strip().replace(" ", "")
             while run:
                 dec = int(startdec)
-                brute_results(dec)
-                startdec = int(startdec) + int(mag)
+                if dec == int(stopdec):
+                    stop()
+                else:
+                    brute_results(dec)
+                    startdec = int(startdec) + int(mag)
+        
+        def Sequential_Bruteforce_speed_back():
+            startdec = self._txt_inputstart.get().strip().replace(" ", "")
+            stopdec = self._txt_inputstop.get().strip().replace(" ", "")
+            mag = self._txt_inputmag.get().strip().replace(" ", "")
+            while run:
+                dec = int(stopdec)
+                if dec == int(startdec):
+                    stop()
+                else:
+                    brute_results(dec)
+                    stopdec = int(stopdec) - int(mag)
         # ============================================================================= 
         #  Brain Program Main
         # =============================================================================
@@ -780,13 +775,12 @@ class MainWindow():
             totaladd+=1
             self.l44.config(text = f'{total}')
             self.l66.config(text = f'{totaladd}')
-        
+
         def Random_brain_online():
             while run1:
                 passphrase = ' '.join(random.sample(mylist, random.randint(1,3)))
                 brain_results_online(passphrase)
-                
-                
+
         def Random_brain_online1():
             while run1:
                 passphrase = ' '.join(random.sample(mylist, random.randint(3,9)))
@@ -813,10 +807,9 @@ class MainWindow():
                 brain_results_online(passphrase)
         
         def Random_brain_online6():
-            while run1:
-                for i in range(0,len(mylist)):
-                    passphrase = mylist[i]
-                    brain_results_online(passphrase)
+            for i in range(0,len(mylist)):
+                passphrase = mylist[i]
+                brain_results_online(passphrase)
 
         def brain_results_offline(passphrase):
             global total, totaladd, found
@@ -842,8 +835,7 @@ class MainWindow():
             totaladd+=1
             self.l44.config(text = f'{total}')
             self.l66.config(text = f'{totaladd}')
-            
-            
+
         def Random_brain_offline():
             while run1:
                 passphrase = ' '.join(random.sample(mylist, random.randint(1,3)))
@@ -875,10 +867,9 @@ class MainWindow():
                 brain_results_offline(passphrase)
                 
         def Random_brain_offline6():
-            while run1:
-                for i in range(0,len(mylist)):
-                    passphrase = mylist[i]
-                    brain_results_offline(passphrase)
+            for i in range(0,len(mylist)):
+                passphrase = mylist[i]
+                brain_results_offline(passphrase)
         # ============================================================================= 
         #  Mnemonic Program Main
         # ============================================================================= 
@@ -1104,7 +1095,6 @@ class MainWindow():
         self.word_frame.pack(fill="both", expand=1)
         self.about_frame.pack(fill="both", expand=1)
         self.credits_frame.pack(fill="both", expand=1)
-        # Add our Tabs and Order of them
         self.my_notebook.add(self.bitcoin_frame, text="Bitcoin Hunting")
         self.my_notebook.add(self.main_frame, text="Conversion Tools ")
         self.my_notebook.add(self.brain_frame, text="Brain Hunting")
@@ -1130,7 +1120,6 @@ class MainWindow():
         self._btc_hex.place(x=390,y=45)
         self._rd_dec = tkinter.Button(self.main_frame, text="Random", font=MainWindow.C_FONT, command=self.evt_rd_dec)
         self._rd_dec.place(x=15,y=150)
-
         self._jump_input = tkinter.Entry(self.main_frame, width=7, font=MainWindow.C_FONT)
         self._jump_input.insert(0, '1')
         self._jump_input.place(x=200,y=150)
@@ -1139,7 +1128,6 @@ class MainWindow():
         self._jump1_dec.place(x=300,y=150)
         self._jump_dec = tkinter.Button(self.main_frame, text=" - ", font=MainWindow.C_FONT, command=self.evt_jump_rm1_dec)
         self._jump_dec.place(x=140,y=150)
-
         labeladdr = tkinter.Label(self.main_frame, text=" When Searching for adress \n it will generate \n a random private key \n this will not match the address ", font=("Arial", 8))
         labeladdr.place(x=670,y=135)
         self._bt_ip = tkinter.Button(self.main_frame, text="Address", font=MainWindow.C_FONT, command=self.evt_btc_add)
@@ -1149,13 +1137,11 @@ class MainWindow():
         self._stringvar_bin = tkinter.StringVar()
         txt_outputbin = tkinter.Entry(self.main_frame, textvariable=self._stringvar_bin, width=56, font=MainWindow.C_FONT)
         txt_outputbin.place(x=130,y=200)
-        
         label = tkinter.Label(self.main_frame, text="  Bits ", font=MainWindow.C_FONT)
         label.place(x=730,y=240)
         self._stringvar_bit = tkinter.StringVar()
         txt_outputbit = tkinter.Entry(self.main_frame, textvariable=self._stringvar_bit, width=5, font=MainWindow.C_FONT)
         txt_outputbit.place(x=745,y=280)
-        
         label = tkinter.Label(self.main_frame, text=" Decimal ", font=MainWindow.C_FONT)
         label.place(x=5,y=240)
         self._stringvar_dec = tkinter.StringVar()
@@ -1246,12 +1232,14 @@ class MainWindow():
         self._btc_bin.place(x=545,y=75)
         self.titleb = tkinter.Label(self.brain_frame, text="Brain Wallet Words ",font=("Arial",16),bg="#F0F0F0",fg="Black")
         self.titleb.place(x=380,y=270)
+        self.titleerror = tkinter.Label(self.brain_frame, text="!!! Error to be Fixed !!! \n 1 Word from list \n Not stopping  Error !!! ",font=("Arial",8),bg="#F0F0F0",fg="red")
+        self.titleerror.place(x=15,y=250)
         self.title1 = tkinter.Label(self.brain_frame, text="Random Brain Wallet Generator Online Pick Ammount of Words to Generate",font=("Arial",12),bg="#F0F0F0",fg="Black")
         self.title1.place(x=60,y=130)
         self.title2 = tkinter.Label(self.brain_frame, text="Random Brain Wallet Generator Offline Pick Ammount of Words to Generate",font=("Arial",12),bg="#F0F0F0",fg="Black")
         self.title2.place(x=60,y=130)
         # Create our  Brain Buttons
-        self.my_button = tkinter.Button(self.brain_frame, text= "1 Word ",font=("Arial",10),bg="#B6E1A4", command= Random_brain_online6)
+        self.my_button = tkinter.Button(self.brain_frame, text= "1 Word ",font=("Arial",10),bg="#ee6b6e", command= Random_brain_online6)
         self.my_button.place(x=10,y=160)
         self.my_button = tkinter.Button(self.brain_frame, text= "1-3 Words ",font=("Arial",10),bg="#A3E4A7", command= Random_brain_online)
         self.my_button.place(x=73,y=160)
@@ -1265,7 +1253,7 @@ class MainWindow():
         self.my_button.place(x=430,y=160)
         self.my_button = tkinter.Button(self.brain_frame, text= "21-24 Words ",font=("Arial",10),bg="#A3E4F7", command= Random_brain_online5)
         self.my_button.place(x=530,y=160)
-        self.my_button = tkinter.Button(self.brain_frame, text= "1 Word ",font=("Arial",10),bg="#B6E1A4", command= Random_brain_offline6)
+        self.my_button = tkinter.Button(self.brain_frame, text= "1 Word ",font=("Arial",10),bg="#ee6b6e", command= Random_brain_offline6)
         self.my_button.place(x=10,y=220)
         self.my_button = tkinter.Button(self.brain_frame, text= "1-3 Words ",font=("Arial",10),bg="#A3E4A7", command= Random_brain_offline)
         self.my_button.place(x=73,y=220)
@@ -1286,32 +1274,30 @@ class MainWindow():
         self.l1.place(x=100,y=70)
         self.t1 = tkinter.Label(self.bitcoin_frame, text=addr_count_print,font=("Arial",14),bg="#F0F0F0",fg="Black")
         self.t1.place(x=80,y=110)
-        
         labelstart = tkinter.Label(self.bitcoin_frame, text="Start \nDec ", font=("Arial",13))
         labelstart.place(x=5,y=140)
         self._txt_inputstart = tkinter.Entry(self.bitcoin_frame, width=50, font=MainWindow.C_FONT)
         self._txt_inputstart.insert(0, '1')
         self._txt_inputstart.place(x=65,y=145)
         self._txt_inputstart.focus()
-        
         labelstop = tkinter.Label(self.bitcoin_frame, text="Stop \nDec ", font=("Arial",13))
         labelstop.place(x=5,y= 180)
         self._txt_inputstop = tkinter.Entry(self.bitcoin_frame, width=50, font=MainWindow.C_FONT)
         self._txt_inputstop.insert(0, max_p)
         self._txt_inputstop.place(x=65,y=185)
         self._txt_inputstop.focus()
-        
         labelmag = tkinter.Label(self.bitcoin_frame, text="Jump \nMag ", font=("Arial",13))
         labelmag.place(x=640,y= 220)
         self._txt_inputmag = tkinter.Entry(self.bitcoin_frame, width=8, font=MainWindow.C_FONT)
         self._txt_inputmag.insert(0, '1')
         self._txt_inputmag.place(x=690,y=225)
         self._txt_inputmag.focus()
-        
-        self.r1 = tkinter.Button(self.bitcoin_frame, text="Generate Random Wallets ",font=("Arial",15),bg="#A3E4D7",command=Random_Bruteforce_Speed)
+        self.r1 = tkinter.Button(self.bitcoin_frame, text=" Generate Random  ",font=("Arial",13),bg="#A3E4D7",command=Random_Bruteforce_Speed)
         self.r1.place(x=60,y=220)
-        self.s1 = tkinter.Button(self.bitcoin_frame, text="Generate Sequential Wallets ",font=("Arial",15),bg="#A3E4D7",command=Sequential_Bruteforce_speed)
-        self.s1.place(x=360,y=220)
+        self.s1 = tkinter.Button(self.bitcoin_frame, text=" Sequential Start-Stop",font=("Arial",13),bg="#B3B4D7",command=Sequential_Bruteforce_speed)
+        self.s1.place(x=240,y=220)
+        self.sb1 = tkinter.Button(self.bitcoin_frame, text=" Backward Stop-Start ",font=("Arial",13),bg="#C3C4D7",command=Sequential_Bruteforce_speed_back)
+        self.sb1.place(x=430,y=220)
         self.start= tkinter.Button(self.bitcoin_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= start)
         self.start.place(x=690,y=180)
         self.stop= tkinter.Button(self.bitcoin_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= stop)
@@ -1420,14 +1406,11 @@ class MainWindow():
         widget['text'] = "© MIZOGG 2018 - 2022"
         widget['image'] = widget.miz_image_png
         widget.place(x=220,y=180)
-        # Create a Label Text
-        label = Label(pop, text='Welcome to BitHunter...... \n\n Made By Mizogg.co.uk \n\n Version 1.7 07/11/22')
+        label = Label(pop, text='Welcome to BitHunter...... \n\n Made By Mizogg.co.uk \n\n Version 1.8 08/11/22')
         label.pack(pady=10)
         Label(pop, text= "This window will get closed after 3 seconds...", font=('Helvetica 8 bold')).pack(pady=10)
-        # Add a Frame
         frame = Frame(pop)
         frame.pack(pady=10)
-        # Add Button for making selection
         button1 = Button(frame, text=" Close ",
         command=self.CLOSEWINDOW)
         button1.grid(row=0, column=1)
