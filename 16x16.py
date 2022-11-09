@@ -10,7 +10,7 @@ import tkinter.scrolledtext as tkst
 from tkinter.ttk import *
 import secp256k1 as ice
 from bloomfilter import BloomFilter, ScalableBloomFilter, SizeGrowthRate
-
+import psutil
 with open('puzzle.bf', "rb") as fp:
     bloom_filterbtc = BloomFilter.load(fp)
 
@@ -163,7 +163,14 @@ class App:
             with open("found.txt", "a", encoding="utf-8") as f:
                 f.write(self.WINTEXT)
             self.popwin()
-        
+
+    def cpu_met(self):
+        self.cpu_use = psutil.cpu_percent()
+        self.cpu_label.config(text='Total CPU {}%'.format(self.cpu_use))
+        self.cpu_label.after(1000,self.cpu_met)
+        self.ram_use = psutil.virtual_memory()[2]
+        self.ram_label.config(text='RAM memory % used {}%'.format(self.ram_use))
+
     def init_tk(self):
         self.BH16x16 = Tk()
         self.BH16x16.title('BitcoinHunter 16x16.py')
@@ -280,6 +287,11 @@ class App:
         self.lbl_tickno.pack(padx=3, pady=3)
         self.lbl_totalno = tkinter.Label(self.hunter_win, text='Total Addresses Scanned : 0', font=("Arial",10),bg='#A1A1A1',fg="Purple")
         self.lbl_totalno.pack(padx=3, pady=3)
+        self.cpu_label = tkinter.Label(self.main_frame,font = ('calibri', 14, 'bold'), background = '#F0F0F0', foreground = 'Purple')
+        self.cpu_label.place(x=10,y=10)
+        self.ram_label = tkinter.Label(self.main_frame,font = ('calibri', 14, 'bold'), background = '#F0F0F0', foreground = 'Purple')
+        self.ram_label.place(x=160,y=10)
+        self.cpu_met()
         # =============================================================================
         # about_frame
         # =============================================================================
