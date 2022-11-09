@@ -57,7 +57,7 @@ python BitcoinHunter.py
 ![image](https://user-images.githubusercontent.com/88630056/200415271-29d7d26e-749d-4ee2-b57a-6f0d659ed7e7.png)
 
 # 16x16.py
-![image](https://user-images.githubusercontent.com/88630056/200930707-146603ae-6f46-4d1a-a00f-715699b50a0d.png)
+![image](https://user-images.githubusercontent.com/88630056/200955807-dd817c76-3ccf-434a-ba1c-e3e2f8b603e1.png)
 
 # About Bitcoin
 ![image](https://user-images.githubusercontent.com/88630056/200415376-bc5d01ce-cf64-403b-aac8-da131a965eb6.png)
