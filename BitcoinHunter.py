@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 08.11.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 09.11.2022 https://t.me/CryptoCrackersUK
 from tkinter import * 
 from tkinter import ttk
 import tkinter.messagebox
@@ -11,7 +11,7 @@ import secp256k1 as ice
 import random
 import webbrowser
 import hmac, struct, time, codecs, sys, os, binascii, hashlib
-
+import psutil
 try:
     import base58
     import ecdsa
@@ -42,6 +42,7 @@ except ImportError:
     from bit import Key
     from bit.format import bytes_to_wif
     import numpy as np
+
 # ============================================================================= 
 # Bitcoin Price chart
 # =============================================================================
@@ -155,7 +156,6 @@ def int2addr(value):
     uaddr = ice.privatekey_to_address(0, False, dec)  #Uncompressed
     p2sh = ice.privatekey_to_address(1, True, dec) #p2sh
     bech32 = ice.privatekey_to_address(2, True, dec)  #bech32
-    
     source_code = get_balance(caddr)
     received_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
     receivedid = source_code.xpath(received_id)
@@ -169,7 +169,6 @@ def int2addr(value):
     txs_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
     txsid = source_code.xpath(txs_id)
     txs = str(txsid[0].text_content())
-
     source_code1 = get_balance1(uaddr)
     received_id1 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
     receivedid1 = source_code1.xpath(received_id1)
@@ -183,7 +182,6 @@ def int2addr(value):
     txs_id1 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
     txsid1 = source_code1.xpath(txs_id1)
     txs1 = str(txsid1[0].text_content())
-
     source_code2 = get_balance2(p2sh)
     received_id2 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
     receivedid2 = source_code2.xpath(received_id2)
@@ -197,7 +195,6 @@ def int2addr(value):
     txs_id2 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
     txsid2 = source_code2.xpath(txs_id2)
     txs2 = str(txsid2[0].text_content())
-
     source_code3 = get_balance3(bech32)
     received_id3 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
     receivedid3 = source_code3.xpath(received_id3)
@@ -589,7 +586,7 @@ stopdec = max_p
 class MainWindow():
     C_FONT = ("Consolas", 16)
     C_TXT_MAXLEN = 30
-    def __init__(self):   
+    def __init__(self):
         def start():
            global run
            run= True
@@ -1160,6 +1157,12 @@ class MainWindow():
         # =============================================================================
         #  Widgets 
         # =============================================================================
+        def cpu_met():
+            cpu_use = psutil.cpu_percent()
+            cpu_label.config(text='Total CPU {}%'.format(cpu_use))
+            cpu_label.after(1000,cpu_met)
+            ram_use = psutil.virtual_memory()[2]
+            ram_label.config(text='RAM memory % used {}%'.format(ram_use))
         def time():
             string = strftime('%H:%M:%S %p')
             lbl.config(text = string)
@@ -1175,6 +1178,11 @@ class MainWindow():
         self.widgetHunter.place(x=690,y=590)
         lbl = tkinter.Label(self._window, font = ('calibri', 28, 'bold'), background = '#F0F0F0', foreground = 'purple')
         lbl.place(x=10,y=30)
+        cpu_label = tkinter.Label(self._window,font = ('calibri', 14, 'bold'), background = '#F0F0F0', foreground = 'red')
+        cpu_label.place(x=220,y=590)
+        ram_label = tkinter.Label(self._window,font = ('calibri', 14, 'bold'), background = '#F0F0F0', foreground = 'red')
+        ram_label.place(x=380,y=590)
+        cpu_met()
         time()
         # =============================================================================
         # about_frame
@@ -1575,7 +1583,7 @@ class MainWindow():
         self._stringvar_dec.set(dec_value)
         self._stringvar_hex.set(hex_value)
         self._stringvar_addr.set(btc_value)
-    
+
     def mainloop(self):
         self.startpop()
         self.main_frame.mainloop()
