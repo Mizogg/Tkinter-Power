@@ -425,8 +425,8 @@ Hexadecimal Private Key : {HEX3}
             f.write(WINTEXT)
     total+=1
     totaladd+=1
-    self.l444.config(text = f'{total}')
-    self.l666.config(text = f'{totaladd}')
+    self.l4.config(text = f'{total}')
+    self.l6.config(text = f'{totaladd}')
 # ============================================================================= 
 information = ('''
 https://en.wikipedia.org/wiki/Bitcoin
@@ -1406,8 +1406,8 @@ class MainWindow():
         self.brain_update1.update()
         total+=1
         totaladd+=1
-        self.l44.config(text = f'{total}')
-        self.l66.config(text = f'{totaladd}')
+        self.l4.config(text = f'{total}')
+        self.l6.config(text = f'{totaladd}')
         
     def Random_word_single(self):
         mnem = self._txt_inputword.get()
