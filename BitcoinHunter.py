@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 09.11.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 11.11.2022 https://t.me/CryptoCrackersUK
 from tkinter import * 
 from tkinter import ttk
 import tkinter.messagebox
@@ -9,6 +9,7 @@ from tkinter.ttk import *
 from time import strftime, sleep
 import secp256k1 as ice
 import random
+import string
 import webbrowser
 import hmac, struct, time, codecs, sys, os, binascii, hashlib
 import psutil
@@ -46,7 +47,7 @@ except ImportError:
 # ============================================================================= 
 # Bitcoin Price chart
 # =============================================================================
-def price(exchange=''):
+def price():
     url = 'https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=GBP,USD,EUR'
     page = requests.get(url)
     data = page.json()
@@ -462,6 +463,7 @@ creditsinfo = ('''
                 Look for Bitcoin with tkinter and python in GUI.
                         Made By Mizogg.co.uk
                             Version = 1.8
+                New features added to Brain Wallet Generator
                     New features added to Bitcoin Generator
 
                             Version = 1.7
@@ -575,13 +577,10 @@ addr_count_print = f'Total Bitcoin Addresses Loaded and Checking : {addr_count}'
 with open('files/words.txt', newline='', encoding='utf-8') as f:
     for line in f:
         mylist.append(line.strip())
-
-max_p = 115792089237316195423570985008687907852837564279074904382605163141518161494336
+startdec = 1
+stopdec = 115792089237316195423570985008687907852837564279074904382605163141518161494336
 totaladd = total = found =0
 run = run1 = run2 = True
-
-startdec = 1
-stopdec = max_p
 
 class MainWindow():
     C_FONT = ("Consolas", 16)
@@ -775,37 +774,22 @@ class MainWindow():
 
         def Random_brain_online():
             while run1:
-                passphrase = ' '.join(random.sample(mylist, random.randint(1,3)))
-                brain_results_online(passphrase)
-
-        def Random_brain_online1():
-            while run1:
-                passphrase = ' '.join(random.sample(mylist, random.randint(3,9)))
-                brain_results_online(passphrase)
-
-        def Random_brain_online2():
-            while run1:
-                passphrase = ' '.join(random.sample(mylist, random.randint(9,15)))
-                brain_results_online(passphrase)
-                
-        def Random_brain_online3():
-            while run1:
-                passphrase = ' '.join(random.sample(mylist, random.randint(15,18)))
-                brain_results_online(passphrase)
-
-        def Random_brain_online4():
-            while run1:
-                passphrase = ' '.join(random.sample(mylist, random.randint(18,21)))
-                brain_results_online(passphrase)
-
-        def Random_brain_online5():
-            while run1:
-                passphrase = ' '.join(random.sample(mylist, random.randint(21,24)))
+                start_amm = self._txt_brain_ammount.get().strip().replace(" ", "")
+                stop_amm = self._txt_brain_total.get().strip().replace(" ", "")
+                passphrase = ' '.join(random.sample(mylist, random.randint(int(start_amm), int(stop_amm))))
                 brain_results_online(passphrase)
         
-        def Random_brain_online6():
+        def Random_brain_online1():
             for i in range(0,len(mylist)):
                 passphrase = mylist[i]
+                brain_results_online(passphrase)
+        
+        def Random_brain_online2():
+            start_amm = self._txt_brain_ammount.get().strip().replace(" ", "")
+            stop_amm = self._txt_brain_total.get().strip().replace(" ", "")
+            while run1:
+                words = random.randrange(int(start_amm), int(stop_amm))
+                passphrase = ''.join(random.sample(string.ascii_lowercase, words))
                 brain_results_online(passphrase)
 
         def brain_results_offline(passphrase):
@@ -834,38 +818,23 @@ class MainWindow():
             self.l66.config(text = f'{totaladd}')
 
         def Random_brain_offline():
+            start_amm = self._txt_brain_ammount.get().strip().replace(" ", "")
+            stop_amm = self._txt_brain_total.get().strip().replace(" ", "")
             while run1:
-                passphrase = ' '.join(random.sample(mylist, random.randint(1,3)))
+                passphrase = ' '.join(random.sample(mylist, random.randint(int(start_amm), int(stop_amm))))
                 brain_results_offline(passphrase)
-
+                
         def Random_brain_offline1():
-            while run1:
-                passphrase = ' '.join(random.sample(mylist, random.randint(3,9)))
-                brain_results_offline(passphrase)
-
-        def Random_brain_offline2():
-            while run1:
-                passphrase = ' '.join(random.sample(mylist, random.randint(9,15)))
-                brain_results_offline(passphrase)
-
-        def Random_brain_offline3():
-            while run1:
-                passphrase = ' '.join(random.sample(mylist, random.randint(15,18)))
-                brain_results_offline(passphrase)
-
-        def Random_brain_offline4():
-            while run1:
-                passphrase = ' '.join(random.sample(mylist, random.randint(18,21)))
-                brain_results_offline(passphrase)
-                
-        def Random_brain_offline5():
-            while run1:
-                passphrase = ' '.join(random.sample(mylist, random.randint(21,24)))
-                brain_results_offline(passphrase)
-                
-        def Random_brain_offline6():
             for i in range(0,len(mylist)):
                 passphrase = mylist[i]
+                brain_results_offline(passphrase)
+        
+        def Random_brain_offline2():
+            start_amm = self._txt_brain_ammount.get().strip().replace(" ", "")
+            stop_amm = self._txt_brain_total.get().strip().replace(" ", "")
+            while run1:
+                words = random.randrange(int(start_amm), int(stop_amm))
+                passphrase = ''.join(random.sample(string.ascii_lowercase, words))
                 brain_results_offline(passphrase)
         # ============================================================================= 
         #  Mnemonic Program Main
@@ -1117,15 +1086,15 @@ class MainWindow():
         self._btc_hex.place(x=390,y=45)
         self._rd_dec = tkinter.Button(self.main_frame, text="Random", font=MainWindow.C_FONT, command=self.evt_rd_dec)
         self._rd_dec.place(x=15,y=150)
-        self._jump_input = tkinter.Entry(self.main_frame, width=7, font=MainWindow.C_FONT)
+        self._jump_input = tkinter.Entry(self.main_frame, width=7, font=MainWindow.C_FONT, fg='red')
         self._jump_input.insert(0, '1')
         self._jump_input.place(x=200,y=150)
         self._jump_input.focus()
-        self._jump1_dec = tkinter.Button(self.main_frame, text=" + ", font=MainWindow.C_FONT, command=self.evt_jump1_dec)
+        self._jump1_dec = tkinter.Button(self.main_frame, text=" + ", font=MainWindow.C_FONT, command=self.evt_jump1_dec, fg='green')
         self._jump1_dec.place(x=300,y=150)
-        self._jump_dec = tkinter.Button(self.main_frame, text=" - ", font=MainWindow.C_FONT, command=self.evt_jump_rm1_dec)
+        self._jump_dec = tkinter.Button(self.main_frame, text=" - ", font=MainWindow.C_FONT, command=self.evt_jump_rm1_dec, fg='red')
         self._jump_dec.place(x=140,y=150)
-        labeladdr = tkinter.Label(self.main_frame, text=" When Searching for adress \n it will generate \n a random private key \n this will not match the address ", font=("Arial", 8))
+        labeladdr = tkinter.Label(self.main_frame, text=" When Searching for adress \n it will generate \n a random private key \n this will not match the address ", font=("Arial", 8), fg='red')
         labeladdr.place(x=670,y=135)
         self._bt_ip = tkinter.Button(self.main_frame, text="Address", font=MainWindow.C_FONT, command=self.evt_btc_add)
         self._bt_ip.place(x=570,y=150)
@@ -1157,16 +1126,6 @@ class MainWindow():
         # =============================================================================
         #  Widgets 
         # =============================================================================
-        def cpu_met():
-            cpu_use = psutil.cpu_percent()
-            cpu_label.config(text='Total CPU {}%'.format(cpu_use))
-            cpu_label.after(1000,cpu_met)
-            ram_use = psutil.virtual_memory()[2]
-            ram_label.config(text='RAM memory % used {}%'.format(ram_use))
-        def time():
-            string = strftime('%H:%M:%S %p')
-            lbl.config(text = string)
-            lbl.after(1000, time)
         self.widget = tkinter.Label(self._window, compound='top')
         self.widget.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
         self.widget['text'] = "© MIZOGG 2018 - 2022"
@@ -1176,20 +1135,18 @@ class MainWindow():
         self.widgetsnake.place(x=30,y=590)
         self.widgetHunter = tkinter.Button(self._window, text= "16x16 BTC Hunter ",font=("Arial",10),bg="gold", command= hunter16x16)
         self.widgetHunter.place(x=690,y=590)
-        lbl = tkinter.Label(self._window, font = ('calibri', 28, 'bold'), background = '#F0F0F0', foreground = 'purple')
-        lbl.place(x=10,y=30)
-        cpu_label = tkinter.Label(self._window,font = ('calibri', 14, 'bold'), background = '#F0F0F0', foreground = 'red')
-        cpu_label.place(x=220,y=590)
-        ram_label = tkinter.Label(self._window,font = ('calibri', 14, 'bold'), background = '#F0F0F0', foreground = 'red')
-        ram_label.place(x=380,y=590)
-        cpu_met()
-        time()
+        self.lbl = tkinter.Label(self._window, font = ('calibri', 28, 'bold'), background = '#F0F0F0', foreground = 'purple')
+        self.lbl.place(x=10,y=30)
+        self.cpu_label = tkinter.Label(self._window,font = ('calibri', 14, 'bold'), background = '#F0F0F0', foreground = 'red')
+        self.cpu_label.place(x=220,y=590)
+        self.ram_label = tkinter.Label(self._window,font = ('calibri', 14, 'bold'), background = '#F0F0F0', foreground = 'red')
+        self.ram_label.place(x=380,y=590)
         # =============================================================================
         # about_frame
         # =============================================================================
         about1 = tkinter.Frame(master = self.about_frame, bg = '#F0F0F0')
         about1.pack(fill='both', expand='yes')
-        pricelable_data = f"Todays Bitcoin Price £ {price('BTC')} "
+        pricelable_data = f"Todays Bitcoin Price £ {price()} "
         pricelable = tkinter.Label(master = about1, text=pricelable_data, font=("Arial",14),bg="#F0F0F0",fg="purple")
         pricelable.place(x=90, y=530)
         editArea = tkst.ScrolledText(master = about1, wrap = tkinter.WORD, width  = 40, height = 16,font=("Arial",12))
@@ -1200,7 +1157,7 @@ class MainWindow():
         # =============================================================================
         credits1 = tkinter.Frame(master = self.credits_frame, bg = '#F0F0F0')
         credits1.pack(fill='both', expand='yes')
-        pricelable_data = f"Todays Bitcoin Price £ {price('BTC')} "
+        pricelable_data = f"Todays Bitcoin Price £ {price()} "
         pricelable = tkinter.Label(master = credits1, text=pricelable_data, font=("Arial",14),bg="#F0F0F0",fg="purple")
         pricelable.place(x=90, y=530)
         editArea = tkst.ScrolledText(master = credits1, wrap = tkinter.WORD, width  = 40, height = 16,font=("Arial",12))
@@ -1226,8 +1183,8 @@ class MainWindow():
         self.brain_update.place(x=30,y=310)
         self.brain_update1 = tkinter.Label(self.brain_frame, bg="#F0F0F0",font=("Arial",14),text="")
         self.brain_update1.place(x=60,y=350)
-        self.start1= tkinter.Button(self.brain_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= start1)
-        self.stop1= tkinter.Button(self.brain_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= stop1)
+        self.start1= tkinter.Button(self.brain_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= start1, fg='green')
+        self.stop1= tkinter.Button(self.brain_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= stop1, fg='red')
         self.start1.place(x=690,y=180)
         self.stop1.place(x=750,y=180)
         labelbrain = tkinter.Label(self.brain_frame, text="Brain \nWords ", font=("Arial",13))
@@ -1236,45 +1193,37 @@ class MainWindow():
         self._txt_inputbrain.insert(0, 'how much wood could a woodchuck chuck if a woodchuck could chuck wood')
         self._txt_inputbrain.place(x=80,y=80)
         self._txt_inputbrain.focus()
+        self._txt_brain_ammount = tkinter.Entry(self.brain_frame, width=4, font=MainWindow.C_FONT, fg="red")
+        self._txt_brain_ammount.insert(0, '1')
+        self._txt_brain_ammount.place(x=130,y=150)
+        self._txt_brain_ammount.focus()
+        self._txt_brain_total = tkinter.Entry(self.brain_frame, width=4, font=MainWindow.C_FONT, fg="red")
+        self._txt_brain_total.insert(0, '12')
+        self._txt_brain_total.place(x=130,y=200)
+        self._txt_brain_total.focus()
         self._btc_bin = tkinter.Button(self.brain_frame, text="Enter", font=MainWindow.C_FONT, command=self.Random_brain_single)
         self._btc_bin.place(x=545,y=75)
         self.titleb = tkinter.Label(self.brain_frame, text="Brain Wallet Words ",font=("Arial",16),bg="#F0F0F0",fg="Black")
-        self.titleb.place(x=380,y=270)
+        self.titleb.place(x=380,y=260)
         self.titleerror = tkinter.Label(self.brain_frame, text="!!! Error to be Fixed !!! \n 1 Word from list \n Not stopping  Error !!! ",font=("Arial",8),bg="#F0F0F0",fg="red")
-        self.titleerror.place(x=15,y=250)
-        self.title1 = tkinter.Label(self.brain_frame, text="Random Brain Wallet Generator Online Pick Ammount of Words to Generate",font=("Arial",12),bg="#F0F0F0",fg="Black")
-        self.title1.place(x=60,y=130)
-        self.title2 = tkinter.Label(self.brain_frame, text="Random Brain Wallet Generator Offline Pick Ammount of Words to Generate",font=("Arial",12),bg="#F0F0F0",fg="Black")
-        self.title2.place(x=60,y=130)
+        self.titleerror.place(x=200,y=230)
+        self.titlemax = tkinter.Label(self.brain_frame, text="!!! MAX 25 -26 !!!",font=("Arial",12),bg="#F0F0F0",fg="red")
+        self.titlemax.place(x=25,y=230)
+        self.title1 = tkinter.Label(self.brain_frame, text="Brain Wallet \n Random Generator \n Online & Offline \n Pick Ammount \n to Generate",font=("Arial",8),bg="#F0F0F0",fg="Black")
+        self.title1.place(x=15,y=150)
         # Create our  Brain Buttons
-        self.my_button = tkinter.Button(self.brain_frame, text= "1 Word ",font=("Arial",10),bg="#ee6b6e", command= Random_brain_online6)
-        self.my_button.place(x=10,y=160)
-        self.my_button = tkinter.Button(self.brain_frame, text= "1-3 Words ",font=("Arial",10),bg="#A3E4A7", command= Random_brain_online)
-        self.my_button.place(x=73,y=160)
-        self.my_button = tkinter.Button(self.brain_frame, text= "3-9 Words ",font=("Arial",10),bg="#A3E4B7", command= Random_brain_online1)
-        self.my_button.place(x=155,y=160)
-        self.my_button = tkinter.Button(self.brain_frame, text= "9-15 Words ",font=("Arial",10),bg="#A3E4C7", command= Random_brain_online2)
-        self.my_button.place(x=240,y=160)
-        self.my_button = tkinter.Button(self.brain_frame, text= "15-18 Words ",font=("Arial",10),bg="#A3E4D7", command= Random_brain_online3)
-        self.my_button.place(x=330,y=160)
-        self.my_button = tkinter.Button(self.brain_frame, text= "18-21 Words ",font=("Arial",10),bg="#A3E4E7", command= Random_brain_online4)
-        self.my_button.place(x=430,y=160)
-        self.my_button = tkinter.Button(self.brain_frame, text= "21-24 Words ",font=("Arial",10),bg="#A3E4F7", command= Random_brain_online5)
-        self.my_button.place(x=530,y=160)
-        self.my_button = tkinter.Button(self.brain_frame, text= "1 Word ",font=("Arial",10),bg="#ee6b6e", command= Random_brain_offline6)
-        self.my_button.place(x=10,y=220)
-        self.my_button = tkinter.Button(self.brain_frame, text= "1-3 Words ",font=("Arial",10),bg="#A3E4A7", command= Random_brain_offline)
-        self.my_button.place(x=73,y=220)
-        self.my_button = tkinter.Button(self.brain_frame, text= "3-9 Words ",font=("Arial",10),bg="#A3E4B7", command= Random_brain_offline1)
-        self.my_button.place(x=155,y=220)
-        self.my_button = tkinter.Button(self.brain_frame, text= "9-15 Words ",font=("Arial",10),bg="#A3E4C7", command= Random_brain_offline2)
-        self.my_button.place(x=240,y=220)
-        self.my_button = tkinter.Button(self.brain_frame, text= "15-18 Words ",font=("Arial",10),bg="#A3E4D7", command= Random_brain_offline3)
-        self.my_button.place(x=330,y=220)
-        self.my_button = tkinter.Button(self.brain_frame, text= "18-21 Words ",font=("Arial",10),bg="#A3E4E7", command= Random_brain_offline4)
-        self.my_button.place(x=430,y=220)
-        self.my_button = tkinter.Button(self.brain_frame, text= "21-24 Words ",font=("Arial",10),bg="#A3E4F7", command= Random_brain_offline5)
-        self.my_button.place(x=530,y=220)
+        self.my_button = tkinter.Button(self.brain_frame, text= "1 Word List (On-Line) ",font=("Arial",10),bg="#ee6b6e", command= Random_brain_online1)
+        self.my_button.place(x=200,y=150)
+        self.my_button = tkinter.Button(self.brain_frame, text= "Brain Words (On-Line) ",font=("Arial",10),bg="#A3E4A7", command= Random_brain_online)
+        self.my_button.place(x=350,y=150)
+        self.my_button = tkinter.Button(self.brain_frame, text= "Brain String (On-Line) ",font=("Arial",10),bg="#F3E4C8", command= Random_brain_online2)
+        self.my_button.place(x=510,y=150)
+        self.my_button = tkinter.Button(self.brain_frame, text= "1 Word List (Off-Line) ",font=("Arial",10),bg="#ee6b6e", command= Random_brain_offline1)
+        self.my_button.place(x=200,y=200)
+        self.my_button = tkinter.Button(self.brain_frame, text= "Brain Words (Off-Line) ",font=("Arial",10),bg="#A3E4A7", command= Random_brain_offline)
+        self.my_button.place(x=350,y=200)
+        self.my_button = tkinter.Button(self.brain_frame, text= "Brain String (Off-Line) ",font=("Arial",10),bg="#F3E4C8", command= Random_brain_offline2)
+        self.my_button.place(x=510,y=200)
         # =============================================================================
         # bitcoin_frame
         # =============================================================================
@@ -1291,7 +1240,7 @@ class MainWindow():
         labelstop = tkinter.Label(self.bitcoin_frame, text="Stop \nDec ", font=("Arial",13))
         labelstop.place(x=5,y= 180)
         self._txt_inputstop = tkinter.Entry(self.bitcoin_frame, width=50, font=MainWindow.C_FONT)
-        self._txt_inputstop.insert(0, max_p)
+        self._txt_inputstop.insert(0, stopdec)
         self._txt_inputstop.place(x=65,y=185)
         self._txt_inputstop.focus()
         labelmag = tkinter.Label(self.bitcoin_frame, text="Jump \nMag ", font=("Arial",13))
@@ -1306,9 +1255,9 @@ class MainWindow():
         self.s1.place(x=240,y=220)
         self.sb1 = tkinter.Button(self.bitcoin_frame, text=" Backward Stop-Start ",font=("Arial",13),bg="#C3C4D7",command=Sequential_Bruteforce_speed_back)
         self.sb1.place(x=430,y=220)
-        self.start= tkinter.Button(self.bitcoin_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= start)
+        self.start= tkinter.Button(self.bitcoin_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= start, fg='green')
         self.start.place(x=690,y=180)
-        self.stop= tkinter.Button(self.bitcoin_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= stop)
+        self.stop= tkinter.Button(self.bitcoin_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= stop, fg='red')
         self.stop.place(x=750,y=180)
         self.l2 = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",12),text="")
         self.l2.place(x=50,y=270)
@@ -1324,7 +1273,7 @@ class MainWindow():
         self.l7.place(x=680,y=70)
         self.l8 = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",23),text="0")
         self.l8.place(x=740,y=120)
-        pricelable_data = f"Todays Bitcoin Price £ {price('BTC')} "
+        pricelable_data = f"Todays Bitcoin Price £ {price()} "
         pricelable = tkinter.Label(self.bitcoin_frame, text=pricelable_data, font=("Arial",14),bg="#F0F0F0",fg="purple")
         pricelable.place(x=90, y=530)
         # =============================================================================
@@ -1346,8 +1295,8 @@ class MainWindow():
         self.word_update.place(x=30,y=280)
         self.word_update1 = tkinter.Label(self.word_frame, bg="#F0F0F0",font=("Arial",11),text="")
         self.word_update1.place(x=60,y=300)
-        self.start2= tkinter.Button(self.word_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= start2)
-        self.stop2= tkinter.Button(self.word_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= stop2)
+        self.start2= tkinter.Button(self.word_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= start2, fg='green')
+        self.stop2= tkinter.Button(self.word_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= stop2, fg='red')
         self.start2.place(x=690,y=180)
         self.stop2.place(x=750,y=180)
         labelword = tkinter.Label(self.word_frame, text="Mnemonic", font=("Arial",13))
@@ -1426,7 +1375,19 @@ class MainWindow():
     
     def CLOSEWINDOW(self):
         pop.destroy()
-   
+
+    def cpu_met(self):
+        cpu_use = psutil.cpu_percent()
+        self.cpu_label.config(text='Total CPU {}%'.format(cpu_use))
+        self.cpu_label.after(1000,self.cpu_met)
+        ram_use = psutil.virtual_memory()[2]
+        self.ram_label.config(text='RAM memory % used {}%'.format(ram_use))
+        
+    def time(self):
+        self.stringtime = strftime('%H:%M:%S %p')
+        self.lbl.config(text = self.stringtime)
+        self.lbl.after(1000, self.time)
+
     def Random_brain_single(self):
         passphrase = self._txt_inputbrain.get().strip()
         global total, totaladd, found
@@ -1563,7 +1524,7 @@ class MainWindow():
     def evt_btc_add(self):
         try:
             btc_value = self._txt_input.get().strip().replace(" ", "")
-            dec_value = int(random.randrange(startdec, max_p))
+            dec_value = int(random.randrange(startdec, stopdec))
             bin_value = dec2bin(dec_value)
             hex_value = dec2hex(dec_value)
             bit_value = dec2bit(dec_value)
@@ -1586,6 +1547,8 @@ class MainWindow():
 
     def mainloop(self):
         self.startpop()
+        self.cpu_met()
+        self.time()
         self.main_frame.mainloop()
 
 if __name__ == "__main__":
