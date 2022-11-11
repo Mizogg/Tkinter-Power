@@ -769,8 +769,8 @@ class MainWindow():
             self.brain_update1.update()
             total+=1
             totaladd+=1
-            self.l44.config(text = f'{total}')
-            self.l66.config(text = f'{totaladd}')
+            self.l4.config(text = f'{total}')
+            self.l6.config(text = f'{totaladd}')
 
         def Random_brain_online():
             while run1:
@@ -814,8 +814,8 @@ class MainWindow():
             self.brain_update1.update()
             total+=1
             totaladd+=1
-            self.l44.config(text = f'{total}')
-            self.l66.config(text = f'{totaladd}')
+            self.l4.config(text = f'{total}')
+            self.l6.config(text = f'{totaladd}')
 
         def Random_brain_offline():
             start_amm = self._txt_brain_ammount.get().strip().replace(" ", "")
@@ -878,8 +878,8 @@ class MainWindow():
             self.word_update1.update()
             total+=1
             totaladd+=1
-            self.l444.config(text = f'{total}')
-            self.l666.config(text = f'{totaladd}')
+            self.l4.config(text = f'{total}')
+            self.l6.config(text = f'{totaladd}')
         
         def Random_word_online():
             while run2:
@@ -977,8 +977,8 @@ class MainWindow():
             self.word_update1.update()
             total+=1
             totaladd+=4
-            self.l444.config(text = f'{total}')
-            self.l666.config(text = f'{totaladd}')
+            self.l4.config(text = f'{total}')
+            self.l6.config(text = f'{totaladd}')
 
         def Random_word_offline():
             while run2:
@@ -1073,27 +1073,27 @@ class MainWindow():
         label = tkinter.Label(self.main_frame, text=" Type \n Data \n Here ", font=MainWindow.C_FONT)
         label.place(x=5,y=70)
         self._txt_input = tkinter.Entry(self.main_frame, width=56, font=MainWindow.C_FONT)
-        self._txt_input.insert(0, '1FeexV6bAHb8ybZjqQMjJrcCrHGW9sb6uF')
+        self._txt_input.insert(0, '10101')
         self._txt_input.place(x=80,y=100)
         self._txt_input.focus()
         self._btc_bin = tkinter.Button(self.main_frame, text="Bin", font=MainWindow.C_FONT, command=self.evt_btc_bin)
-        self._btc_bin.place(x=270,y=45)
+        self._btc_bin.place(x=300,y=150)
         self._btc_dec = tkinter.Button(self.main_frame, text="Dec", font=MainWindow.C_FONT, command=self.evt_btc_dec)
-        self._btc_dec.place(x=330,y=45)
+        self._btc_dec.place(x=360,y=150)
         self._btc_bit = tkinter.Button(self.main_frame, text="Bits", font=MainWindow.C_FONT, command=self.evt_btc_bit)
-        self._btc_bit.place(x=450,y=45)
+        self._btc_bit.place(x=480,y=150)
         self._btc_hex = tkinter.Button(self.main_frame, text="Hex", font=MainWindow.C_FONT, command=self.evt_btc_hex)
-        self._btc_hex.place(x=390,y=45)
+        self._btc_hex.place(x=420,y=150)
         self._rd_dec = tkinter.Button(self.main_frame, text="Random", font=MainWindow.C_FONT, command=self.evt_rd_dec)
         self._rd_dec.place(x=15,y=150)
-        self._jump_input = tkinter.Entry(self.main_frame, width=7, font=MainWindow.C_FONT, fg='red')
+        self._jump_input = tkinter.Entry(self.main_frame, width=4, font=MainWindow.C_FONT, fg='red')
         self._jump_input.insert(0, '1')
-        self._jump_input.place(x=200,y=150)
+        self._jump_input.place(x=170,y=150)
         self._jump_input.focus()
         self._jump1_dec = tkinter.Button(self.main_frame, text=" + ", font=MainWindow.C_FONT, command=self.evt_jump1_dec, fg='green')
-        self._jump1_dec.place(x=300,y=150)
+        self._jump1_dec.place(x=230,y=150)
         self._jump_dec = tkinter.Button(self.main_frame, text=" - ", font=MainWindow.C_FONT, command=self.evt_jump_rm1_dec, fg='red')
-        self._jump_dec.place(x=140,y=150)
+        self._jump_dec.place(x=110,y=150)
         labeladdr = tkinter.Label(self.main_frame, text=" When Searching for adress \n it will generate \n a random private key \n this will not match the address ", font=("Arial", 8), fg='red')
         labeladdr.place(x=670,y=135)
         self._bt_ip = tkinter.Button(self.main_frame, text="Address", font=MainWindow.C_FONT, command=self.evt_btc_add)
@@ -1141,6 +1141,16 @@ class MainWindow():
         self.cpu_label.place(x=220,y=590)
         self.ram_label = tkinter.Label(self._window,font = ('calibri', 14, 'bold'), background = '#F0F0F0', foreground = 'red')
         self.ram_label.place(x=380,y=590)
+        self.l3 = tkinter.Label(self._window, text="Total Private Keys : ",font=("Arial",12),bg="#F0F0F0",fg="Black")
+        self.l3.place(x=240,y=30)
+        self.l4 = tkinter.Label(self._window, bg="#F0F0F0",font=("Arial",12),text="")
+        self.l4.place(x=380,y=30)
+        self.l5 = tkinter.Label(self._window, text="Total Addresses   : ",font=("Arial",12),bg="#F0F0F0",fg="Black")
+        self.l5.place(x=240,y=50)
+        self.l6 = tkinter.Label(self._window, bg="#F0F0F0",font=("Arial",12),text="")
+        self.l6.place(x=380,y=50)
+        self.t1 = tkinter.Label(self._window, text=addr_count_print,font=("Arial",14),bg="#F0F0F0",fg="purple")
+        self.t1.place(x=80,y=80)
         # =============================================================================
         # about_frame
         # =============================================================================
@@ -1166,17 +1176,9 @@ class MainWindow():
         # =============================================================================
         # brain_frame
         # =============================================================================
-        self.l33 = tkinter.Label(self.brain_frame, text="Total Private Keys : ",font=("Arial",12),bg="#F0F0F0",fg="Black")
-        self.l44 = tkinter.Label(self.brain_frame, bg="#F0F0F0",font=("Arial",12),text="")
-        self.l55 = tkinter.Label(self.brain_frame, text="Total Addresses   : ",font=("Arial",12),bg="#F0F0F0",fg="Black")
-        self.l66 = tkinter.Label(self.brain_frame, bg="#F0F0F0",font=("Arial",12),text="")
         self.l77 = tkinter.Label(self.brain_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple")
         self.l88 = tkinter.Label(self.brain_frame, bg="#F0F0F0",font=("Arial",23),text="0")
         # =============================================================================
-        self.l33.place(x=240,y=5)
-        self.l44.place(x=380,y=5)
-        self.l55.place(x=240,y=25)
-        self.l66.place(x=380,y=25)
         self.l77.place(x=680,y=70)
         self.l88.place(x=740,y=120)
         self.brain_update = tkinter.Entry(self.brain_frame, state='readonly', bg="#F0F0F0",font=("Arial",12),text="", width=80, fg="Red")
@@ -1228,9 +1230,9 @@ class MainWindow():
         # bitcoin_frame
         # =============================================================================
         self.l1 = tkinter.Label(self.bitcoin_frame, text="Bitcoin Wallet Generator ",font=("Arial",20),bg="#F0F0F0",fg="Black")
-        self.l1.place(x=100,y=70)
-        self.t1 = tkinter.Label(self.bitcoin_frame, text=addr_count_print,font=("Arial",14),bg="#F0F0F0",fg="Black")
-        self.t1.place(x=80,y=110)
+        self.l1.place(x=180,y=100)
+        self.l2 = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",12),text="")
+        self.l2.place(x=50,y=280)
         labelstart = tkinter.Label(self.bitcoin_frame, text="Start \nDec ", font=("Arial",13))
         labelstart.place(x=5,y=140)
         self._txt_inputstart = tkinter.Entry(self.bitcoin_frame, width=50, font=MainWindow.C_FONT)
@@ -1259,16 +1261,6 @@ class MainWindow():
         self.start.place(x=690,y=180)
         self.stop= tkinter.Button(self.bitcoin_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= stop, fg='red')
         self.stop.place(x=750,y=180)
-        self.l2 = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",12),text="")
-        self.l2.place(x=50,y=270)
-        self.l3 = tkinter.Label(self.bitcoin_frame, text="Total Private Keys : ",font=("Arial",12),bg="#F0F0F0",fg="Black")
-        self.l3.place(x=240,y=5)
-        self.l4 = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",12),text="")
-        self.l4.place(x=380,y=5)
-        self.l5 = tkinter.Label(self.bitcoin_frame, text="Total Addresses   : ",font=("Arial",12),bg="#F0F0F0",fg="Black")
-        self.l5.place(x=240,y=25)
-        self.l6 = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",12),text="")
-        self.l6.place(x=380,y=25)
         self.l7 = tkinter.Label(self.bitcoin_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple")
         self.l7.place(x=680,y=70)
         self.l8 = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",23),text="0")
@@ -1279,14 +1271,6 @@ class MainWindow():
         # =============================================================================
         # word_frame
         # =============================================================================
-        self.l333 = tkinter.Label(self.word_frame, text="Total Private Keys : ",font=("Arial",12),bg="#F0F0F0",fg="Black")
-        self.l333.place(x=240,y=5)
-        self.l444 = tkinter.Label(self.word_frame, bg="#F0F0F0",font=("Arial",12),text="")
-        self.l444.place(x=380,y=5)
-        self.l555 = tkinter.Label(self.word_frame, text="Total Addresses   : ",font=("Arial",12),bg="#F0F0F0",fg="Black")
-        self.l555.place(x=240,y=25)
-        self.l666 = tkinter.Label(self.word_frame, bg="#F0F0F0",font=("Arial",12),text="")
-        self.l666.place(x=380,y=25)
         self.l777 = tkinter.Label(self.word_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple")
         self.l777.place(x=680,y=70)
         self.l888 = tkinter.Label(self.word_frame, bg="#F0F0F0",font=("Arial",23),text="0")
