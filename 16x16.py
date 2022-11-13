@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 11.11.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 13.11.2022 https://t.me/CryptoCrackersUK
 import random, sys, os
 import numpy as np
 from tkinter import *
@@ -26,9 +26,6 @@ def hex2bit(value):
     length -=2
     return length
 
-# ============================================================================= 
-# For Menu
-# ============================================================================= 
 def donothing():
    x = 0
 
@@ -38,12 +35,14 @@ def openweb():
 def opentelegram():
    x = webbrowser.open("https://t.me/CryptoCrackersUK")
 
-information = ('''
+information16x16 = ('''
             Look for Bitcoin with tkinter and python in GUI.
                         16x16Hunter
                     Made By Mizogg.co.uk
+                        Version = 1.2
+                Top Level Fixed CPU and Ram added
+
                         Version = 1.1
-                        
                 Visualize own HEX not working
             Toplevel needs fixing after single click
                     MUCH TODO more to add
@@ -63,31 +62,7 @@ class App:
         self.on_cells = 0
         self.tick_delay = 0 #in ms
         self.seed_ratio = 33
-    # ============================================================================= 
-    # For WINNER Display
-    # ============================================================================= 
-    def popwin(self):
-        self.popwin = Toplevel()
-        self.popwin.title("BitcoinHunter 16x16.py")
-        self.popwin.iconbitmap('images/miz.ico')
-        self.popwin.geometry("700x250")
-        widgetwin = tkinter.Label(self.popwin, compound='top')
-        widgetwin.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
-        widgetwin['text'] = "© MIZOGG 2018 - 2022"
-        widgetwin['image'] = widgetwin.miz_image_png
-        widgetwin.place(x=380,y=180)
-        widgetwin2 = tkinter.Label(self.popwin, compound='top')
-        widgetwin2.miz_image_png = tkinter.PhotoImage(file='images/congratulations.gif')
-        widgetwin2['image'] = widgetwin2.miz_image_png
-        widgetwin2.place(x=10,y=165)
-        editArea = tkst.ScrolledText(master = self.popwin, wrap = tkinter.WORD, width  = 70, height = 6,font=("Arial",12))
-        editArea.pack(padx=10, pady=10)
-        editArea.insert(tkinter.INSERT, self.WINTEXT)
-        frame = Frame(self.popwin)
-        frame.pack(padx=10, pady=10)
-        button1 = Button(frame, text=" Close ", command=self.popwin.destroy)
-        button1.grid(row=0, column=1)
-            
+
     def btc_hunter(self):
         arr = np.array(self.grid)
         binstring = ''.join(''.join(map(str, l)) for l in arr)
@@ -95,45 +70,37 @@ class App:
         self.binstringvar.set(binstring)
         self.binstring_update.config(textvariable = self.binstringvar, relief='flat')
         self.binstring_update.update()
-        
         dec = int(binstring, 2)
         self.decstringvar = tkinter.StringVar()
         self.decstringvar.set(dec)
         self.decstring_update.config(textvariable = self.decstringvar, relief='flat')
         self.decstring_update.update()
-        
         HEX = hex(int(binstring, 2))
         self.hexstringvar = tkinter.StringVar()
         self.hexstringvar.set(HEX)
         self.hexstring_update.config(textvariable = self.hexstringvar, relief='flat')
         self.hexstring_update.update()
-
         caddr = ice.privatekey_to_address(0, True, dec)
         uaddr = ice.privatekey_to_address(0, False, dec)
         HEX = "%064x" % dec
         wifc = ice.btc_pvk_to_wif(HEX)
         wifu = ice.btc_pvk_to_wif(HEX, False)
-        
         self.caddrstringvar = tkinter.StringVar()
         self.caddrstringvar.set(caddr)
         self.caddrstring_update.config(textvariable = self.caddrstringvar, relief='flat')
         self.caddrstring_update.update()
-        
         self.wifcstringvar = tkinter.StringVar()
         self.wifcstringvar.set(wifc)
         self.wifcstring_update.config(textvariable = self.wifcstringvar, relief='flat')
         self.wifcstring_update.update()
-        
         self.uaddrstringvar = tkinter.StringVar()
         self.uaddrstringvar.set(uaddr)
         self.uaddrstring_update.config(textvariable = self.uaddrstringvar, relief='flat')
         self.uaddrstring_update.update()
-        
         self.wifustringvar = tkinter.StringVar()
         self.wifustringvar.set(wifu)
         self.wifustring_update.config(textvariable = self.wifustringvar, relief='flat')
         self.wifustring_update.update()
-        
         p2sh = ice.privatekey_to_address(1, True, dec)
         self.p2shstringvar = tkinter.StringVar()
         self.p2shstringvar.set(p2sh)
@@ -148,22 +115,22 @@ class App:
             self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc} \nBinary Data: \n {binstring}")
             with open("found.txt", "a", encoding="utf-8") as f:
                 f.write(self.WINTEXT)
-            self.popwin()
+            self.popwinner()
         if uaddr in bloom_filterbtc:
             self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu} \nBinary Data: \n {binstring}")
             with open("found.txt", "a", encoding="utf-8") as f:
                 f.write(self.WINTEXT)
-            self.popwin()
+            self.popwinner()
         if p2sh in bloom_filterbtc:
             self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address p2sh: {p2sh} \nBinary Data: \n {binstring}")
             with open("found.txt", "a", encoding="utf-8") as f:
                 f.write(self.WINTEXT)
-            self.popwin()
+            self.popwinner()
         if bech32 in bloom_filterbtc:
             self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Bc1: {bech32} \nBinary Data: \n {binstring}")
             with open("found.txt", "a", encoding="utf-8") as f:
                 f.write(self.WINTEXT)
-            self.popwin()
+            self.popwinner()
 
     def cpu_met(self):
         self.cpu_use = psutil.cpu_percent()
@@ -227,75 +194,65 @@ class App:
         self._btc_bin.pack(padx=10, pady=3)'''
         self.hunter_win = tkinter.Frame(self.content1, bg = '#A1A1A1')
         self.hunter_win.pack(fill='both', expand='yes')
-        Binary_data = "Binary Data"
-        Binarylable = tkinter.Label(self.hunter_win, text=Binary_data, font=("Arial",10),bg='#A1A1A1',fg="Black")
-        Binarylable.pack(padx=10, pady=3)
+        self.Binary_data = "Binary Data"
+        self.Binarylable = tkinter.Label(self.hunter_win, text=self.Binary_data, font=("Arial",10),bg='#A1A1A1',fg="Black").pack(padx=10, pady=3)
         self.binstring_update = tkinter.Entry(self.hunter_win, state='readonly', bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
         self.binstring_update.pack(padx=10, pady=2)
-        DEC_data = "Private Key Dec"
-        DEClable = tkinter.Label(self.hunter_win, text=DEC_data, font=("Arial",10),bg='#A1A1A1',fg="Black")
-        DEClable.pack(padx=10, pady=3)
+        self.DEC_data = "Private Key Dec"
+        self.DEClable = tkinter.Label(self.hunter_win, text=self.DEC_data, font=("Arial",10),bg='#A1A1A1',fg="Black").pack(padx=10, pady=3)
         self.decstring_update = tkinter.Entry(self.hunter_win, state='readonly', bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
         self.decstring_update.pack(padx=10, pady=2)
-        HEX_data = "Private Key HEX"
-        HEXlable = tkinter.Label(self.hunter_win, text=HEX_data, font=("Arial",10),bg='#A1A1A1',fg="Black")
-        HEXlable.pack(padx=10, pady=3)
+        self.HEX_data = "Private Key HEX"
+        self.HEXlable = tkinter.Label(self.hunter_win, text=self.HEX_data, font=("Arial",10),bg='#A1A1A1',fg="Black").pack(padx=10, pady=3)
         self.hexstring_update = tkinter.Entry(self.hunter_win, state='readonly', bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
         self.hexstring_update.pack(padx=10, pady=2)
-        caddr_data = "Address Compressed"
-        caddrlable = tkinter.Label(self.hunter_win, text=caddr_data, font=("Arial",10),bg='#A1A1A1',fg="Black")
-        caddrlable.pack(padx=10, pady=3)
+        self.caddr_data = "Address Compressed"
+        self.caddrlable = tkinter.Label(self.hunter_win, text=self.caddr_data, font=("Arial",10),bg='#A1A1A1',fg="Black").pack(padx=10, pady=3)
         self.caddrstring_update = tkinter.Entry(self.hunter_win, state='readonly', bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
         self.caddrstring_update.pack(padx=10, pady=2)
-        wifc_data = "WIF Compressed"
-        wifclable = tkinter.Label(self.hunter_win, text=wifc_data, font=("Arial",10),bg='#A1A1A1',fg="Black")
-        wifclable.pack(padx=10, pady=3)
+        self.wifc_data = "WIF Compressed"
+        self.wifclable = tkinter.Label(self.hunter_win, text=self.wifc_data, font=("Arial",10),bg='#A1A1A1',fg="Black").pack(padx=10, pady=3)
         self.wifcstring_update = tkinter.Entry(self.hunter_win, state='readonly', bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
         self.wifcstring_update.pack(padx=10, pady=2)
-        uaddr_data = "Address Uncompressed"
-        uaddrlable = tkinter.Label(self.hunter_win, text=uaddr_data, font=("Arial",10),bg='#A1A1A1',fg="Black")
-        uaddrlable.pack(padx=10, pady=3)
+        self.uaddr_data = "Address Uncompressed"
+        self.uaddrlable = tkinter.Label(self.hunter_win, text=self.uaddr_data, font=("Arial",10),bg='#A1A1A1',fg="Black").pack(padx=10, pady=3)
         self.uaddrstring_update = tkinter.Entry(self.hunter_win, state='readonly', bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
         self.uaddrstring_update.pack(padx=10, pady=2)
-        wifu_data = "WIF Uncompressed"
-        wifulable = tkinter.Label(self.hunter_win, text=wifu_data, font=("Arial",10),bg='#A1A1A1',fg="Black")
-        wifulable.pack(padx=10, pady=3)
+        self.wifu_data = "WIF Uncompressed"
+        self.wifulable = tkinter.Label(self.hunter_win, text=self.wifu_data, font=("Arial",10),bg='#A1A1A1',fg="Black").pack(padx=10, pady=3)
         self.wifustring_update = tkinter.Entry(self.hunter_win, state='readonly', bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
         self.wifustring_update.pack(padx=10, pady=2)
-        p2sh_data = "Address P2SH"
-        p2shlable = tkinter.Label(self.hunter_win, text=p2sh_data, font=("Arial",10),bg='#A1A1A1',fg="Black")
-        p2shlable.pack(padx=10, pady=3)
+        self.p2sh_data = "Address P2SH"
+        self.p2shlable = tkinter.Label(self.hunter_win, text=self.p2sh_data, font=("Arial",10),bg='#A1A1A1',fg="Black").pack(padx=10, pady=3)
         self.p2shstring_update = tkinter.Entry(self.hunter_win, state='readonly', bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
         self.p2shstring_update.pack(padx=10, pady=2)
-        bc1_data = "Address P2WPKH"
-        bc1lable = tkinter.Label(self.hunter_win, text=bc1_data, font=("Arial",10),bg='#A1A1A1',fg="Black")
-        bc1lable.pack(padx=10, pady=3)
+        self.bc1_data = "Address P2WPKH"
+        self.bc1lable = tkinter.Label(self.hunter_win, text=self.bc1_data, font=("Arial",10),bg='#A1A1A1',fg="Black").pack(padx=10, pady=3)
         self.bech32string_update = tkinter.Entry(self.hunter_win, state='readonly', bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
         self.bech32string_update.pack(padx=10, pady=2)
-        self.t123 = tkinter.Label(self.BH16x16, text=addr_count_print,font=("Arial",14),bg="#F0F0F0",fg="purple")
-        self.t123.place(x=540,y=580)
+        self.t123 = tkinter.Label(self.BH16x16, text=addr_count_print,font=("Arial",14),bg="#F0F0F0",fg="purple").place(x=540,y=580)
         self.lbl_tickno = tkinter.Label(self.hunter_win, text='Total Private Keys Scanned : 0', font=("Arial",10),bg='#A1A1A1',fg="Purple")
         self.lbl_tickno.pack(padx=3, pady=3)
         self.lbl_totalno = tkinter.Label(self.hunter_win, text='Total Addresses Scanned : 0', font=("Arial",10),bg='#A1A1A1',fg="Purple")
         self.lbl_totalno.pack(padx=3, pady=3)
-        self.cpu_label = tkinter.Label(self.BH16x16,font = ('calibri', 14, 'bold'), background = '#F0F0F0', foreground = 'red')
+        self.cpu_label = tkinter.Label(self.BH16x16,font = ('calibri', 14, 'bold'), bg= '#F0F0F0', fg= 'red')
         self.cpu_label.place(x=600,y=620)
-        self.ram_label = tkinter.Label(self.BH16x16,font = ('calibri', 14, 'bold'), background = '#F0F0F0', foreground = 'red')
+        self.ram_label = tkinter.Label(self.BH16x16,font = ('calibri', 14, 'bold'), bg= '#F0F0F0', fg= 'red')
         self.ram_label.place(x=800,y=620)
-        widget = tkinter.Label(self.BH16x16, compound='top')
-        widget.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
-        widget['text'] = "© MIZOGG 2018 - 2022"
-        widget['image'] = widget.miz_image_png
-        widget.place(x=5,y=590)
+        self.widget16x16 = tkinter.Label(self.BH16x16, compound='top')
+        self.widget16x16.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
+        self.widget16x16['text'] = "© MIZOGG 2018 - 2022"
+        self.widget16x16['image'] = self.widget16x16.miz_image_png
+        self.widget16x16.place(x=5,y=590)
         self.cpu_met()
         # =============================================================================
         # about_frame
         # =============================================================================
-        about16 = tkinter.Frame(master = self.about_frame, bg = '#F0F0F0')
-        about16.pack(fill='both', expand='yes')
-        editArea = tkst.ScrolledText(master = about16, wrap = tkinter.WORD, width  = 40, height = 16,font=("Arial",12))
-        editArea.pack(padx=10, pady=90, fill=tkinter.BOTH, expand=True)
-        editArea.insert(tkinter.INSERT, information)
+        self.about16 = tkinter.Frame(master = self.about_frame, bg = '#F0F0F0')
+        self.about16.pack(fill='both', expand='yes')
+        self.editArea16 = tkst.ScrolledText(master = self.about16, wrap = tkinter.WORD, width  = 40, height = 16,font=("Arial",12))
+        self.editArea16.pack(padx=10, pady=90, fill=tkinter.BOTH, expand=True)
+        self.editArea16.insert(tkinter.INSERT, information16x16)
         
     def init_grid(self):
         self.grid = [[0 for x in range(self.cols)] for y in range(self.rows)]
@@ -436,25 +393,45 @@ class App:
         self.update_labels()
         if self.is_active:
             self.BH16x16.after(self.tick_delay, self.tick)
-    
+
+    def popwinner(self):
+        self.popwin = Toplevel()
+        self.popwin.title("BitcoinHunter 16x16.py")
+        self.popwin.iconbitmap('images/miz.ico')
+        self.popwin.geometry("700x250")
+        self.widgetwinpop = tkinter.Label(self.popwin, compound='top')
+        self.widgetwinpop.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
+        self.widgetwinpop['text'] = "© MIZOGG 2018 - 2022"
+        self.widgetwinpop['image'] = self.widgetwinpop.miz_image_png
+        self.widgetwinpop.place(x=380,y=180)
+        self.widgetwin2pop = tkinter.Label(self.popwin, compound='top')
+        self.widgetwin2pop.miz_image_png = tkinter.PhotoImage(file='images/congratulations.gif')
+        self.widgetwin2pop['image'] = self.widgetwin2pop.miz_image_png
+        self.widgetwin2pop.place(x=10,y=165)
+        self.editAreapop = tkst.ScrolledText(master = self.popwin, wrap = tkinter.WORD, width  = 70, height = 6,font=("Arial",12))
+        self.editAreapop.pack(padx=10, pady=10)
+        self.editAreapop.insert(tkinter.INSERT, self.WINTEXT)
+        self.framewinpop = Frame(self.popwin)
+        self.framewinpop.pack(padx=10, pady=10)
+        self.buttonwinpop = Button(self.framewinpop, text=" Close ", command=self.popwin.destroy)
+        self.buttonwinpop.grid(row=0, column=1)
+        
     def startpop(self):
         self.pop = Toplevel()
         self.pop.title("16x16.py")
         self.pop.iconbitmap('images/miz.ico')
         self.pop.geometry("700x250")
-        widget = tkinter.Label(self.pop, compound='top')
-        widget.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
-        widget['text'] = "© MIZOGG 2018 - 2022"
-        widget['image'] = widget.miz_image_png
-        widget.place(x=220,y=180)
-        label = Label(self.pop, text='Welcome to 16x16.py...... \n\n Made By Mizogg.co.uk \n\n Version 1.1 08/11/22')
-        label.pack(pady=10)
-        Label(self.pop, text= "This window will get closed after 2 seconds...", font=('Helvetica 8 bold')).pack(pady=10)
-        frame = Frame(self.pop)
-        frame.pack(pady=10)
-        button1 = Button(frame, text=" Close ",
-        command=self.CLOSEWINDOW)
-        button1.grid(row=0, column=1)
+        self.widgetpop = tkinter.Label(self.pop, compound='top')
+        self.widgetpop.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
+        self.widgetpop['text'] = "© MIZOGG 2018 - 2022"
+        self.widgetpop['image'] = self.widgetpop.miz_image_png
+        self.widgetpop.place(x=220,y=180)
+        self.label = tkinter.Label(self.pop, text='Welcome to 16x16.py...... \n\n Made By Mizogg.co.uk \n\n Version 1.2 13/11/22').pack(pady=10)
+        self.label1 = tkinter.Label(self.pop, text= "This window will get closed after 2 seconds...", font=('Helvetica 8 bold')).pack(pady=10)
+        self.framepop = Frame(self.pop)
+        self.framepop.pack(pady=10)
+        self.buttonpop = Button(self.framepop, text=" Close ", command=self.CLOSEWINDOW)
+        self.buttonpop.grid(row=0, column=1)
         self.pop.after(2000,lambda:self.pop.destroy())
     
     def CLOSEWINDOW(self):
