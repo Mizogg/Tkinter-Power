@@ -9,31 +9,14 @@ import tkinter.messagebox
 import tkinter.scrolledtext as tkst
 from tkinter.ttk import *
 import secp256k1 as ice
+import mizlib as MIZ
 from bloomfilter import BloomFilter, ScalableBloomFilter, SizeGrowthRate
 import psutil
+
 with open('puzzle.bf', "rb") as fp:
     bloom_filterbtc = BloomFilter.load(fp)
 addr_count = len(bloom_filterbtc)  
 addr_count_print = f'Total Bitcoin Addresses Loaded and Checking : {addr_count}'
-def hex2bin(value):
-    return bin(int(value, 16))
-
-def hex2dec(value):
-    return int(value, 16)
-    
-def hex2bit(value):
-    length = len(bin(int(value, 16)))
-    length -=2
-    return length
-
-def donothing():
-   x = 0
-
-def openweb():
-   x = webbrowser.open("https://mizogg.co.uk")
-   
-def opentelegram():
-   x = webbrowser.open("https://t.me/CryptoCrackersUK")
 
 information16x16 = ('''
             Look for Bitcoin with tkinter and python in GUI.
@@ -134,10 +117,13 @@ class App:
 
     def cpu_met(self):
         self.cpu_use = psutil.cpu_percent()
-        self.cpu_label.config(text='Total CPU {}%'.format(self.cpu_use))
+        self.cpu_label.config(text='Total CPU {} %'.format(self.cpu_use))
         self.cpu_label.after(1000,self.cpu_met)
         self.ram_use = psutil.virtual_memory()[2]
-        self.ram_label.config(text='RAM memory % used {}%'.format(self.ram_use))
+        self.ram_label.config(text='RAM Used {} %'.format(self.ram_use))
+        ram_free = psutil.virtual_memory().available * 100 / psutil.virtual_memory().total
+        self.ram_free = str(ram_free)[:4]
+        self.ram_free_label.config(text='RAM Free {} %'.format(self.ram_free))
 
     def init_tk(self):
         self.BH16x16 = Tk()
@@ -150,8 +136,8 @@ class App:
         self.BH16x16.filemenu.add_command(label="Exit", command=self.BH16x16.quit)
         self.BH16x16.menubar.add_cascade(label="File", menu=self.BH16x16.filemenu)
         self.BH16x16.helpmenu = Menu(self.BH16x16.menubar, tearoff=0)
-        self.BH16x16.helpmenu.add_command(label="Help Telegram Group", command=opentelegram)
-        self.BH16x16.helpmenu.add_command(label="Mizogg Website", command=openweb)
+        self.BH16x16.helpmenu.add_command(label="Help Telegram Group", command=MIZ.opentelegram)
+        self.BH16x16.helpmenu.add_command(label="Mizogg Website", command=MIZ.openweb)
         self.BH16x16.helpmenu.add_command(label="About BitcoinHunter", command=self.startpop)
         self.BH16x16.menubar.add_cascade(label="Help", menu=self.BH16x16.helpmenu)
         self.BH16x16.config(menu=self.BH16x16.menubar)
@@ -236,9 +222,11 @@ class App:
         self.lbl_totalno = tkinter.Label(self.hunter_win, text='Total Addresses Scanned : 0', font=("Arial",10),bg='#A1A1A1',fg="Purple")
         self.lbl_totalno.pack(padx=3, pady=3)
         self.cpu_label = tkinter.Label(self.BH16x16,font = ('calibri', 14, 'bold'), bg= '#F0F0F0', fg= 'red')
-        self.cpu_label.place(x=600,y=620)
+        self.cpu_label.place(x=580,y=620)
         self.ram_label = tkinter.Label(self.BH16x16,font = ('calibri', 14, 'bold'), bg= '#F0F0F0', fg= 'red')
-        self.ram_label.place(x=800,y=620)
+        self.ram_label.place(x=740,y=620)
+        self.ram_free_label = tkinter.Label(self.BH16x16,font = ('calibri', 14, 'bold'), bg= '#F0F0F0', fg= 'red')
+        self.ram_free_label.place(x=900,y=620)
         self.widget16x16 = tkinter.Label(self.BH16x16, compound='top')
         self.widget16x16.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
         self.widget16x16['text'] = "© MIZOGG 2018 - 2022"
@@ -352,9 +340,9 @@ class App:
             
     '''def evt_btc_hex(self):
         hex_value = self._txt_inputhex.get().strip().replace(" ", "")
-        bin_value = hex2bin(hex_value).strip().replace("0b", "")
-        dec_value = hex2dec(hex_value)
-        bit_value = hex2bit(hex_value)
+        bin_value = MIZ.hex2bin(hex_value).strip().replace("0b", "")
+        dec_value = MIZ.hex2dec(hex_value)
+        bit_value = MIZ.hex2bit(hex_value)
         self.clear_canvas()
         for rw in range(self.rows):
             for cl in range(self.cols):
