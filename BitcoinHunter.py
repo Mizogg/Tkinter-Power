@@ -7,104 +7,22 @@ import tkinter.messagebox
 import tkinter.scrolledtext as tkst
 from tkinter.ttk import *
 from time import strftime, sleep
-import secp256k1 as ice
 import random, sys, os
 import string
 import psutil
 import mizlib as MIZ
-try:
-    from bloomfilter import BloomFilter, ScalableBloomFilter, SizeGrowthRate
-
-except ImportError:
-    import subprocess
-    subprocess.check_call(["python", '-m', 'pip', 'install', 'simplebloomfilter'])
-    subprocess.check_call(["python", '-m', 'pip', 'install', 'bitarray==1.9.2'])
-    from bloomfilter import BloomFilter, ScalableBloomFilter, SizeGrowthRate
-# For Word Tab
-derivation_total_path_to_check = 1
 
 def random_word_results(self, mnem):
-    global total, totaladd, found
-    seed = MIZ.mnem_to_seed(mnem)
-    pvk = MIZ.bip39seed_to_private_key(seed, derivation_total_path_to_check)
-    pvk2 = MIZ.bip39seed_to_private_key2(seed, derivation_total_path_to_check)
-    pvk3 = MIZ.bip39seed_to_private_key3(seed, derivation_total_path_to_check)
-    caddr = ice.privatekey_to_address(0, True, (int.from_bytes(pvk, "big")))
-    p2sh = ice.privatekey_to_address(1, True, (int.from_bytes(pvk2, "big")))
-    bech32 = ice.privatekey_to_address(2, True, (int.from_bytes(pvk3, "big")))
-    dec = (int.from_bytes(pvk, "big"))
-    HEX = "%064x" % dec
-    dec2 = (int.from_bytes(pvk2, "big"))
-    HEX2 = "%064x" % dec2
-    dec3 = (int.from_bytes(pvk3, "big"))
-    HEX3 = "%064x" % dec3
-    cpath = "m/44'/0'/0'/0/0"
-    ppath = "m/49'/0'/0'/0/0"
-    bpath = "m/84'/0'/0'/0/0"
-    source_code = MIZ.get_balance(caddr)
-    received_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
-    receivedid = source_code.xpath(received_id)
-    totalReceived = str(receivedid[0].text_content())
-    sent_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[2]/td[2]'
-    sentid = source_code.xpath(sent_id)
-    totalSent = str(sentid[0].text_content())
-    balance_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[3]/td[2]'
-    balanceid = source_code.xpath(balance_id)
-    balance = str(balanceid[0].text_content())
-    txs_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
-    txsid = source_code.xpath(txs_id)
-    txs = str(txsid[0].text_content())
-    source_code2 = MIZ.get_balance2(p2sh)
-    received_id2 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
-    receivedid2 = source_code2.xpath(received_id2)
-    totalReceived2 = str(receivedid2[0].text_content())
-    sent_id2 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[2]/td[2]'
-    sentid2 = source_code2.xpath(sent_id2)
-    totalSent2 = str(sentid2[0].text_content())
-    balance_id2 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[3]/td[2]'
-    balanceid2 = source_code2.xpath(balance_id2)
-    balance2 = str(balanceid2[0].text_content())
-    txs_id2 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
-    txsid2 = source_code2.xpath(txs_id2)
-    txs2 = str(txsid2[0].text_content())
-    source_code3 = MIZ.get_balance3(bech32)
-    received_id3 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
-    receivedid3 = source_code3.xpath(received_id3)
-    totalReceived3 = str(receivedid3[0].text_content())
-    sent_id3 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[2]/td[2]'
-    sentid3 = source_code3.xpath(sent_id3)
-    totalSent3 = str(sentid3[0].text_content())
-    balance_id3 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[3]/td[2]'
-    balanceid3 = source_code3.xpath(balance_id3)
-    balance3 = str(balanceid3[0].text_content())
-    txs_id3 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
-    txsid3 = source_code3.xpath(txs_id3)
-    txs3 = str(txsid3[0].text_content())
+    global total, totaladd
     wordvar = tkinter.StringVar()
     wordvar.set(mnem)
     wordvartext = tkinter.StringVar()
-    wordvartext1 = (f'''====================================================:Balance:Received:Sent:TXS:
-Bitcoin Address : {caddr} : [{balance}] : [{totalReceived}] : [{totalSent}] : [{txs}]
-Hexadecimal Private Key : {HEX}
-
-Bitcoin Address : {p2sh} : [{balance2}] : [{totalReceived2}] : [{totalSent2}] : [{txs2}]
-Hexadecimal Private Key : {HEX2}
-
-Bitcoin Address : {bech32} : [{balance3}] : [{totalReceived3}] : [{totalSent3}] : [{txs3}]
-Hexadecimal Private Key : {HEX3}
-==================================================================================
-''')
+    wordvartext1 = MIZ.rwr(self, mnem)
     wordvartext.set(wordvartext1)
     self.word_update.config(textvariable = wordvar, relief='flat')
     self.word_update1.config(textvariable = wordvartext, relief='flat')
     self.word_update1.update()
     self.word_update.update()
-    if int(txs) > 0 or int(txs2) > 0 or int(txs3) > 0:
-        found+=1
-        self.foundword.config(text = f'{found}')
-        WINTEXT = f'\n Mnemonic : {mnem} \n\n {wordvartext1}'
-        with open('found.txt', 'a', encoding='utf-8') as f:
-            f.write(WINTEXT)
     total+=1
     totaladd+=1
     self.totalC.config(text = f'{total}')
@@ -182,10 +100,6 @@ creditsinfo = ('''
 
 # Database Load and Files
 mylist = []
-with open('puzzle.bf', "rb") as fp:
-    bloom_filterbtc = BloomFilter.load(fp)
-addr_count = len(bloom_filterbtc)  
-addr_count_print = f'Total Bitcoin Addresses Loaded and Checking : {addr_count}'
  
 with open('files/words.txt', newline='', encoding='utf-8') as f:
     for line in f:
@@ -197,6 +111,7 @@ run = run1 = run2 = True
 
 class MainWindow():
     def __init__(self):
+        self.found = found
         def start():
            global run
            run= True
@@ -224,62 +139,9 @@ class MainWindow():
         def RandomInteger(minN, maxN):
             return random.randrange(minN, maxN)
         #  Brute Program Main
-        def brute_results(dec):
-            global total, totaladd, found
-            caddr = ice.privatekey_to_address(0, True, dec)
-            uaddr = ice.privatekey_to_address(0, False, dec)
-            HEX = "%064x" % dec
-            wifc = ice.btc_pvk_to_wif(HEX)
-            wifu = ice.btc_pvk_to_wif(HEX, False)
-            p2sh = ice.privatekey_to_address(1, True, dec)
-            bech32 = ice.privatekey_to_address(2, True, dec)
-            length = len(bin(dec))
-            length -=2
-            if caddr in bloom_filterbtc:
-                self.bfr.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc}')
-                found+=1
-                self.foundbtc.config(text = f'{found}')
-                with open('found.txt', 'a') as result:
-                    result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc}\n')
-                self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc}")
-                self.popwinner()
-            if uaddr in bloom_filterbtc:
-                self.bfr.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu}')
-                found+=1
-                self.foundbtc.config(text = f'{found}')
-                with open('found.txt', 'a') as result:
-                    result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu}\n')
-                self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu}")
-                self.popwinner()
-            if p2sh in bloom_filterbtc:
-                self.bfr.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address p2sh: {p2sh}')
-                found+=1
-                self.foundbtc.config(text = f'{found}')
-                with open('found.txt', 'a') as result:
-                    result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address p2sh: {p2sh} \n')
-                self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address p2sh: {p2sh}")
-                self.popwinner()
-            if bech32 in bloom_filterbtc:
-                self.bfr.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address bech32: {bech32}')
-                found+=1
-                self.foundbtc.config(text = f'{found}')
-                with open('found.txt', 'a') as result:
-                    result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address bech32: {bech32}')
-                self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address bech32: {bech32}")
-                self.popwinner()
-            scantext = f'''
-            *** DEC Key ***
- {dec}
-        Bits {length}
-        *** HEY Key ***
-    {HEX}
- BTC Address Compressed: {caddr}
-        WIF Compressed: {wifc}
- BTC Address Uncompressed: {uaddr}
-        WIF Compressed: {wifu}
- BTC Address p2sh: {p2sh}
- BTC Address bech32: {bech32}
-====================================='''
+        def brute_results(self, dec):
+            global total, totaladd
+            scantext = MIZ.brute_btc(self, dec)
             self.bfr.config(text = scantext)
             self.bfr.update()
             total+=1
@@ -292,7 +154,7 @@ class MainWindow():
             stopdec = self._txt_inputstop.get().strip().replace(" ", "")
             while run:
                 dec =int(RandomInteger(int(startdec), int(stopdec)))
-                brute_results(dec)
+                brute_results(self, dec)
 
         def Sequential_Bruteforce_speed():
             startdec = self._txt_inputstart.get().strip().replace(" ", "")
@@ -303,7 +165,7 @@ class MainWindow():
                 if dec == int(stopdec):
                     stop()
                 else:
-                    brute_results(dec)
+                    brute_results(self, dec)
                     startdec = int(startdec) + int(mag)
         
         def Sequential_Bruteforce_speed_back():
@@ -315,40 +177,18 @@ class MainWindow():
                 if dec == int(startdec):
                     stop()
                 else:
-                    brute_results(dec)
+                    brute_results(self, dec)
                     stopdec = int(stopdec) - int(mag)
         #  Brain Program Main
-        def brain_results_online(passphrase):
-            global total, totaladd, found
-            wallet = MIZ.BrainWallet()
-            private_key, caddr = wallet.generate_address_from_passphrase(passphrase)
-            source_code = MIZ.get_balance(caddr)
-            received_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
-            receivedid = source_code.xpath(received_id)
-            totalReceived = str(receivedid[0].text_content())
-            sent_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[2]/td[2]'
-            sentid = source_code.xpath(sent_id)
-            totalSent = str(sentid[0].text_content())
-            balance_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[3]/td[2]'
-            balanceid = source_code.xpath(balance_id)
-            balance = str(balanceid[0].text_content())
-            txs_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
-            txsid = source_code.xpath(txs_id)
-            txs = str(txsid[0].text_content())
+        def brain_results_online(self, passphrase):
+            global total, totaladd
             brainvar = tkinter.StringVar()
             brainvar.set(passphrase)
             brainvartext = tkinter.StringVar()
-            brainvartext1 = (f'\n Private Key In HEX : \n\n {private_key} \n\n Bitcoin Adress : {caddr} \n Balance  [{balance}] \n TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]')
+            brainvartext1 = MIZ.rbonline(self, passphrase)
             brainvartext.set(brainvartext1)
             self.brain_update.config(textvariable = brainvar, relief='flat')
             self.brain_update1.config(textvariable = brainvartext, relief='flat')
-            if int(txs) > 0 :
-                found+=1
-                self.foundbw.config(text = f'{found}')
-                with open("found.txt", "a", encoding="utf-8") as f:
-                    f.write(f'\n BrainWallet : {passphrase} \n Private Key In HEX : {private_key} \n Bitcoin Adress : {caddr} \n Balance  [{balance}] TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]')
-                self.WINTEXT = (f"BrainWallet : {passphrase}\n HEX Key: {private_key} \n BTC Address Compressed: {caddr}  \n \n Balance  [{balance}] \n TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]")
-                self.popwinner()
             self.brain_update.update()
             self.brain_update1.update()
             total+=1
@@ -361,12 +201,12 @@ class MainWindow():
                 start_amm = self._txt_brain_ammount.get().strip().replace(" ", "")
                 stop_amm = self._txt_brain_total.get().strip().replace(" ", "")
                 passphrase = ' '.join(random.sample(mylist, random.randint(int(start_amm), int(stop_amm))))
-                brain_results_online(passphrase)
+                brain_results_online(self, passphrase)
         
         def Random_brain_online1():
             for i in range(0,len(mylist)):
                 passphrase = mylist[i]
-                brain_results_online(passphrase)
+                brain_results_online(self, passphrase)
         
         def Random_brain_online2():
             start_amm = self._txt_brain_ammount.get().strip().replace(" ", "")
@@ -374,26 +214,17 @@ class MainWindow():
             while run1:
                 words = random.randrange(int(start_amm), int(stop_amm))
                 passphrase = ''.join(random.sample(string.ascii_lowercase, words))
-                brain_results_online(passphrase)
+                brain_results_online(self, passphrase)
 
-        def brain_results_offline(passphrase):
-            global total, totaladd, found
-            wallet = MIZ.BrainWallet()
-            private_key, addr = wallet.generate_address_from_passphrase(passphrase)
+        def brain_results_offline(self, passphrase):
+            global total, totaladd
             brainvar = tkinter.StringVar()
             brainvar.set(passphrase)
             brainvartext = tkinter.StringVar()
-            brainvartext1 = (f'\n Private Key In HEX : \n\n {private_key} \n\n Bitcoin Adress : {addr} ')
+            brainvartext1 = MIZ.rboffline(self, passphrase)
             brainvartext.set(brainvartext1)
             self.brain_update.config(textvariable = brainvar, relief='flat')
             self.brain_update1.config(textvariable = brainvartext, relief='flat')
-            if addr in bloom_filterbtc:
-                found+=1
-                self.foundbw.config(text = f'{found}')
-                self.WINTEXT = (f'\n BrainWallet: {passphrase} \n Private Key In HEX : {private_key} \n Bitcoin Adress : {addr}')
-                with open("found.txt", "a", encoding="utf-8") as f:
-                    f.write(self.WINTEXT)
-                self.popwinner()
             self.brain_update.update()
             self.brain_update1.update()
             total+=1
@@ -406,12 +237,12 @@ class MainWindow():
             stop_amm = self._txt_brain_total.get().strip().replace(" ", "")
             while run1:
                 passphrase = ' '.join(random.sample(mylist, random.randint(int(start_amm), int(stop_amm))))
-                brain_results_offline(passphrase)
+                brain_results_offline(self, passphrase)
                 
         def Random_brain_offline1():
             for i in range(0,len(mylist)):
                 passphrase = mylist[i]
-                brain_results_offline(passphrase)
+                brain_results_offline(self, passphrase)
         
         def Random_brain_offline2():
             start_amm = self._txt_brain_ammount.get().strip().replace(" ", "")
@@ -419,43 +250,18 @@ class MainWindow():
             while run1:
                 words = random.randrange(int(start_amm), int(stop_amm))
                 passphrase = ''.join(random.sample(string.ascii_lowercase, words))
-                brain_results_offline(passphrase)
+                brain_results_offline(self, passphrase)
         #  Mnemonic Program Main
         def word_results_online(rnds):
             global total, totaladd, found
             mnem = MIZ.create_valid_mnemonics(strength=int(rnds))
-            seed = MIZ.mnem_to_seed(mnem)
-            pvk = MIZ.bip39seed_to_private_key(seed, derivation_total_path_to_check)
-            dec = (int.from_bytes(pvk, "big"))
-            HEX = "%064x" % dec
-            caddr = ice.privatekey_to_address(0, True, (int.from_bytes(pvk, "big")))
-            source_code = MIZ.get_balance(caddr)
-            received_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
-            receivedid = source_code.xpath(received_id)
-            totalReceived = str(receivedid[0].text_content())
-            sent_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[2]/td[2]'
-            sentid = source_code.xpath(sent_id)
-            totalSent = str(sentid[0].text_content())
-            balance_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[3]/td[2]'
-            balanceid = source_code.xpath(balance_id)
-            balance = str(balanceid[0].text_content())
-            txs_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
-            txsid = source_code.xpath(txs_id)
-            txs = str(txsid[0].text_content())
             wordvar = tkinter.StringVar()
             wordvar.set(mnem)
             wordvartext = tkinter.StringVar()
-            wordvartext1 = (f'\n Decimal Private Key \n {dec} \n Hexadecimal Private Key \n {HEX} \n Bitcoin Adress : {caddr} \n Balance  [{balance}] \n TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]')
+            wordvartext1 = MIZ.rwonline(self, mnem)
             wordvartext.set(wordvartext1)
             self.word_update.config(textvariable = wordvar, relief='flat')
             self.word_update1.config(textvariable = wordvartext, relief='flat')
-            if int(txs) > 0 :
-                found+=1
-                self.foundword.config(text = f'{found}')
-                self.WINTEXT = f'\n Mnemonic : {mnem} \n Dec Key: {dec} \n HEX Key: {HEX} \n Bitcoin Adress : {caddr} \n Balance  [{balance}] TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]'
-                with open('found.txt', 'a', encoding='utf-8') as f:
-                    f.write(self.WINTEXT)
-                self.popwinner()
             self.word_update.update()
             self.word_update1.update()
             total+=1
@@ -509,52 +315,15 @@ class MainWindow():
                 word_results_online(rnds)
 
         def word_results_offline(rnds):
-            global total, totaladd, found
+            global total, totaladd
             mnem = MIZ.create_valid_mnemonics(strength=int(rnds))
-            seed = MIZ.mnem_to_seed(mnem)
-            pvk = MIZ.bip39seed_to_private_key(seed, derivation_total_path_to_check)
-            pvk2 = MIZ.bip39seed_to_private_key2(seed, derivation_total_path_to_check)
-            pvk3 = MIZ.bip39seed_to_private_key3(seed, derivation_total_path_to_check)
-            dec = (int.from_bytes(pvk, "big"))
-            HEX = "%064x" % dec
-            dec2 = (int.from_bytes(pvk2, "big"))
-            HEX2 = "%064x" % dec2
-            dec3 = (int.from_bytes(pvk3, "big"))
-            HEX3 = "%064x" % dec3
-            cpath = "m/44'/0'/0'/0/0"
-            ppath = "m/49'/0'/0'/0/0"
-            bpath = "m/84'/0'/0'/0/0"
-            caddr = ice.privatekey_to_address(0, True, (int.from_bytes(pvk, "big")))
-            p2sh = ice.privatekey_to_address(1, True, (int.from_bytes(pvk2, "big")))
-            bech32 = ice.privatekey_to_address(2, True, (int.from_bytes(pvk3, "big")))
             wordvar = tkinter.StringVar()
             wordvar.set(mnem)
             wordvartext = tkinter.StringVar()
-            wordvartext1 = (f' Bitcoin {cpath} :  {caddr} \n Bitcoin {cpath} : Decimal Private Key \n {dec} \n Bitcoin {cpath} : Hexadecimal Private Key \n {HEX}  \n Bitcoin {ppath} :  {p2sh}\n Bitcoin {ppath} : Decimal Private Key \n {dec2} \n Bitcoin {ppath} :  Hexadecimal Private Key \n {HEX2} \n Bitcoin {bpath} : {bech32}\n Bitcoin {bpath} : Decimal Private Key \n {dec3} \n Bitcoin {bpath} : Hexadecimal Private Key \n {HEX3} ')
+            wordvartext1 = MIZ.rwoffline(self, mnem)
             wordvartext.set(wordvartext1)
             self.word_update.config(textvariable = wordvar, relief='flat')
             self.word_update1.config(textvariable = wordvartext, relief='flat')
-            if caddr in bloom_filterbtc:
-                found+=1
-                self.foundword.config(text = f'{found}')
-                self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {cpath} :  {caddr} \n Decimal Private Key \n {dec} \n Hexadecimal Private Key \n {HEX}  \n'
-                with open("found.txt", "a", encoding="utf-8") as f:
-                    f.write(self.WINTEXT)
-                self.popwinner()
-            if p2sh in bloom_filterbtc:
-                found+=1
-                self.foundword.config(text = f'{found}')
-                self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {ppath} :  {p2sh}\nDecimal Private Key \n {dec2} \n Hexadecimal Private Key \n {HEX2} \n'
-                with open("found.txt", "a", encoding="utf-8") as f:
-                    f.write(self.WINTEXT)
-                self.popwinner()
-            if bech32 in bloom_filterbtc:
-                found+=1
-                self.foundword.config(text = f'{found}')
-                self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {bpath} : {bech32}\n Decimal Private Key \n {dec3} \n Hexadecimal Private Key \n {HEX3} \n'
-                with open("found.txt", "a", encoding="utf-8") as f:
-                    f.write(self.WINTEXT)
-                self.popwinner()
             self.word_update.update()
             self.word_update1.update()
             total+=1
@@ -708,7 +477,7 @@ class MainWindow():
         self.totaladd = tkinter.Label(self._window, text="Total Addresses   : ",font=("Arial",12),bg="#F0F0F0",fg="Black").place(x=240,y=50)
         self.totalA = tkinter.Label(self._window, bg="#F0F0F0",font=("Arial",12),text="")
         self.totalA.place(x=380,y=50)
-        self.addcount = tkinter.Label(self._window, text=addr_count_print,font=("Arial",14),bg="#F0F0F0",fg="purple").place(x=80,y=80)
+        self.addcount = tkinter.Label(self._window, text=MIZ.countadd(),font=("Arial",14),bg="#F0F0F0",fg="purple").place(x=80,y=80)
         # about_frame
         self.about1 = tkinter.Frame(master = self.about_frame, bg = '#F0F0F0')
         self.about1.pack(fill='both', expand='yes')
@@ -890,34 +659,14 @@ class MainWindow():
 
     def Random_brain_single(self):
         passphrase = self._txt_inputbrain.get().strip()
-        global total, totaladd, found
-        wallet = MIZ.BrainWallet()
-        private_key, caddr = wallet.generate_address_from_passphrase(passphrase)
-        source_code = MIZ.get_balance(caddr)
-        received_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
-        receivedid = source_code.xpath(received_id)
-        totalReceived = str(receivedid[0].text_content())
-        sent_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[2]/td[2]'
-        sentid = source_code.xpath(sent_id)
-        totalSent = str(sentid[0].text_content())
-        balance_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[3]/td[2]'
-        balanceid = source_code.xpath(balance_id)
-        balance = str(balanceid[0].text_content())
-        txs_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
-        txsid = source_code.xpath(txs_id)
-        txs = str(txsid[0].text_content())
+        global total, totaladd
         brainvar = tkinter.StringVar()
         brainvar.set(passphrase)
         brainvartext = tkinter.StringVar()
-        brainvartext1 = (f'\n Private Key In HEX : \n\n {private_key} \n\n Bitcoin Adress : {caddr} \n Balance  [{balance}] \n TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]')
+        brainvartext1 = brainvartext1 = MIZ.rbonline(self, passphrase)
         brainvartext.set(brainvartext1)
         self.brain_update.config(textvariable = brainvar, relief='flat')
         self.brain_update1.config(textvariable = brainvartext, relief='flat')
-        if int(txs) > 0 :
-            found+=1
-            self.foundbw.config(text = f'{found}')
-            with open("found.txt", "a", encoding="utf-8") as f:
-                f.write(f'\n BrainWallet: {passphrase} \n Private Key In HEX : {private_key} \n Bitcoin Adress : {caddr} \n Balance  [{balance}] TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}] \n')
         self.brain_update.update()
         self.brain_update1.update()
         total+=1
