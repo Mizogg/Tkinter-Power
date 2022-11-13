@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 11.11.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 13.11.2022 https://t.me/CryptoCrackersUK
 from tkinter import * 
 from tkinter import ttk
 import tkinter.messagebox
@@ -43,18 +43,13 @@ except ImportError:
     from bit import Key
     from bit.format import bytes_to_wif
     import numpy as np
-
-# ============================================================================= 
 # Bitcoin Price chart
-# =============================================================================
 def price():
     url = 'https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=GBP,USD,EUR'
     page = requests.get(url)
     data = page.json()
     return data
-# ============================================================================= 
-# Balance Checking
-# ============================================================================= 
+# Balance Checking 
 def get_balance(caddr):
     urlblock = "https://bitcoin.atomicwallet.io/address/" + caddr
     respone_block = requests.get(urlblock)
@@ -81,10 +76,8 @@ def get_balance3(bech32):
     respone_block = requests.get(urlblock)
     byte_string = respone_block.content
     source_code3 = html.fromstring(byte_string)
-    return source_code3
-# ============================================================================= 
-# FOR Conversion TAB
-# ============================================================================= 
+    return source_code3 
+# FOR Conversion TAB 
 def bin2dec(value):
     return int(value, 2)
 
@@ -217,9 +210,7 @@ Bitcoin Address : {bech32} : [{balance3}] : [{totalReceived3}] : [{totalSent3}] 
 ==================================================================================
 ''')
     return dataadd
-# ============================================================================= 
 # For Menu
-# ============================================================================= 
 def donothing():
    x = 0
 
@@ -234,9 +225,7 @@ def opensnake():
 
 def hunter16x16():
     x =  os.system('python 16x16.py')  
-# ============================================================================= 
 # For Word Tab
-# ============================================================================= 
 derivation_total_path_to_check = 1
 order	= 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
 
@@ -419,14 +408,14 @@ Hexadecimal Private Key : {HEX3}
     self.word_update.update()
     if int(txs) > 0 or int(txs2) > 0 or int(txs3) > 0:
         found+=1
-        self.l888.config(text = f'{found}')
+        self.foundword.config(text = f'{found}')
         WINTEXT = f'\n Mnemonic : {mnem} \n\n {wordvartext1}'
         with open('found.txt', 'a', encoding='utf-8') as f:
             f.write(WINTEXT)
     total+=1
     totaladd+=1
-    self.l4.config(text = f'{total}')
-    self.l6.config(text = f'{totaladd}')
+    self.totalC.config(text = f'{total}')
+    self.totalA.config(text = f'{totaladd}')
 # ============================================================================= 
 information = ('''
 https://en.wikipedia.org/wiki/Bitcoin
@@ -462,7 +451,7 @@ which is the smallest possible division, and named in homage to bitcoin's creato
 creditsinfo = ('''
                 Look for Bitcoin with tkinter and python in GUI.
                         Made By Mizogg.co.uk
-                            Version = 1.8
+                    Version = 1.8 (1422 Lines of code) 
                 New features added to Brain Wallet Generator
                     New features added to Bitcoin Generator
 
@@ -473,7 +462,7 @@ creditsinfo = ('''
             Input start and stop Decimal main Bitcoin Generator
         1 Brain word from list TODO make stop function on 1 Brain
 
-                            Version = 1.6
+                    Version = 1.6 (1654 Lines of code) 
                     16x16Hunter speed improvements
                 Other Fixes and code reduced in size
                     removed Puzzle Tab and block game
@@ -490,16 +479,14 @@ creditsinfo = ('''
             Added Start and Stop to Brain Wallet also Added Input screen
                         Puzzle page Updated
 
-                            Version = 1.2
+                Version = 1.2 (3100 Lines of code) 
                     Added Brain Online and Oflline
                         Added Conversion Tools
                         Added Atomic Wallet API
                 Big Thanks TO @Clintsoff and CryptoCrackers
             More Information and help please check links in menu help !!!
 ''')
-# =============================================================================
 # BrainWallet
-# ============================================================================= 
 class BrainWallet:
 
     @staticmethod
@@ -564,16 +551,13 @@ class BrainWallet:
         for one in range(ones):
             b58_string = '1' + b58_string
         return b58_string
-# ============================================================================= 
 # Database Load and Files
-# ============================================================================= 
 mylist = []
 with open('puzzle.bf', "rb") as fp:
     bloom_filterbtc = BloomFilter.load(fp)
 addr_count = len(bloom_filterbtc)  
 addr_count_print = f'Total Bitcoin Addresses Loaded and Checking : {addr_count}'
-    
-# =============================================================================  
+ 
 with open('files/words.txt', newline='', encoding='utf-8') as f:
     for line in f:
         mylist.append(line.strip())
@@ -583,8 +567,6 @@ totaladd = total = found =0
 run = run1 = run2 = True
 
 class MainWindow():
-    C_FONT = ("Consolas", 16)
-    C_TXT_MAXLEN = 30
     def __init__(self):
         def start():
            global run
@@ -612,32 +594,7 @@ class MainWindow():
 
         def RandomInteger(minN, maxN):
             return random.randrange(minN, maxN)
-
-        def popwin(WINTEXT):
-            global popwin
-            popwin = Toplevel(self._window)
-            popwin.title("BitcoinHunter.py")
-            popwin.iconbitmap('images/miz.ico')
-            popwin.geometry("700x250")
-            widgetwin = tkinter.Label(popwin, compound='top')
-            widgetwin.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
-            widgetwin['text'] = "© MIZOGG 2018 - 2022"
-            widgetwin['image'] = widgetwin.miz_image_png
-            widgetwin.place(x=380,y=180)
-            widgetwin2 = tkinter.Label(popwin, compound='top')
-            widgetwin2.miz_image_png = tkinter.PhotoImage(file='images/congratulations.gif')
-            widgetwin2['image'] = widgetwin2.miz_image_png
-            widgetwin2.place(x=10,y=165)
-            editArea = tkst.ScrolledText(master = popwin, wrap = tkinter.WORD, width  = 70, height = 6,font=("Arial",12))
-            editArea.pack(padx=10, pady=10)
-            editArea.insert(tkinter.INSERT, WINTEXT)
-            frame = Frame(popwin)
-            frame.pack(padx=10, pady=10)
-            button1 = Button(frame, text=" Close ", command=popwin.destroy)
-            button1.grid(row=0, column=1)
-        # ============================================================================= 
         #  Brute Program Main
-        # ============================================================================= 
         def brute_results(dec):
             global total, totaladd, found
             caddr = ice.privatekey_to_address(0, True, dec)
@@ -650,37 +607,37 @@ class MainWindow():
             length = len(bin(dec))
             length -=2
             if caddr in bloom_filterbtc:
-                self.l2.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc}')
+                self.bfr.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc}')
                 found+=1
-                self.l8.config(text = f'{found}')
+                self.foundbtc.config(text = f'{found}')
                 with open('found.txt', 'a') as result:
-                    result.write(f'\n Instance: Random_Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc}\n')
-                WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc}")
-                popwin(WINTEXT)
+                    result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc}\n')
+                self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc}")
+                self.popwinner()
             if uaddr in bloom_filterbtc:
-                self.l2.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu}')
+                self.bfr.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu}')
                 found+=1
-                self.l8.config(text = f'{found}')
+                self.foundbtc.config(text = f'{found}')
                 with open('found.txt', 'a') as result:
-                    result.write(f'\n Instance: Random_Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu}\n')
-                WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu}")
-                popwin(WINTEXT)
+                    result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu}\n')
+                self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu}")
+                self.popwinner()
             if p2sh in bloom_filterbtc:
-                self.l2.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address p2sh: {p2sh}')
+                self.bfr.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address p2sh: {p2sh}')
                 found+=1
-                self.l8.config(text = f'{found}')
+                self.foundbtc.config(text = f'{found}')
                 with open('found.txt', 'a') as result:
-                    result.write(f'\n Instance: Random_Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address p2sh: {p2sh} \n')
-                WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address p2sh: {p2sh}")
-                popwin(WINTEXT)
+                    result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address p2sh: {p2sh} \n')
+                self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address p2sh: {p2sh}")
+                self.popwinner()
             if bech32 in bloom_filterbtc:
-                self.l2.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address bech32: {bech32}')
+                self.bfr.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address bech32: {bech32}')
                 found+=1
-                self.l8.config(text = f'{found}')
+                self.foundbtc.config(text = f'{found}')
                 with open('found.txt', 'a') as result:
                     result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address bech32: {bech32}')
-                WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address bech32: {bech32}")
-                popwin(WINTEXT)
+                self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address bech32: {bech32}")
+                self.popwinner()
             scantext = f'''
             *** DEC Key ***
  {dec}
@@ -694,12 +651,12 @@ class MainWindow():
  BTC Address p2sh: {p2sh}
  BTC Address bech32: {bech32}
 ====================================='''
-            self.l2.config(text = scantext)
-            self.l2.update()
+            self.bfr.config(text = scantext)
+            self.bfr.update()
             total+=1
             totaladd+=4
-            self.l4.config(text = f'{total}')
-            self.l6.config(text = f'{totaladd}')
+            self.totalC.config(text = f'{total}')
+            self.totalA.config(text = f'{totaladd}')
 
         def Random_Bruteforce_Speed():
             startdec = self._txt_inputstart.get().strip().replace(" ", "")
@@ -731,9 +688,7 @@ class MainWindow():
                 else:
                     brute_results(dec)
                     stopdec = int(stopdec) - int(mag)
-        # ============================================================================= 
         #  Brain Program Main
-        # =============================================================================
         def brain_results_online(passphrase):
             global total, totaladd, found
             wallet = BrainWallet()
@@ -760,17 +715,17 @@ class MainWindow():
             self.brain_update1.config(textvariable = brainvartext, relief='flat')
             if int(txs) > 0 :
                 found+=1
-                self.l88.config(text = f'{found}')
+                self.foundbw.config(text = f'{found}')
                 with open("found.txt", "a", encoding="utf-8") as f:
-                    f.write(f'\n BrainWallet: {passphrase} \n Private Key In HEX : {private_key} \n Bitcoin Adress : {caddr} \n Balance  [{balance}] TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]')
-                WINTEXT = (f"Passphrase {passphrase}\n HEX Key: {private_key} \n BTC Address Compressed: {caddr}  \n \n Balance  [{balance}] \n TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]")
-                popwin(WINTEXT)
+                    f.write(f'\n BrainWallet : {passphrase} \n Private Key In HEX : {private_key} \n Bitcoin Adress : {caddr} \n Balance  [{balance}] TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]')
+                self.WINTEXT = (f"BrainWallet : {passphrase}\n HEX Key: {private_key} \n BTC Address Compressed: {caddr}  \n \n Balance  [{balance}] \n TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]")
+                self.popwinner()
             self.brain_update.update()
             self.brain_update1.update()
             total+=1
             totaladd+=1
-            self.l4.config(text = f'{total}')
-            self.l6.config(text = f'{totaladd}')
+            self.totalC.config(text = f'{total}')
+            self.totalA.config(text = f'{totaladd}')
 
         def Random_brain_online():
             while run1:
@@ -805,17 +760,17 @@ class MainWindow():
             self.brain_update1.config(textvariable = brainvartext, relief='flat')
             if addr in bloom_filterbtc:
                 found+=1
-                self.l88.config(text = f'{found}')
-                WINTEXT = (f'\n BrainWallet: {passphrase} \n Private Key In HEX : {private_key} \n Bitcoin Adress : {addr}')
+                self.foundbw.config(text = f'{found}')
+                self.WINTEXT = (f'\n BrainWallet: {passphrase} \n Private Key In HEX : {private_key} \n Bitcoin Adress : {addr}')
                 with open("found.txt", "a", encoding="utf-8") as f:
-                    f.write(WINTEXT)
-                popwin(WINTEXT)
+                    f.write(self.WINTEXT)
+                self.popwinner()
             self.brain_update.update()
             self.brain_update1.update()
             total+=1
             totaladd+=1
-            self.l4.config(text = f'{total}')
-            self.l6.config(text = f'{totaladd}')
+            self.totalC.config(text = f'{total}')
+            self.totalA.config(text = f'{totaladd}')
 
         def Random_brain_offline():
             start_amm = self._txt_brain_ammount.get().strip().replace(" ", "")
@@ -836,9 +791,7 @@ class MainWindow():
                 words = random.randrange(int(start_amm), int(stop_amm))
                 passphrase = ''.join(random.sample(string.ascii_lowercase, words))
                 brain_results_offline(passphrase)
-        # ============================================================================= 
         #  Mnemonic Program Main
-        # ============================================================================= 
         def word_results_online(rnds):
             global total, totaladd, found
             mnem = create_valid_mnemonics(strength=int(rnds))
@@ -869,17 +822,17 @@ class MainWindow():
             self.word_update1.config(textvariable = wordvartext, relief='flat')
             if int(txs) > 0 :
                 found+=1
-                self.l888.config(text = f'{found}')
-                WINTEXT = f'\n Mnemonic : {mnem} \n Dec Key: {dec} \n HEX Key: {HEX} \n Bitcoin Adress : {caddr} \n Balance  [{balance}] TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]'
+                self.foundword.config(text = f'{found}')
+                self.WINTEXT = f'\n Mnemonic : {mnem} \n Dec Key: {dec} \n HEX Key: {HEX} \n Bitcoin Adress : {caddr} \n Balance  [{balance}] TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]'
                 with open('found.txt', 'a', encoding='utf-8') as f:
-                    f.write(WINTEXT)
-                popwin(WINTEXT)
+                    f.write(self.WINTEXT)
+                self.popwinner()
             self.word_update.update()
             self.word_update1.update()
             total+=1
             totaladd+=1
-            self.l4.config(text = f'{total}')
-            self.l6.config(text = f'{totaladd}')
+            self.totalC.config(text = f'{total}')
+            self.totalA.config(text = f'{totaladd}')
         
         def Random_word_online():
             while run2:
@@ -954,31 +907,31 @@ class MainWindow():
             self.word_update1.config(textvariable = wordvartext, relief='flat')
             if caddr in bloom_filterbtc:
                 found+=1
-                self.l888.config(text = f'{found}')
-                WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {cpath} :  {caddr} \n Decimal Private Key \n {dec} \n Hexadecimal Private Key \n {HEX}  \n'
+                self.foundword.config(text = f'{found}')
+                self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {cpath} :  {caddr} \n Decimal Private Key \n {dec} \n Hexadecimal Private Key \n {HEX}  \n'
                 with open("found.txt", "a", encoding="utf-8") as f:
-                    f.write(WINTEXT)
-                popwin(WINTEXT)
+                    f.write(self.WINTEXT)
+                self.popwinner()
             if p2sh in bloom_filterbtc:
                 found+=1
-                self.l888.config(text = f'{found}')
-                WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {ppath} :  {p2sh}\nDecimal Private Key \n {dec2} \n Hexadecimal Private Key \n {HEX2} \n'
+                self.foundword.config(text = f'{found}')
+                self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {ppath} :  {p2sh}\nDecimal Private Key \n {dec2} \n Hexadecimal Private Key \n {HEX2} \n'
                 with open("found.txt", "a", encoding="utf-8") as f:
-                    f.write(WINTEXT)
-                popwin(WINTEXT)
+                    f.write(self.WINTEXT)
+                self.popwinner()
             if bech32 in bloom_filterbtc:
                 found+=1
-                self.l888.config(text = f'{found}')
-                WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {bpath} : {bech32}\n Decimal Private Key \n {dec3} \n Hexadecimal Private Key \n {HEX3} \n'
+                self.foundword.config(text = f'{found}')
+                self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {bpath} : {bech32}\n Decimal Private Key \n {dec3} \n Hexadecimal Private Key \n {HEX3} \n'
                 with open("found.txt", "a", encoding="utf-8") as f:
-                    f.write(WINTEXT)
-                popwin(WINTEXT)
+                    f.write(self.WINTEXT)
+                self.popwinner()
             self.word_update.update()
             self.word_update1.update()
             total+=1
             totaladd+=4
-            self.l4.config(text = f'{total}')
-            self.l6.config(text = f'{totaladd}')
+            self.totalC.config(text = f'{total}')
+            self.totalA.config(text = f'{totaladd}')
 
         def Random_word_offline():
             while run2:
@@ -1024,9 +977,7 @@ class MainWindow():
             while run2:
                 rnds = '256'
                 word_results_offline(rnds)
-        # ============================================================================= 
         #  Main Window Program Menu Bar
-        # ============================================================================= 
         self._window = tkinter.Tk()
         self._window.title("BitcoinHunter.py @ Mizogg.co.uk")
         self._window.iconbitmap('images/miz.ico')
@@ -1067,298 +1018,229 @@ class MainWindow():
         self.my_notebook.add(self.word_frame, text="Mnemonic Hunting")
         self.my_notebook.add(self.about_frame, text="About Bitcoin")
         self.my_notebook.add(self.credits_frame, text="Credits")
-        # ============================================================================= 
         #  Main Tab
-        # ============================================================================= 
-        label = tkinter.Label(self.main_frame, text=" Type \n Data \n Here ", font=MainWindow.C_FONT)
-        label.place(x=5,y=70)
-        self._txt_input = tkinter.Entry(self.main_frame, width=56, font=MainWindow.C_FONT)
+        self.labeltype = tkinter.Label(self.main_frame, text=" Type \n Data \n Here ", font=("Consolas", 16)).place(x=5,y=70)
+        self._txt_input = tkinter.Entry(self.main_frame, width=56, font=("Consolas", 16))
         self._txt_input.insert(0, '10101')
         self._txt_input.place(x=80,y=100)
         self._txt_input.focus()
-        self._btc_bin = tkinter.Button(self.main_frame, text="Bin", font=MainWindow.C_FONT, command=self.evt_btc_bin)
-        self._btc_bin.place(x=300,y=150)
-        self._btc_dec = tkinter.Button(self.main_frame, text="Dec", font=MainWindow.C_FONT, command=self.evt_btc_dec)
-        self._btc_dec.place(x=360,y=150)
-        self._btc_bit = tkinter.Button(self.main_frame, text="Bits", font=MainWindow.C_FONT, command=self.evt_btc_bit)
-        self._btc_bit.place(x=480,y=150)
-        self._btc_hex = tkinter.Button(self.main_frame, text="Hex", font=MainWindow.C_FONT, command=self.evt_btc_hex)
-        self._btc_hex.place(x=420,y=150)
-        self._rd_dec = tkinter.Button(self.main_frame, text="Random", font=MainWindow.C_FONT, command=self.evt_rd_dec)
-        self._rd_dec.place(x=15,y=150)
-        self._jump_input = tkinter.Entry(self.main_frame, width=4, font=MainWindow.C_FONT, fg='red')
+        self._btc_bin = tkinter.Button(self.main_frame, text="Bin", font=("Consolas", 16), command=self.evt_btc_bin).place(x=300,y=150)
+        self._btc_dec = tkinter.Button(self.main_frame, text="Dec", font=("Consolas", 16), command=self.evt_btc_dec).place(x=360,y=150)
+        self._btc_bit = tkinter.Button(self.main_frame, text="Bits", font=("Consolas", 16), command=self.evt_btc_bit).place(x=480,y=150)
+        self._btc_hex = tkinter.Button(self.main_frame, text="Hex", font=("Consolas", 16), command=self.evt_btc_hex).place(x=420,y=150)
+        self._rd_dec = tkinter.Button(self.main_frame, text="Random", font=("Consolas", 16), command=self.evt_rd_dec).place(x=15,y=150)
+        self._jump_input = tkinter.Entry(self.main_frame, width=4, font=("Consolas", 16), fg='red')
         self._jump_input.insert(0, '1')
         self._jump_input.place(x=170,y=150)
         self._jump_input.focus()
-        self._jump1_dec = tkinter.Button(self.main_frame, text=" + ", font=MainWindow.C_FONT, command=self.evt_jump1_dec, fg='green')
-        self._jump1_dec.place(x=230,y=150)
-        self._jump_dec = tkinter.Button(self.main_frame, text=" - ", font=MainWindow.C_FONT, command=self.evt_jump_rm1_dec, fg='red')
-        self._jump_dec.place(x=110,y=150)
-        labeladdr = tkinter.Label(self.main_frame, text=" When Searching for adress \n it will generate \n a random private key \n this will not match the address ", font=("Arial", 8), fg='red')
-        labeladdr.place(x=670,y=135)
-        self._bt_ip = tkinter.Button(self.main_frame, text="Address", font=MainWindow.C_FONT, command=self.evt_btc_add)
-        self._bt_ip.place(x=570,y=150)
-        label = tkinter.Label(self.main_frame, text="  Binary ", font=MainWindow.C_FONT)
-        label.place(x=5,y=200)
+        self._jump1_dec = tkinter.Button(self.main_frame, text=" + ", font=("Consolas", 16), command=self.evt_jump1_dec, fg='green').place(x=230,y=150)
+        self._jump_dec = tkinter.Button(self.main_frame, text=" - ", font=("Consolas", 16), command=self.evt_jump_rm1_dec, fg='red').place(x=110,y=150)
+        self.labeladdr = tkinter.Label(self.main_frame, text=" When Searching for adress \n it will generate \n a random private key \n this will not match the address ", font=("Arial", 8), fg='red').place(x=670,y=135)
+        self._bt_ip = tkinter.Button(self.main_frame, text="Address", font=("Consolas", 16), command=self.evt_btc_add).place(x=570,y=150)
+        self.labelbin = tkinter.Label(self.main_frame, text="  Binary ", font=("Consolas", 16)).place(x=5,y=200)
         self._stringvar_bin = tkinter.StringVar()
-        txt_outputbin = tkinter.Entry(self.main_frame, textvariable=self._stringvar_bin, width=56, font=MainWindow.C_FONT)
-        txt_outputbin.place(x=130,y=200)
-        label = tkinter.Label(self.main_frame, text="  Bits ", font=MainWindow.C_FONT)
-        label.place(x=730,y=240)
+        self.txt_outputbin = tkinter.Entry(self.main_frame, textvariable=self._stringvar_bin, width=56, font=("Consolas", 16))
+        self.txt_outputbin.place(x=130,y=200)
+        self.labelbits = tkinter.Label(self.main_frame, text="  Bits ", font=("Consolas", 16)).place(x=730,y=240)
         self._stringvar_bit = tkinter.StringVar()
-        txt_outputbit = tkinter.Entry(self.main_frame, textvariable=self._stringvar_bit, width=5, font=MainWindow.C_FONT)
-        txt_outputbit.place(x=745,y=280)
-        label = tkinter.Label(self.main_frame, text=" Decimal ", font=MainWindow.C_FONT)
-        label.place(x=5,y=240)
+        self.txt_outputbit = tkinter.Entry(self.main_frame, textvariable=self._stringvar_bit, width=5, font=("Consolas", 16))
+        self.txt_outputbit.place(x=745,y=280)
+        self.labeldec = tkinter.Label(self.main_frame, text=" Decimal ", font=("Consolas", 16)).place(x=5,y=240)
         self._stringvar_dec = tkinter.StringVar()
-        self.txt_outputdec = tkinter.Entry(self.main_frame, textvariable=self._stringvar_dec, width=50, font=MainWindow.C_FONT)
+        self.txt_outputdec = tkinter.Entry(self.main_frame, textvariable=self._stringvar_dec, width=50, font=("Consolas", 16))
         self.txt_outputdec.place(x=130,y=240)
-        label = tkinter.Label(self.main_frame, text="Hexadecimal ", font=MainWindow.C_FONT)
-        label.place(x=2,y=280)
+        self.labelhex = tkinter.Label(self.main_frame, text="Hexadecimal ", font=("Consolas", 16)).place(x=2,y=280)
         self._stringvar_hex = tkinter.StringVar()
-        txt_outputhex = tkinter.Entry(self.main_frame, textvariable=self._stringvar_hex, width=48, font=MainWindow.C_FONT)
-        txt_outputhex.place(x=150,y=280)
-        label1 = tkinter.Label(self.main_frame, text=" BTC Address ", font=MainWindow.C_FONT)
-        label1.place(x=300,y=310)
+        self.txt_outputhex = tkinter.Entry(self.main_frame, textvariable=self._stringvar_hex, width=48, font=("Consolas", 16))
+        self.txt_outputhex.place(x=150,y=280)
+        self.labelbtca = tkinter.Label(self.main_frame, text=" BTC Address ", font=("Consolas", 16)).place(x=300,y=310)
         self._stringvar_addr = tkinter.StringVar()
-        txt_outputaddr = tkinter.Label(self.main_frame, textvariable=self._stringvar_addr, font=("Arial", 12))
-        txt_outputaddr.place(x=50,y=350)
-        # =============================================================================
-        #  Widgets 
-        # =============================================================================
+        self.txt_outputaddr = tkinter.Label(self.main_frame, textvariable=self._stringvar_addr, font=("Arial", 12))
+        self.txt_outputaddr.place(x=50,y=350)
+        #  Widgets
         self.widget = tkinter.Label(self._window, compound='top')
         self.widget.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
         self.widget['text'] = "© MIZOGG 2018 - 2022"
         self.widget['image'] = self.widget.miz_image_png
         self.widget.place(x=590,y=30)
-        self.widgetsnake = tkinter.Button(self._window, text= "BTC Snake Game ",font=("Arial",10),bg="purple", command= opensnake)
-        self.widgetsnake.place(x=30,y=590)
-        self.widgetHunter = tkinter.Button(self._window, text= "16x16 BTC Hunter ",font=("Arial",10),bg="gold", command= hunter16x16)
-        self.widgetHunter.place(x=690,y=590)
+        self.widgetsnake = tkinter.Button(self._window, text= "BTC Snake Game ",font=("Arial",10),bg="purple", command= opensnake).place(x=30,y=590)
+        self.widgetHunter = tkinter.Button(self._window, text= "16x16 BTC Hunter ",font=("Arial",10),bg="gold", command= hunter16x16).place(x=690,y=590)
         self.lbl = tkinter.Label(self._window, font = ('calibri', 28, 'bold'), background = '#F0F0F0', foreground = 'purple')
         self.lbl.place(x=10,y=30)
         self.cpu_label = tkinter.Label(self._window,font = ('calibri', 14, 'bold'), background = '#F0F0F0', foreground = 'red')
         self.cpu_label.place(x=220,y=590)
         self.ram_label = tkinter.Label(self._window,font = ('calibri', 14, 'bold'), background = '#F0F0F0', foreground = 'red')
         self.ram_label.place(x=380,y=590)
-        self.l3 = tkinter.Label(self._window, text="Total Private Keys : ",font=("Arial",12),bg="#F0F0F0",fg="Black")
-        self.l3.place(x=240,y=30)
-        self.l4 = tkinter.Label(self._window, bg="#F0F0F0",font=("Arial",12),text="")
-        self.l4.place(x=380,y=30)
-        self.l5 = tkinter.Label(self._window, text="Total Addresses   : ",font=("Arial",12),bg="#F0F0F0",fg="Black")
-        self.l5.place(x=240,y=50)
-        self.l6 = tkinter.Label(self._window, bg="#F0F0F0",font=("Arial",12),text="")
-        self.l6.place(x=380,y=50)
-        self.t1 = tkinter.Label(self._window, text=addr_count_print,font=("Arial",14),bg="#F0F0F0",fg="purple")
-        self.t1.place(x=80,y=80)
-        # =============================================================================
+        self.tpk = tkinter.Label(self._window, text="Total Private Keys : ",font=("Arial",12),bg="#F0F0F0",fg="Black").place(x=240,y=30)
+        self.totalC = tkinter.Label(self._window, bg="#F0F0F0",font=("Arial",12),text="")
+        self.totalC.place(x=380,y=30)
+        self.totaladd = tkinter.Label(self._window, text="Total Addresses   : ",font=("Arial",12),bg="#F0F0F0",fg="Black").place(x=240,y=50)
+        self.totalA = tkinter.Label(self._window, bg="#F0F0F0",font=("Arial",12),text="")
+        self.totalA.place(x=380,y=50)
+        self.addcount = tkinter.Label(self._window, text=addr_count_print,font=("Arial",14),bg="#F0F0F0",fg="purple").place(x=80,y=80)
         # about_frame
-        # =============================================================================
-        about1 = tkinter.Frame(master = self.about_frame, bg = '#F0F0F0')
-        about1.pack(fill='both', expand='yes')
-        pricelable_data = f"Todays Bitcoin Price £ {price()} "
-        pricelable = tkinter.Label(master = about1, text=pricelable_data, font=("Arial",14),bg="#F0F0F0",fg="purple")
-        pricelable.place(x=90, y=530)
-        editArea = tkst.ScrolledText(master = about1, wrap = tkinter.WORD, width  = 40, height = 16,font=("Arial",12))
-        editArea.pack(padx=10, pady=90, fill=tkinter.BOTH, expand=True)
-        editArea.insert(tkinter.INSERT, information)
-        # =============================================================================
+        self.about1 = tkinter.Frame(master = self.about_frame, bg = '#F0F0F0')
+        self.about1.pack(fill='both', expand='yes')
+        self.pricelable_data = f"Todays Bitcoin Price £ {price()} "
+        self.pricelable = tkinter.Label(master = self.about1, text=self.pricelable_data, font=("Arial",14),bg="#F0F0F0",fg="purple")
+        self.pricelable.place(x=90, y=530)
+        self.editArea = tkst.ScrolledText(master = self.about1, wrap = tkinter.WORD, width  = 40, height = 16,font=("Arial",12))
+        self.editArea.pack(padx=10, pady=90, fill=tkinter.BOTH, expand=True)
+        self.editArea.insert(tkinter.INSERT, information)
         # credits_frame
-        # =============================================================================
-        credits1 = tkinter.Frame(master = self.credits_frame, bg = '#F0F0F0')
-        credits1.pack(fill='both', expand='yes')
-        pricelable_data = f"Todays Bitcoin Price £ {price()} "
-        pricelable = tkinter.Label(master = credits1, text=pricelable_data, font=("Arial",14),bg="#F0F0F0",fg="purple")
-        pricelable.place(x=90, y=530)
-        editArea = tkst.ScrolledText(master = credits1, wrap = tkinter.WORD, width  = 40, height = 16,font=("Arial",12))
-        editArea.pack(padx=10, pady=90, fill=tkinter.BOTH, expand=True)
-        editArea.insert(tkinter.INSERT, creditsinfo)
-        # =============================================================================
+        self.credits1 = tkinter.Frame(master = self.credits_frame, bg = '#F0F0F0')
+        self.credits1.pack(fill='both', expand='yes')
+        self.pricelable_data = f"Todays Bitcoin Price £ {price()} "
+        self.pricelable = tkinter.Label(master = self.credits1, text=self.pricelable_data, font=("Arial",14),bg="#F0F0F0",fg="purple")
+        self.pricelable.place(x=90, y=530)
+        self.editArea = tkst.ScrolledText(master = self.credits1, wrap = tkinter.WORD, width  = 40, height = 16,font=("Arial",12))
+        self.editArea.pack(padx=10, pady=90, fill=tkinter.BOTH, expand=True)
+        self.editArea.insert(tkinter.INSERT, creditsinfo)
         # brain_frame
-        # =============================================================================
-        self.l77 = tkinter.Label(self.brain_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple")
-        self.l88 = tkinter.Label(self.brain_frame, bg="#F0F0F0",font=("Arial",23),text="0")
-        # =============================================================================
-        self.l77.place(x=680,y=70)
-        self.l88.place(x=740,y=120)
+        self.totalbw = tkinter.Label(self.brain_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple").place(x=680,y=70)
+        self.foundbw = tkinter.Label(self.brain_frame, bg="#F0F0F0",font=("Arial",23),text="0")
+        self.foundbw.place(x=740,y=120)
         self.brain_update = tkinter.Entry(self.brain_frame, state='readonly', bg="#F0F0F0",font=("Arial",12),text="", width=80, fg="Red")
         self.brain_update.place(x=30,y=310)
         self.brain_update1 = tkinter.Label(self.brain_frame, bg="#F0F0F0",font=("Arial",14),text="")
         self.brain_update1.place(x=60,y=350)
-        self.start1= tkinter.Button(self.brain_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= start1, fg='green')
-        self.stop1= tkinter.Button(self.brain_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= stop1, fg='red')
-        self.start1.place(x=690,y=180)
-        self.stop1.place(x=750,y=180)
-        labelbrain = tkinter.Label(self.brain_frame, text="Brain \nWords ", font=("Arial",13))
-        labelbrain.place(x=5,y=75)
-        self._txt_inputbrain = tkinter.Entry(self.brain_frame, width=36, font=MainWindow.C_FONT)
+        self.start1= tkinter.Button(self.brain_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= start1, fg='green').place(x=690,y=180)
+        self.stop1= tkinter.Button(self.brain_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= stop1, fg='red').place(x=750,y=180)
+        self.labelbrain = tkinter.Label(self.brain_frame, text="Brain \nWords ", font=("Arial",13)).place(x=5,y=75)
+        self._txt_inputbrain = tkinter.Entry(self.brain_frame, width=36, font=("Consolas", 16))
         self._txt_inputbrain.insert(0, 'how much wood could a woodchuck chuck if a woodchuck could chuck wood')
         self._txt_inputbrain.place(x=80,y=80)
         self._txt_inputbrain.focus()
-        self._txt_brain_ammount = tkinter.Entry(self.brain_frame, width=4, font=MainWindow.C_FONT, fg="red")
+        self._txt_brain_ammount = tkinter.Entry(self.brain_frame, width=4, font=("Consolas", 16), fg="red")
         self._txt_brain_ammount.insert(0, '1')
         self._txt_brain_ammount.place(x=130,y=150)
         self._txt_brain_ammount.focus()
-        self._txt_brain_total = tkinter.Entry(self.brain_frame, width=4, font=MainWindow.C_FONT, fg="red")
+        self._txt_brain_total = tkinter.Entry(self.brain_frame, width=4, font=("Consolas", 16), fg="red")
         self._txt_brain_total.insert(0, '12')
         self._txt_brain_total.place(x=130,y=200)
         self._txt_brain_total.focus()
-        self._btc_bin = tkinter.Button(self.brain_frame, text="Enter", font=MainWindow.C_FONT, command=self.Random_brain_single)
-        self._btc_bin.place(x=545,y=75)
-        self.titleb = tkinter.Label(self.brain_frame, text="Brain Wallet Words ",font=("Arial",16),bg="#F0F0F0",fg="Black")
-        self.titleb.place(x=380,y=260)
-        self.titleerror = tkinter.Label(self.brain_frame, text="!!! Error to be Fixed !!! \n 1 Word from list \n Not stopping  Error !!! ",font=("Arial",8),bg="#F0F0F0",fg="red")
-        self.titleerror.place(x=200,y=230)
-        self.titlemax = tkinter.Label(self.brain_frame, text="!!! MAX 25 -26 !!!",font=("Arial",12),bg="#F0F0F0",fg="red")
-        self.titlemax.place(x=25,y=230)
-        self.title1 = tkinter.Label(self.brain_frame, text="Brain Wallet \n Random Generator \n Online & Offline \n Pick Ammount \n to Generate",font=("Arial",8),bg="#F0F0F0",fg="Black")
-        self.title1.place(x=15,y=150)
-        # Create our  Brain Buttons
-        self.my_button = tkinter.Button(self.brain_frame, text= "1 Word List (On-Line) ",font=("Arial",10),bg="#ee6b6e", command= Random_brain_online1)
-        self.my_button.place(x=200,y=150)
-        self.my_button = tkinter.Button(self.brain_frame, text= "Brain Words (On-Line) ",font=("Arial",10),bg="#A3E4A7", command= Random_brain_online)
-        self.my_button.place(x=350,y=150)
-        self.my_button = tkinter.Button(self.brain_frame, text= "Brain String (On-Line) ",font=("Arial",10),bg="#F3E4C8", command= Random_brain_online2)
-        self.my_button.place(x=510,y=150)
-        self.my_button = tkinter.Button(self.brain_frame, text= "1 Word List (Off-Line) ",font=("Arial",10),bg="#ee6b6e", command= Random_brain_offline1)
-        self.my_button.place(x=200,y=200)
-        self.my_button = tkinter.Button(self.brain_frame, text= "Brain Words (Off-Line) ",font=("Arial",10),bg="#A3E4A7", command= Random_brain_offline)
-        self.my_button.place(x=350,y=200)
-        self.my_button = tkinter.Button(self.brain_frame, text= "Brain String (Off-Line) ",font=("Arial",10),bg="#F3E4C8", command= Random_brain_offline2)
-        self.my_button.place(x=510,y=200)
-        # =============================================================================
+        self._btc_bin = tkinter.Button(self.brain_frame, text="Enter", font=("Consolas", 16), command=self.Random_brain_single).place(x=545,y=75)
+        self.titleb = tkinter.Label(self.brain_frame, text="Brain Wallet Words ",font=("Arial",16),bg="#F0F0F0",fg="Black").place(x=380,y=260)
+        self.titleerror = tkinter.Label(self.brain_frame, text="!!! Error to be Fixed !!! \n 1 Word from list \n Not stopping  Error !!! ",font=("Arial",8),bg="#F0F0F0",fg="red").place(x=200,y=230)
+        self.titlemax = tkinter.Label(self.brain_frame, text="!!! MAX 25 -26 !!!",font=("Arial",12),bg="#F0F0F0",fg="red").place(x=25,y=230)
+        self.title1 = tkinter.Label(self.brain_frame, text="Brain Wallet \n Random Generator \n Online & Offline \n Pick Ammount \n to Generate",font=("Arial",8),bg="#F0F0F0",fg="Black").place(x=15,y=150)
+        self.my_button = tkinter.Button(self.brain_frame, text= "1 Word List (On-Line) ",font=("Arial",10),bg="#ee6b6e", command= Random_brain_online1).place(x=200,y=150)
+        self.my_button = tkinter.Button(self.brain_frame, text= "Brain Words (On-Line) ",font=("Arial",10),bg="#A3E4A7", command= Random_brain_online).place(x=350,y=150)
+        self.my_button = tkinter.Button(self.brain_frame, text= "Brain String (On-Line) ",font=("Arial",10),bg="#F3E4C8", command= Random_brain_online2).place(x=510,y=150)
+        self.my_button = tkinter.Button(self.brain_frame, text= "1 Word List (Off-Line) ",font=("Arial",10),bg="#ee6b6e", command= Random_brain_offline1).place(x=200,y=200)
+        self.my_button = tkinter.Button(self.brain_frame, text= "Brain Words (Off-Line) ",font=("Arial",10),bg="#A3E4A7", command= Random_brain_offline).place(x=350,y=200)
+        self.my_button = tkinter.Button(self.brain_frame, text= "Brain String (Off-Line) ",font=("Arial",10),bg="#F3E4C8", command= Random_brain_offline2).place(x=510,y=200)
         # bitcoin_frame
-        # =============================================================================
-        self.l1 = tkinter.Label(self.bitcoin_frame, text="Bitcoin Wallet Generator ",font=("Arial",20),bg="#F0F0F0",fg="Black")
-        self.l1.place(x=180,y=100)
-        self.l2 = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",12),text="")
-        self.l2.place(x=50,y=280)
-        labelstart = tkinter.Label(self.bitcoin_frame, text="Start \nDec ", font=("Arial",13))
-        labelstart.place(x=5,y=140)
-        self._txt_inputstart = tkinter.Entry(self.bitcoin_frame, width=50, font=MainWindow.C_FONT)
+        self.bwg = tkinter.Label(self.bitcoin_frame, text="Bitcoin Wallet Generator ",font=("Arial",20),bg="#F0F0F0",fg="Black").place(x=180,y=100)
+        self.bfr = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",12),text="")
+        self.bfr.place(x=50,y=280)
+        self.labelstart = tkinter.Label(self.bitcoin_frame, text="Start \nDec ", font=("Arial",13)).place(x=5,y=140)
+        self._txt_inputstart = tkinter.Entry(self.bitcoin_frame, width=50, font=("Consolas", 16))
         self._txt_inputstart.insert(0, '1')
         self._txt_inputstart.place(x=65,y=145)
         self._txt_inputstart.focus()
-        labelstop = tkinter.Label(self.bitcoin_frame, text="Stop \nDec ", font=("Arial",13))
-        labelstop.place(x=5,y= 180)
-        self._txt_inputstop = tkinter.Entry(self.bitcoin_frame, width=50, font=MainWindow.C_FONT)
+        self.labelstop = tkinter.Label(self.bitcoin_frame, text="Stop \nDec ", font=("Arial",13)).place(x=5,y= 180)
+        self._txt_inputstop = tkinter.Entry(self.bitcoin_frame, width=50, font=("Consolas", 16))
         self._txt_inputstop.insert(0, stopdec)
         self._txt_inputstop.place(x=65,y=185)
         self._txt_inputstop.focus()
-        labelmag = tkinter.Label(self.bitcoin_frame, text="Jump \nMag ", font=("Arial",13))
-        labelmag.place(x=640,y= 220)
-        self._txt_inputmag = tkinter.Entry(self.bitcoin_frame, width=8, font=MainWindow.C_FONT)
+        self.labelmag = tkinter.Label(self.bitcoin_frame, text="Jump \nMag ", font=("Arial",13)).place(x=640,y= 220)
+        self._txt_inputmag = tkinter.Entry(self.bitcoin_frame, width=8, font=("Consolas", 16))
         self._txt_inputmag.insert(0, '1')
         self._txt_inputmag.place(x=690,y=225)
         self._txt_inputmag.focus()
-        self.r1 = tkinter.Button(self.bitcoin_frame, text=" Generate Random  ",font=("Arial",13),bg="#A3E4D7",command=Random_Bruteforce_Speed)
-        self.r1.place(x=60,y=220)
-        self.s1 = tkinter.Button(self.bitcoin_frame, text=" Sequential Start-Stop",font=("Arial",13),bg="#B3B4D7",command=Sequential_Bruteforce_speed)
-        self.s1.place(x=240,y=220)
-        self.sb1 = tkinter.Button(self.bitcoin_frame, text=" Backward Stop-Start ",font=("Arial",13),bg="#C3C4D7",command=Sequential_Bruteforce_speed_back)
-        self.sb1.place(x=430,y=220)
-        self.start= tkinter.Button(self.bitcoin_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= start, fg='green')
-        self.start.place(x=690,y=180)
-        self.stop= tkinter.Button(self.bitcoin_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= stop, fg='red')
-        self.stop.place(x=750,y=180)
-        self.l7 = tkinter.Label(self.bitcoin_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple")
-        self.l7.place(x=680,y=70)
-        self.l8 = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",23),text="0")
-        self.l8.place(x=740,y=120)
-        pricelable_data = f"Todays Bitcoin Price £ {price()} "
-        pricelable = tkinter.Label(self.bitcoin_frame, text=pricelable_data, font=("Arial",14),bg="#F0F0F0",fg="purple")
-        pricelable.place(x=90, y=530)
-        # =============================================================================
+        self.r1 = tkinter.Button(self.bitcoin_frame, text=" Generate Random  ",font=("Arial",13),bg="#A3E4D7",command=Random_Bruteforce_Speed).place(x=60,y=220)
+        self.s1 = tkinter.Button(self.bitcoin_frame, text=" Sequential Start-Stop",font=("Arial",13),bg="#B3B4D7",command=Sequential_Bruteforce_speed).place(x=240,y=220)
+        self.sb1 = tkinter.Button(self.bitcoin_frame, text=" Backward Stop-Start ",font=("Arial",13),bg="#C3C4D7",command=Sequential_Bruteforce_speed_back).place(x=430,y=220)
+        self.start= tkinter.Button(self.bitcoin_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= start, fg='green').place(x=690,y=180)
+        self.stop= tkinter.Button(self.bitcoin_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= stop, fg='red').place(x=750,y=180)
+        self.totalbtc = tkinter.Label(self.bitcoin_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple").place(x=680,y=70)
+        self.foundbtc = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",23),text="0")
+        self.foundbtc.place(x=740,y=120)
+        self.pricelable_data = f"Todays Bitcoin Price £ {price()} "
+        self.pricelable = tkinter.Label(self.bitcoin_frame, text=self.pricelable_data, font=("Arial",14),bg="#F0F0F0",fg="purple").place(x=90, y=530)
         # word_frame
-        # =============================================================================
-        self.l777 = tkinter.Label(self.word_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple")
-        self.l777.place(x=680,y=70)
-        self.l888 = tkinter.Label(self.word_frame, bg="#F0F0F0",font=("Arial",23),text="0")
-        self.l888.place(x=740,y=120)
+        self.totalw = tkinter.Label(self.word_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple").place(x=680,y=70)
+        self.foundword = tkinter.Label(self.word_frame, bg="#F0F0F0",font=("Arial",23),text="0")
+        self.foundword.place(x=740,y=120)
         self.word_update = tkinter.Entry(self.word_frame, state='readonly', bg="#F0F0F0",font=("Arial",12),text="", width=80,fg="Red")
         self.word_update.place(x=30,y=280)
         self.word_update1 = tkinter.Label(self.word_frame, bg="#F0F0F0",font=("Arial",11),text="")
         self.word_update1.place(x=60,y=300)
-        self.start2= tkinter.Button(self.word_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= start2, fg='green')
-        self.stop2= tkinter.Button(self.word_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= stop2, fg='red')
-        self.start2.place(x=690,y=180)
-        self.stop2.place(x=750,y=180)
-        labelword = tkinter.Label(self.word_frame, text="Mnemonic", font=("Arial",13))
-        labelword.place(x=5,y=75)
-        self._txt_inputword = tkinter.Entry(self.word_frame, width=36, font=MainWindow.C_FONT)
+        self.start2= tkinter.Button(self.word_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= start2, fg='green').place(x=690,y=180)
+        self.stop2= tkinter.Button(self.word_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= stop2, fg='red').place(x=750,y=180)
+        self.labelword = tkinter.Label(self.word_frame, text="Mnemonic", font=("Arial",13)).place(x=5,y=75)
+        self._txt_inputword = tkinter.Entry(self.word_frame, width=36, font=("Consolas", 16))
         self._txt_inputword.insert(0, 'witch collapse practice feed shame open despair creek road again ice least')
         self._txt_inputword.place(x=90,y=80)
         self._txt_inputword.focus()
-        self._word_bin = tkinter.Button(self.word_frame, text="Enter", font=MainWindow.C_FONT, command=self.Random_word_single)
-        self._word_bin.place(x=545,y=75)
-        self.titlem = tkinter.Label(self.word_frame, text="Mnemonic Words ",font=("Arial",16),bg="#F0F0F0",fg="Black")
-        self.titlem.place(x=380,y=250)
-        self.titlem1 = tkinter.Label(self.word_frame, text="Random Mnemonic Wallet Generator Online Pick Ammount of Words to Generate",font=("Arial",12),bg="#F0F0F0",fg="Black")
-        self.titlem1.place(x=60,y=130)
-        self.titlem2 = tkinter.Label(self.word_frame, text="Random Mnemonic Wallet Generator Offline Pick Ammount of Words to Generate",font=("Arial",12),bg="#F0F0F0",fg="Black")
-        self.titlem2.place(x=60,y=190)
-        self.my_buttonword = tkinter.Button(self.word_frame, text="Random Single", font=("Arial",10),bg="#A3E4A7", command=self.Random_word_random)
-        self.my_buttonword.place(x=690,y=220)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "1 Word ",font=("Arial",10),bg="#A3E4A7", command= Random_word_online)
-        self.my_buttonword.place(x=40,y=160)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "3 Words ",font=("Arial",10),bg="#A3E4B7", command= Random_word_online1)
-        self.my_buttonword.place(x=100,y=160)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "6 Words ",font=("Arial",10),bg="#A3E4C7", command= Random_word_online2)
-        self.my_buttonword.place(x=167,y=160)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "9 Words ",font=("Arial",10),bg="#A3E4D7", command= Random_word_online3)
-        self.my_buttonword.place(x=234,y=160)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "12 Words ",font=("Arial",10),bg="#A3E4E7", command= Random_word_online4)
-        self.my_buttonword.place(x=301,y=160)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "15 Words ",font=("Arial",10),bg="#A3E4F7", command= Random_word_online5)
-        self.my_buttonword.place(x=374,y=160)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "18 Words ",font=("Arial",10),bg="#F3E4A8", command= Random_word_online6)
-        self.my_buttonword.place(x=447,y=160)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "21 Words ",font=("Arial",10),bg="#F3E4B8", command= Random_word_online7)
-        self.my_buttonword.place(x=520,y=160)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "24 Words ",font=("Arial",10),bg="#F3E4C8", command= Random_word_online8)
-        self.my_buttonword.place(x=593,y=160)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "1 Word ",font=("Arial",10),bg="#A3E4A7", command= Random_word_offline)
-        self.my_buttonword.place(x=40,y=220)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "3 Words ",font=("Arial",10),bg="#A3E4B7", command= Random_word_offline1)
-        self.my_buttonword.place(x=100,y=220)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "6 Words ",font=("Arial",10),bg="#A3E4C7", command= Random_word_offline2)
-        self.my_buttonword.place(x=167,y=220)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "9 Words ",font=("Arial",10),bg="#A3E4D7", command= Random_word_offline3)
-        self.my_buttonword.place(x=234,y=220)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "12 Words ",font=("Arial",10),bg="#A3E4E7", command= Random_word_offline4)
-        self.my_buttonword.place(x=301,y=220)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "15 Words ",font=("Arial",10),bg="#A3E4F7", command= Random_word_offline5)
-        self.my_buttonword.place(x=374,y=220)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "18 Words ",font=("Arial",10),bg="#F3E4A8", command= Random_word_offline6)
-        self.my_buttonword.place(x=447,y=220)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "21 Words ",font=("Arial",10),bg="#F3E4B8", command= Random_word_offline7)
-        self.my_buttonword.place(x=520,y=220)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "24 Words ",font=("Arial",10),bg="#F3E4C8", command= Random_word_offline8)
-        self.my_buttonword.place(x=593,y=220)
-    
+        self._word_bin = tkinter.Button(self.word_frame, text="Enter", font=("Consolas", 16), command=self.Random_word_single).place(x=545,y=75)
+        self.titlem = tkinter.Label(self.word_frame, text="Mnemonic Words ",font=("Arial",16),bg="#F0F0F0",fg="Black").place(x=380,y=250)
+        self.titlem1 = tkinter.Label(self.word_frame, text="Random Mnemonic Wallet Generator Online Pick Ammount of Words to Generate",font=("Arial",12),bg="#F0F0F0",fg="Black").place(x=60,y=130)
+        self.titlem2 = tkinter.Label(self.word_frame, text="Random Mnemonic Wallet Generator Offline Pick Ammount of Words to Generate",font=("Arial",12),bg="#F0F0F0",fg="Black").place(x=60,y=190)
+        self.my_buttonword = tkinter.Button(self.word_frame, text="Random Single", font=("Arial",10),bg="#A3E4A7", command=self.Random_word_random).place(x=690,y=220)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "1 Word ",font=("Arial",10),bg="#A3E4A7", command= Random_word_online).place(x=40,y=160)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "3 Words ",font=("Arial",10),bg="#A3E4B7", command= Random_word_online1).place(x=100,y=160)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "6 Words ",font=("Arial",10),bg="#A3E4C7", command= Random_word_online2).place(x=167,y=160)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "9 Words ",font=("Arial",10),bg="#A3E4D7", command= Random_word_online3).place(x=234,y=160)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "12 Words ",font=("Arial",10),bg="#A3E4E7", command= Random_word_online4).place(x=301,y=160)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "15 Words ",font=("Arial",10),bg="#A3E4F7", command= Random_word_online5).place(x=374,y=160)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "18 Words ",font=("Arial",10),bg="#F3E4A8", command= Random_word_online6).place(x=447,y=160)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "21 Words ",font=("Arial",10),bg="#F3E4B8", command= Random_word_online7).place(x=520,y=160)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "24 Words ",font=("Arial",10),bg="#F3E4C8", command= Random_word_online8).place(x=593,y=160)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "1 Word ",font=("Arial",10),bg="#A3E4A7", command= Random_word_offline).place(x=40,y=220)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "3 Words ",font=("Arial",10),bg="#A3E4B7", command= Random_word_offline1).place(x=100,y=220)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "6 Words ",font=("Arial",10),bg="#A3E4C7", command= Random_word_offline2).place(x=167,y=220)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "9 Words ",font=("Arial",10),bg="#A3E4D7", command= Random_word_offline3).place(x=234,y=220)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "12 Words ",font=("Arial",10),bg="#A3E4E7", command= Random_word_offline4).place(x=301,y=220)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "15 Words ",font=("Arial",10),bg="#A3E4F7", command= Random_word_offline5).place(x=374,y=220)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "18 Words ",font=("Arial",10),bg="#F3E4A8", command= Random_word_offline6).place(x=447,y=220)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "21 Words ",font=("Arial",10),bg="#F3E4B8", command= Random_word_offline7).place(x=520,y=220)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "24 Words ",font=("Arial",10),bg="#F3E4C8", command= Random_word_offline8).place(x=593,y=220)
+
+    def popwinner(self):
+        self.popwin = Toplevel()
+        self.popwin.title("BitcoinHunter.py")
+        self.popwin.iconbitmap('images/miz.ico')
+        self.popwin.geometry("700x250")
+        self.widgetwinpop = tkinter.Label(self.popwin, compound='top')
+        self.widgetwinpop.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
+        self.widgetwinpop['text'] = "© MIZOGG 2018 - 2022"
+        self.widgetwinpop['image'] = self.widgetwinpop.miz_image_png
+        self.widgetwinpop.place(x=380,y=180)
+        self.widgetwin2pop = tkinter.Label(self.popwin, compound='top')
+        self.widgetwin2pop.miz_image_png = tkinter.PhotoImage(file='images/congratulations.gif')
+        self.widgetwin2pop['image'] = self.widgetwin2pop.miz_image_png
+        self.widgetwin2pop.place(x=10,y=165)
+        self.editAreapop = tkst.ScrolledText(master = self.popwin, wrap = tkinter.WORD, width  = 70, height = 6,font=("Arial",12))
+        self.editAreapop.pack(padx=10, pady=10)
+        self.editAreapop.insert(tkinter.INSERT, self.WINTEXT)
+        self.framewinpop = Frame(self.popwin)
+        self.framewinpop.pack(padx=10, pady=10)
+        self.buttonwinpop = Button(self.framewinpop, text=" Close ", command=self.popwin.destroy)
+        self.buttonwinpop.grid(row=0, column=1)
+        self.popwin.after(2000,lambda:self.popwin.destroy())
+
     def startpop(self):
-        global pop
-        pop = Toplevel(self._window)
-        pop.title("BitcoinHunter.py")
-        pop.iconbitmap('images/miz.ico')
-        pop.geometry("700x250")
-        widget = tkinter.Label(pop, compound='top')
-        widget.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
-        widget['text'] = "© MIZOGG 2018 - 2022"
-        widget['image'] = widget.miz_image_png
-        widget.place(x=220,y=180)
-        label = Label(pop, text='Welcome to BitHunter...... \n\n Made By Mizogg.co.uk \n\n Version 1.8 08/11/22')
-        label.pack(pady=10)
-        Label(pop, text= "This window will get closed after 3 seconds...", font=('Helvetica 8 bold')).pack(pady=10)
-        frame = Frame(pop)
-        frame.pack(pady=10)
-        button1 = Button(frame, text=" Close ",
-        command=self.CLOSEWINDOW)
-        button1.grid(row=0, column=1)
-        pop.after(3000,lambda:pop.destroy())
-    
+        self.pop = Toplevel()
+        self.pop.title("BitcoinHunter.py")
+        self.pop.iconbitmap('images/miz.ico')
+        self.pop.geometry("700x250")
+        self.widgetpop = tkinter.Label(self.pop, compound='top')
+        self.widgetpop.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
+        self.widgetpop['text'] = "© MIZOGG 2018 - 2022"
+        self.widgetpop['image'] = self.widgetpop.miz_image_png
+        self.widgetpop.place(x=220,y=180)
+        self.label = tkinter.Label(self.pop, text='Welcome to BitHunter...... \n\n Made By Mizogg.co.uk \n\n Version 1.8 13/11/22').pack(pady=10)
+        self.label1 = tkinter.Label(self.pop, text= "This window will get closed after 3 seconds...", font=('Helvetica 8 bold')).pack(pady=10)
+        self.framepop = Frame(self.pop)
+        self.framepop.pack(pady=10)
+        self.buttonpop = Button(self.framepop, text=" Close ", command=self.CLOSEWINDOW)
+        self.buttonpop.grid(row=0, column=1)
+        self.pop.after(3000,lambda:self.pop.destroy())
+        
     def CLOSEWINDOW(self):
-        pop.destroy()
+        self.pop.destroy()
 
     def cpu_met(self):
         cpu_use = psutil.cpu_percent()
@@ -1399,15 +1281,15 @@ class MainWindow():
         self.brain_update1.config(textvariable = brainvartext, relief='flat')
         if int(txs) > 0 :
             found+=1
-            self.l88.config(text = f'{found}')
+            self.foundbw.config(text = f'{found}')
             with open("found.txt", "a", encoding="utf-8") as f:
                 f.write(f'\n BrainWallet: {passphrase} \n Private Key In HEX : {private_key} \n Bitcoin Adress : {caddr} \n Balance  [{balance}] TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}] \n')
         self.brain_update.update()
         self.brain_update1.update()
         total+=1
         totaladd+=1
-        self.l4.config(text = f'{total}')
-        self.l6.config(text = f'{totaladd}')
+        self.totalC.config(text = f'{total}')
+        self.totalA.config(text = f'{totaladd}')
         
     def Random_word_single(self):
         mnem = self._txt_inputword.get()
