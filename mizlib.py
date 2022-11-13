@@ -35,6 +35,13 @@ except ImportError:
     from bit import Key
     from bit.format import bytes_to_wif
     import numpy as np
+    
+with open('puzzle.bf', "rb") as fp:
+    bloom_filterbtc = BloomFilter.load(fp)
+def countadd():
+    addr_count = len(bloom_filterbtc)
+    addr_count_print = (f'Total Bitcoin Addresses Loaded and Checking : {addr_count}')
+    return addr_count_print
 
 # For Menu
 def donothing():
@@ -383,3 +390,246 @@ def bip39seed_to_private_key3(bip39seed, n=1):
     for i in derivation_path:
         private_key, chain_code = derive_bip32childkey(private_key, chain_code, i)
     return private_key
+
+derivation_total_path_to_check = 1
+def rwr(self, mnem):
+    seed = mnem_to_seed(mnem)
+    pvk = bip39seed_to_private_key(seed, derivation_total_path_to_check)
+    pvk2 = bip39seed_to_private_key2(seed, derivation_total_path_to_check)
+    pvk3 = bip39seed_to_private_key3(seed, derivation_total_path_to_check)
+    caddr = ice.privatekey_to_address(0, True, (int.from_bytes(pvk, "big")))
+    p2sh = ice.privatekey_to_address(1, True, (int.from_bytes(pvk2, "big")))
+    bech32 = ice.privatekey_to_address(2, True, (int.from_bytes(pvk3, "big")))
+    dec = (int.from_bytes(pvk, "big"))
+    HEX = "%064x" % dec
+    dec2 = (int.from_bytes(pvk2, "big"))
+    HEX2 = "%064x" % dec2
+    dec3 = (int.from_bytes(pvk3, "big"))
+    HEX3 = "%064x" % dec3
+    cpath = "m/44'/0'/0'/0/0"
+    ppath = "m/49'/0'/0'/0/0"
+    bpath = "m/84'/0'/0'/0/0"
+    source_code = get_balance(caddr)
+    received_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
+    receivedid = source_code.xpath(received_id)
+    totalReceived = str(receivedid[0].text_content())
+    sent_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[2]/td[2]'
+    sentid = source_code.xpath(sent_id)
+    totalSent = str(sentid[0].text_content())
+    balance_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[3]/td[2]'
+    balanceid = source_code.xpath(balance_id)
+    balance = str(balanceid[0].text_content())
+    txs_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
+    txsid = source_code.xpath(txs_id)
+    txs = str(txsid[0].text_content())
+    source_code2 = get_balance2(p2sh)
+    received_id2 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
+    receivedid2 = source_code2.xpath(received_id2)
+    totalReceived2 = str(receivedid2[0].text_content())
+    sent_id2 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[2]/td[2]'
+    sentid2 = source_code2.xpath(sent_id2)
+    totalSent2 = str(sentid2[0].text_content())
+    balance_id2 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[3]/td[2]'
+    balanceid2 = source_code2.xpath(balance_id2)
+    balance2 = str(balanceid2[0].text_content())
+    txs_id2 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
+    txsid2 = source_code2.xpath(txs_id2)
+    txs2 = str(txsid2[0].text_content())
+    source_code3 = get_balance3(bech32)
+    received_id3 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
+    receivedid3 = source_code3.xpath(received_id3)
+    totalReceived3 = str(receivedid3[0].text_content())
+    sent_id3 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[2]/td[2]'
+    sentid3 = source_code3.xpath(sent_id3)
+    totalSent3 = str(sentid3[0].text_content())
+    balance_id3 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[3]/td[2]'
+    balanceid3 = source_code3.xpath(balance_id3)
+    balance3 = str(balanceid3[0].text_content())
+    txs_id3 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
+    txsid3 = source_code3.xpath(txs_id3)
+    txs3 = str(txsid3[0].text_content())
+    wordvartext1 = (f'''====================================================:Balance:Received:Sent:TXS:
+Bitcoin Address : {caddr} : [{balance}] : [{totalReceived}] : [{totalSent}] : [{txs}]
+Hexadecimal Private Key : {HEX}
+
+Bitcoin Address : {p2sh} : [{balance2}] : [{totalReceived2}] : [{totalSent2}] : [{txs2}]
+Hexadecimal Private Key : {HEX2}
+
+Bitcoin Address : {bech32} : [{balance3}] : [{totalReceived3}] : [{totalSent3}] : [{txs3}]
+Hexadecimal Private Key : {HEX3}
+==================================================================================
+''')
+    if int(txs) > 0 or int(txs2) > 0 or int(txs3) > 0:
+        self.found+=1
+        self.foundword.config(text = f'{self.found}')
+        WINTEXT = f'\n Mnemonic : {mnem} \n\n {wordvartext1}'
+        with open('found.txt', 'a', encoding='utf-8') as f:
+            f.write(WINTEXT)
+    return wordvartext1
+
+def brute_btc(self, dec):
+    caddr = ice.privatekey_to_address(0, True, dec)
+    uaddr = ice.privatekey_to_address(0, False, dec)
+    HEX = "%064x" % dec
+    wifc = ice.btc_pvk_to_wif(HEX)
+    wifu = ice.btc_pvk_to_wif(HEX, False)
+    p2sh = ice.privatekey_to_address(1, True, dec)
+    bech32 = ice.privatekey_to_address(2, True, dec)
+    length = len(bin(dec))
+    length -=2
+    if caddr in bloom_filterbtc:
+        self.bfr.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc}')
+        self.found+=1
+        self.foundbtc.config(text = f'{self.found}')
+        with open('found.txt', 'a') as result:
+            result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc}\n')
+        self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc}")
+        self.popwinner()
+    if uaddr in bloom_filterbtc:
+        self.bfr.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu}')
+        self.found+=1
+        self.foundbtc.config(text = f'{self.found}')
+        with open('found.txt', 'a') as result:
+            result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu}\n')
+        self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu}")
+        self.popwinner()
+    if p2sh in bloom_filterbtc:
+        self.bfr.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address p2sh: {p2sh}')
+        self.found+=1
+        self.foundbtc.config(text = f'{self.found}')
+        with open('found.txt', 'a') as result:
+            result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address p2sh: {p2sh} \n')
+        self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address p2sh: {p2sh}")
+        self.popwinner()
+    if bech32 in bloom_filterbtc:
+        self.bfr.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address bech32: {bech32}')
+        self.found+=1
+        self.foundbtc.config(text = f'{self.found}')
+        with open('found.txt', 'a') as result:
+            result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address bech32: {bech32}')
+        self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address bech32: {bech32}")
+        self.popwinner()
+    scantext = f'''
+            *** DEC Key ***
+ {dec}
+        Bits {length}
+        *** HEY Key ***
+    {HEX}
+ BTC Address Compressed: {caddr}
+        WIF Compressed: {wifc}
+ BTC Address Uncompressed: {uaddr}
+        WIF Compressed: {wifu}
+ BTC Address p2sh: {p2sh}
+ BTC Address bech32: {bech32}
+====================================='''
+
+    return scantext
+
+def rbonline(self, passphrase):
+    wallet = BrainWallet()
+    private_key, caddr = wallet.generate_address_from_passphrase(passphrase)
+    source_code = get_balance(caddr)
+    received_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
+    receivedid = source_code.xpath(received_id)
+    totalReceived = str(receivedid[0].text_content())
+    sent_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[2]/td[2]'
+    sentid = source_code.xpath(sent_id)
+    totalSent = str(sentid[0].text_content())
+    balance_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[3]/td[2]'
+    balanceid = source_code.xpath(balance_id)
+    balance = str(balanceid[0].text_content())
+    txs_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
+    txsid = source_code.xpath(txs_id)
+    txs = str(txsid[0].text_content())
+    brainvartext1 = (f'\n Private Key In HEX : \n\n {private_key} \n\n Bitcoin Adress : {caddr} \n Balance  [{balance}] \n TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]')
+    if int(txs) > 0 :
+        self.found+=1
+        self.foundbw.config(text = f'{self.found}')
+        with open("found.txt", "a", encoding="utf-8") as f:
+            f.write(f'\n BrainWallet : {passphrase} \n Private Key In HEX : {private_key} \n Bitcoin Adress : {caddr} \n Balance  [{balance}] TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]')
+        self.WINTEXT = (f"BrainWallet : {passphrase}\n HEX Key: {private_key} \n BTC Address Compressed: {caddr}  \n \n Balance  [{balance}] \n TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]")
+        self.popwinner()
+    return brainvartext1
+    
+def rboffline(self, passphrase):
+    wallet = BrainWallet()
+    private_key, caddr = wallet.generate_address_from_passphrase(passphrase)
+    brainvartext1 = (f'\n Private Key In HEX : \n\n {private_key} \n\n Bitcoin Adress : {caddr} ')
+    if caddr in bloom_filterbtc:
+        self.found+=1
+        self.foundbw.config(text = f'{self.found}')
+        self.WINTEXT = (f'\n BrainWallet: {passphrase} \n Private Key In HEX : {private_key} \n Bitcoin Adress : {caddr}')
+        with open("found.txt", "a", encoding="utf-8") as f:
+            f.write(self.WINTEXT)
+        self.popwinner()
+    return brainvartext1
+
+def rwonline(self, mnem):
+    seed = mnem_to_seed(mnem)
+    pvk = bip39seed_to_private_key(seed, derivation_total_path_to_check)
+    dec = (int.from_bytes(pvk, "big"))
+    HEX = "%064x" % dec
+    caddr = ice.privatekey_to_address(0, True, (int.from_bytes(pvk, "big")))
+    source_code = get_balance(caddr)
+    received_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
+    receivedid = source_code.xpath(received_id)
+    totalReceived = str(receivedid[0].text_content())
+    sent_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[2]/td[2]'
+    sentid = source_code.xpath(sent_id)
+    totalSent = str(sentid[0].text_content())
+    balance_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[3]/td[2]'
+    balanceid = source_code.xpath(balance_id)
+    balance = str(balanceid[0].text_content())
+    txs_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
+    txsid = source_code.xpath(txs_id)
+    txs = str(txsid[0].text_content())
+    wordvartext1 = (f'\n Decimal Private Key \n {dec} \n Hexadecimal Private Key \n {HEX} \n Bitcoin Adress : {caddr} \n Balance  [{balance}] \n TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]')
+    if int(txs) > 0 :
+        self.found+=1
+        self.foundword.config(text = f'{self.found}')
+        self.WINTEXT = f'\n Mnemonic : {mnem} \n Dec Key: {dec} \n HEX Key: {HEX} \n Bitcoin Adress : {caddr} \n Balance  [{balance}] TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]'
+        with open('found.txt', 'a', encoding='utf-8') as f:
+            f.write(self.WINTEXT)
+        self.popwinner()
+    return wordvartext1
+
+def rwoffline(self, mnem):
+    seed = mnem_to_seed(mnem)
+    pvk = bip39seed_to_private_key(seed, derivation_total_path_to_check)
+    pvk2 = bip39seed_to_private_key2(seed, derivation_total_path_to_check)
+    pvk3 = bip39seed_to_private_key3(seed, derivation_total_path_to_check)
+    dec = (int.from_bytes(pvk, "big"))
+    HEX = "%064x" % dec
+    dec2 = (int.from_bytes(pvk2, "big"))
+    HEX2 = "%064x" % dec2
+    dec3 = (int.from_bytes(pvk3, "big"))
+    HEX3 = "%064x" % dec3
+    cpath = "m/44'/0'/0'/0/0"
+    ppath = "m/49'/0'/0'/0/0"
+    bpath = "m/84'/0'/0'/0/0"
+    caddr = ice.privatekey_to_address(0, True, (int.from_bytes(pvk, "big")))
+    p2sh = ice.privatekey_to_address(1, True, (int.from_bytes(pvk2, "big")))
+    bech32 = ice.privatekey_to_address(2, True, (int.from_bytes(pvk3, "big")))
+    wordvartext1 = (f' Bitcoin {cpath} :  {caddr} \n Bitcoin {cpath} : Decimal Private Key \n {dec} \n Bitcoin {cpath} : Hexadecimal Private Key \n {HEX}  \n Bitcoin {ppath} :  {p2sh}\n Bitcoin {ppath} : Decimal Private Key \n {dec2} \n Bitcoin {ppath} :  Hexadecimal Private Key \n {HEX2} \n Bitcoin {bpath} : {bech32}\n Bitcoin {bpath} : Decimal Private Key \n {dec3} \n Bitcoin {bpath} : Hexadecimal Private Key \n {HEX3} ')
+    if caddr in bloom_filterbtc:
+        self.found+=1
+        self.foundword.config(text = f'{self.found}')
+        self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {cpath} :  {caddr} \n Decimal Private Key \n {dec} \n Hexadecimal Private Key \n {HEX}  \n'
+        with open("found.txt", "a", encoding="utf-8") as f:
+            f.write(self.WINTEXT)
+        self.popwinner()
+    if p2sh in bloom_filterbtc:
+        self.found+=1
+        self.foundword.config(text = f'{self.found}')
+        self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {ppath} :  {p2sh}\nDecimal Private Key \n {dec2} \n Hexadecimal Private Key \n {HEX2} \n'
+        with open("found.txt", "a", encoding="utf-8") as f:
+            f.write(self.WINTEXT)
+        self.popwinner()
+    if bech32 in bloom_filterbtc:
+        self.found+=1
+        self.foundword.config(text = f'{self.found}')
+        self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {bpath} : {bech32}\n Decimal Private Key \n {dec3} \n Hexadecimal Private Key \n {HEX3} \n'
+        with open("found.txt", "a", encoding="utf-8") as f:
+            f.write(self.WINTEXT)
+        self.popwinner()
+    return wordvartext1
