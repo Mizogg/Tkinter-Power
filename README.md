@@ -22,6 +22,7 @@ pip install simplebloomfilter
 pip install bitarray==1.9.2
 pip install lxml
 pip install requests
+pip install psutil
 ```
 Make a Bloomfilter database. Within the file folder is Cbloom.py file will convert any bitcoin text file to a bloomfile.
 
