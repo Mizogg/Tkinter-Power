@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 13.11.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 16.11.2022 https://t.me/CryptoCrackersUK
 import hmac, struct, codecs, sys, os, binascii, hashlib
 import webbrowser
 import random
+from tkinter import *
+from tkinter import ttk
+import tkinter.messagebox
+import tkinter.scrolledtext as tkst
+from tkinter.ttk import *
 import secp256k1 as ice
 try:
     import base58
@@ -392,7 +397,7 @@ def bip39seed_to_private_key3(bip39seed, n=1):
     return private_key
 
 derivation_total_path_to_check = 1
-def rwr(self, mnem):
+def rwonline(self, mnem):
     seed = mnem_to_seed(mnem)
     pvk = bip39seed_to_private_key(seed, derivation_total_path_to_check)
     pvk2 = bip39seed_to_private_key2(seed, derivation_total_path_to_check)
@@ -467,6 +472,47 @@ Hexadecimal Private Key : {HEX3}
             f.write(WINTEXT)
     return wordvartext1
 
+def rwoffline(self, mnem):
+    seed = mnem_to_seed(mnem)
+    pvk = bip39seed_to_private_key(seed, derivation_total_path_to_check)
+    pvk2 = bip39seed_to_private_key2(seed, derivation_total_path_to_check)
+    pvk3 = bip39seed_to_private_key3(seed, derivation_total_path_to_check)
+    dec = (int.from_bytes(pvk, "big"))
+    HEX = "%064x" % dec
+    dec2 = (int.from_bytes(pvk2, "big"))
+    HEX2 = "%064x" % dec2
+    dec3 = (int.from_bytes(pvk3, "big"))
+    HEX3 = "%064x" % dec3
+    cpath = "m/44'/0'/0'/0/0"
+    ppath = "m/49'/0'/0'/0/0"
+    bpath = "m/84'/0'/0'/0/0"
+    caddr = ice.privatekey_to_address(0, True, (int.from_bytes(pvk, "big")))
+    p2sh = ice.privatekey_to_address(1, True, (int.from_bytes(pvk2, "big")))
+    bech32 = ice.privatekey_to_address(2, True, (int.from_bytes(pvk3, "big")))
+    wordvartext1 = (f' Bitcoin {cpath} :  {caddr} \n Bitcoin {cpath} : Decimal Private Key \n {dec} \n Bitcoin {cpath} : Hexadecimal Private Key \n {HEX}  \n Bitcoin {ppath} :  {p2sh}\n Bitcoin {ppath} : Decimal Private Key \n {dec2} \n Bitcoin {ppath} :  Hexadecimal Private Key \n {HEX2} \n Bitcoin {bpath} : {bech32}\n Bitcoin {bpath} : Decimal Private Key \n {dec3} \n Bitcoin {bpath} : Hexadecimal Private Key \n {HEX3} ')
+    if caddr in bloom_filterbtc:
+        self.found+=1
+        self.foundword.config(text = f'{self.found}')
+        self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {cpath} :  {caddr} \n Decimal Private Key \n {dec} \n Hexadecimal Private Key \n {HEX}  \n'
+        with open("found.txt", "a", encoding="utf-8") as f:
+            f.write(self.WINTEXT)
+        self.popwinner()
+    if p2sh in bloom_filterbtc:
+        self.found+=1
+        self.foundword.config(text = f'{self.found}')
+        self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {ppath} :  {p2sh}\nDecimal Private Key \n {dec2} \n Hexadecimal Private Key \n {HEX2} \n'
+        with open("found.txt", "a", encoding="utf-8") as f:
+            f.write(self.WINTEXT)
+        self.popwinner()
+    if bech32 in bloom_filterbtc:
+        self.found+=1
+        self.foundword.config(text = f'{self.found}')
+        self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {bpath} : {bech32}\n Decimal Private Key \n {dec3} \n Hexadecimal Private Key \n {HEX3} \n'
+        with open("found.txt", "a", encoding="utf-8") as f:
+            f.write(self.WINTEXT)
+        self.popwinner()
+    return wordvartext1
+    
 def brute_btc(self, dec):
     caddr = ice.privatekey_to_address(0, True, dec)
     uaddr = ice.privatekey_to_address(0, False, dec)
@@ -564,72 +610,71 @@ def rboffline(self, passphrase):
         self.popwinner()
     return brainvartext1
 
-def rwonline(self, mnem):
-    seed = mnem_to_seed(mnem)
-    pvk = bip39seed_to_private_key(seed, derivation_total_path_to_check)
-    dec = (int.from_bytes(pvk, "big"))
+def btc_hunter(self):
+    arr = np.array(self.grid)
+    binstring = ''.join(''.join(map(str, l)) for l in arr)
+    self.binstringvar = tkinter.StringVar()
+    self.binstringvar.set(binstring)
+    self.binstring_update.config(textvariable = self.binstringvar, relief='flat')
+    self.binstring_update.update()
+    dec = int(binstring, 2)
+    self.decstringvar = tkinter.StringVar()
+    self.decstringvar.set(dec)
+    self.decstring_update.config(textvariable = self.decstringvar, relief='flat')
+    self.decstring_update.update()
+    HEX = hex(int(binstring, 2))
+    self.hexstringvar = tkinter.StringVar()
+    self.hexstringvar.set(HEX)
+    self.hexstring_update.config(textvariable = self.hexstringvar, relief='flat')
+    self.hexstring_update.update()
+    caddr = ice.privatekey_to_address(0, True, dec)
+    uaddr = ice.privatekey_to_address(0, False, dec)
     HEX = "%064x" % dec
-    caddr = ice.privatekey_to_address(0, True, (int.from_bytes(pvk, "big")))
-    source_code = get_balance(caddr)
-    received_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
-    receivedid = source_code.xpath(received_id)
-    totalReceived = str(receivedid[0].text_content())
-    sent_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[2]/td[2]'
-    sentid = source_code.xpath(sent_id)
-    totalSent = str(sentid[0].text_content())
-    balance_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[3]/td[2]'
-    balanceid = source_code.xpath(balance_id)
-    balance = str(balanceid[0].text_content())
-    txs_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
-    txsid = source_code.xpath(txs_id)
-    txs = str(txsid[0].text_content())
-    wordvartext1 = (f'\n Decimal Private Key \n {dec} \n Hexadecimal Private Key \n {HEX} \n Bitcoin Adress : {caddr} \n Balance  [{balance}] \n TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]')
-    if int(txs) > 0 :
-        self.found+=1
-        self.foundword.config(text = f'{self.found}')
-        self.WINTEXT = f'\n Mnemonic : {mnem} \n Dec Key: {dec} \n HEX Key: {HEX} \n Bitcoin Adress : {caddr} \n Balance  [{balance}] TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]'
-        with open('found.txt', 'a', encoding='utf-8') as f:
+    wifc = ice.btc_pvk_to_wif(HEX)
+    wifu = ice.btc_pvk_to_wif(HEX, False)
+    self.caddrstringvar = tkinter.StringVar()
+    self.caddrstringvar.set(caddr)
+    self.caddrstring_update.config(textvariable = self.caddrstringvar, relief='flat')
+    self.caddrstring_update.update()
+    self.wifcstringvar = tkinter.StringVar()
+    self.wifcstringvar.set(wifc)
+    self.wifcstring_update.config(textvariable = self.wifcstringvar, relief='flat')
+    self.wifcstring_update.update()
+    self.uaddrstringvar = tkinter.StringVar()
+    self.uaddrstringvar.set(uaddr)
+    self.uaddrstring_update.config(textvariable = self.uaddrstringvar, relief='flat')
+    self.uaddrstring_update.update()
+    self.wifustringvar = tkinter.StringVar()
+    self.wifustringvar.set(wifu)
+    self.wifustring_update.config(textvariable = self.wifustringvar, relief='flat')
+    self.wifustring_update.update()
+    p2sh = ice.privatekey_to_address(1, True, dec)
+    self.p2shstringvar = tkinter.StringVar()
+    self.p2shstringvar.set(p2sh)
+    self.p2shstring_update.config(textvariable = self.p2shstringvar, relief='flat')
+    self.p2shstring_update.update()
+    bech32 = ice.privatekey_to_address(2, True, dec)
+    self.bech32stringvar = tkinter.StringVar()
+    self.bech32stringvar.set(bech32)
+    self.bech32string_update.config(textvariable = self.bech32stringvar, relief='flat')
+    self.bech32string_update.update()
+    if caddr in bloom_filterbtc:
+        self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc} \nBinary Data: \n {binstring}")
+        with open("found.txt", "a", encoding="utf-8") as f:
             f.write(self.WINTEXT)
         self.popwinner()
-    return wordvartext1
-
-def rwoffline(self, mnem):
-    seed = mnem_to_seed(mnem)
-    pvk = bip39seed_to_private_key(seed, derivation_total_path_to_check)
-    pvk2 = bip39seed_to_private_key2(seed, derivation_total_path_to_check)
-    pvk3 = bip39seed_to_private_key3(seed, derivation_total_path_to_check)
-    dec = (int.from_bytes(pvk, "big"))
-    HEX = "%064x" % dec
-    dec2 = (int.from_bytes(pvk2, "big"))
-    HEX2 = "%064x" % dec2
-    dec3 = (int.from_bytes(pvk3, "big"))
-    HEX3 = "%064x" % dec3
-    cpath = "m/44'/0'/0'/0/0"
-    ppath = "m/49'/0'/0'/0/0"
-    bpath = "m/84'/0'/0'/0/0"
-    caddr = ice.privatekey_to_address(0, True, (int.from_bytes(pvk, "big")))
-    p2sh = ice.privatekey_to_address(1, True, (int.from_bytes(pvk2, "big")))
-    bech32 = ice.privatekey_to_address(2, True, (int.from_bytes(pvk3, "big")))
-    wordvartext1 = (f' Bitcoin {cpath} :  {caddr} \n Bitcoin {cpath} : Decimal Private Key \n {dec} \n Bitcoin {cpath} : Hexadecimal Private Key \n {HEX}  \n Bitcoin {ppath} :  {p2sh}\n Bitcoin {ppath} : Decimal Private Key \n {dec2} \n Bitcoin {ppath} :  Hexadecimal Private Key \n {HEX2} \n Bitcoin {bpath} : {bech32}\n Bitcoin {bpath} : Decimal Private Key \n {dec3} \n Bitcoin {bpath} : Hexadecimal Private Key \n {HEX3} ')
-    if caddr in bloom_filterbtc:
-        self.found+=1
-        self.foundword.config(text = f'{self.found}')
-        self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {cpath} :  {caddr} \n Decimal Private Key \n {dec} \n Hexadecimal Private Key \n {HEX}  \n'
+    if uaddr in bloom_filterbtc:
+        self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu} \nBinary Data: \n {binstring}")
         with open("found.txt", "a", encoding="utf-8") as f:
             f.write(self.WINTEXT)
         self.popwinner()
     if p2sh in bloom_filterbtc:
-        self.found+=1
-        self.foundword.config(text = f'{self.found}')
-        self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {ppath} :  {p2sh}\nDecimal Private Key \n {dec2} \n Hexadecimal Private Key \n {HEX2} \n'
+        self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address p2sh: {p2sh} \nBinary Data: \n {binstring}")
         with open("found.txt", "a", encoding="utf-8") as f:
             f.write(self.WINTEXT)
         self.popwinner()
     if bech32 in bloom_filterbtc:
-        self.found+=1
-        self.foundword.config(text = f'{self.found}')
-        self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {bpath} : {bech32}\n Decimal Private Key \n {dec3} \n Hexadecimal Private Key \n {HEX3} \n'
+        self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Bc1: {bech32} \nBinary Data: \n {binstring}")
         with open("found.txt", "a", encoding="utf-8") as f:
             f.write(self.WINTEXT)
         self.popwinner()
-    return wordvartext1
