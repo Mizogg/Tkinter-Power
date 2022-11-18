@@ -1,22 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 13.11.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 16.11.2022 https://t.me/CryptoCrackersUK
 import random, sys, os
-import numpy as np
 from tkinter import *
 from tkinter import ttk
 import tkinter.messagebox
 import tkinter.scrolledtext as tkst
 from tkinter.ttk import *
-import secp256k1 as ice
 import mizlib as MIZ
-from bloomfilter import BloomFilter, ScalableBloomFilter, SizeGrowthRate
 import psutil
-
-with open('puzzle.bf', "rb") as fp:
-    bloom_filterbtc = BloomFilter.load(fp)
-addr_count = len(bloom_filterbtc)  
-addr_count_print = f'Total Bitcoin Addresses Loaded and Checking : {addr_count}'
 
 information16x16 = ('''
             Look for Bitcoin with tkinter and python in GUI.
@@ -46,75 +38,6 @@ class App:
         self.tick_delay = 0 #in ms
         self.seed_ratio = 33
 
-    def btc_hunter(self):
-        arr = np.array(self.grid)
-        binstring = ''.join(''.join(map(str, l)) for l in arr)
-        self.binstringvar = tkinter.StringVar()
-        self.binstringvar.set(binstring)
-        self.binstring_update.config(textvariable = self.binstringvar, relief='flat')
-        self.binstring_update.update()
-        dec = int(binstring, 2)
-        self.decstringvar = tkinter.StringVar()
-        self.decstringvar.set(dec)
-        self.decstring_update.config(textvariable = self.decstringvar, relief='flat')
-        self.decstring_update.update()
-        HEX = hex(int(binstring, 2))
-        self.hexstringvar = tkinter.StringVar()
-        self.hexstringvar.set(HEX)
-        self.hexstring_update.config(textvariable = self.hexstringvar, relief='flat')
-        self.hexstring_update.update()
-        caddr = ice.privatekey_to_address(0, True, dec)
-        uaddr = ice.privatekey_to_address(0, False, dec)
-        HEX = "%064x" % dec
-        wifc = ice.btc_pvk_to_wif(HEX)
-        wifu = ice.btc_pvk_to_wif(HEX, False)
-        self.caddrstringvar = tkinter.StringVar()
-        self.caddrstringvar.set(caddr)
-        self.caddrstring_update.config(textvariable = self.caddrstringvar, relief='flat')
-        self.caddrstring_update.update()
-        self.wifcstringvar = tkinter.StringVar()
-        self.wifcstringvar.set(wifc)
-        self.wifcstring_update.config(textvariable = self.wifcstringvar, relief='flat')
-        self.wifcstring_update.update()
-        self.uaddrstringvar = tkinter.StringVar()
-        self.uaddrstringvar.set(uaddr)
-        self.uaddrstring_update.config(textvariable = self.uaddrstringvar, relief='flat')
-        self.uaddrstring_update.update()
-        self.wifustringvar = tkinter.StringVar()
-        self.wifustringvar.set(wifu)
-        self.wifustring_update.config(textvariable = self.wifustringvar, relief='flat')
-        self.wifustring_update.update()
-        p2sh = ice.privatekey_to_address(1, True, dec)
-        self.p2shstringvar = tkinter.StringVar()
-        self.p2shstringvar.set(p2sh)
-        self.p2shstring_update.config(textvariable = self.p2shstringvar, relief='flat')
-        self.p2shstring_update.update()
-        bech32 = ice.privatekey_to_address(2, True, dec)
-        self.bech32stringvar = tkinter.StringVar()
-        self.bech32stringvar.set(bech32)
-        self.bech32string_update.config(textvariable = self.bech32stringvar, relief='flat')
-        self.bech32string_update.update()
-        if caddr in bloom_filterbtc:
-            self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc} \nBinary Data: \n {binstring}")
-            with open("found.txt", "a", encoding="utf-8") as f:
-                f.write(self.WINTEXT)
-            self.popwinner()
-        if uaddr in bloom_filterbtc:
-            self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu} \nBinary Data: \n {binstring}")
-            with open("found.txt", "a", encoding="utf-8") as f:
-                f.write(self.WINTEXT)
-            self.popwinner()
-        if p2sh in bloom_filterbtc:
-            self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address p2sh: {p2sh} \nBinary Data: \n {binstring}")
-            with open("found.txt", "a", encoding="utf-8") as f:
-                f.write(self.WINTEXT)
-            self.popwinner()
-        if bech32 in bloom_filterbtc:
-            self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Bc1: {bech32} \nBinary Data: \n {binstring}")
-            with open("found.txt", "a", encoding="utf-8") as f:
-                f.write(self.WINTEXT)
-            self.popwinner()
-
     def cpu_met(self):
         self.cpu_use = psutil.cpu_percent()
         self.cpu_label.config(text='Total CPU {} %'.format(self.cpu_use))
@@ -138,7 +61,7 @@ class App:
         self.BH16x16.helpmenu = Menu(self.BH16x16.menubar, tearoff=0)
         self.BH16x16.helpmenu.add_command(label="Help Telegram Group", command=MIZ.opentelegram)
         self.BH16x16.helpmenu.add_command(label="Mizogg Website", command=MIZ.openweb)
-        self.BH16x16.helpmenu.add_command(label="About BitcoinHunter", command=self.startpop)
+        self.BH16x16.helpmenu.add_command(label="About Bit16x16", command=self.startpop)
         self.BH16x16.menubar.add_cascade(label="Help", menu=self.BH16x16.helpmenu)
         self.BH16x16.config(menu=self.BH16x16.menubar)
         self.my_notebook = ttk.Notebook(self.BH16x16)
@@ -216,7 +139,7 @@ class App:
         self.bc1lable = tkinter.Label(self.hunter_win, text=self.bc1_data, font=("Arial",10),bg='#A1A1A1',fg="Black").pack(padx=10, pady=3)
         self.bech32string_update = tkinter.Entry(self.hunter_win, state='readonly', bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
         self.bech32string_update.pack(padx=10, pady=2)
-        self.t123 = tkinter.Label(self.BH16x16, text=addr_count_print,font=("Arial",14),bg="#F0F0F0",fg="purple").place(x=540,y=580)
+        self.addcount = tkinter.Label(self.BH16x16, text=MIZ.countadd(), font=("Arial",14),bg="#F0F0F0",fg="purple").place(x=540,y=580)
         self.lbl_tickno = tkinter.Label(self.hunter_win, text='Total Private Keys Scanned : 0', font=("Arial",10),bg='#A1A1A1',fg="Purple")
         self.lbl_tickno.pack(padx=3, pady=3)
         self.lbl_totalno = tkinter.Label(self.hunter_win, text='Total Addresses Scanned : 0', font=("Arial",10),bg='#A1A1A1',fg="Purple")
@@ -267,7 +190,7 @@ class App:
                 self.off_cells -= 1
             self.put_rect(rw, cl, color)
             self.update_labels()
-            self.btc_hunter()
+            MIZ.btc_hunter(self)
             if self.on_cells:
                 self.btn_start_stop.config(state=NORMAL)
                 self.btn_tick.config(state=NORMAL)
@@ -296,7 +219,6 @@ class App:
                     self.off_cells += 1
                 self.put_rect(rw, cl, color)
         self.update_labels()
-        self.btc_hunter()
 
     def clear_canvas(self):
         self.size = 30
@@ -319,6 +241,7 @@ class App:
                 else:
                     self.grid[rw][cl] = 0
         self.update_canvas()
+        MIZ.btc_hunter(self)
         self.btn_start_stop.config(state=NORMAL)
         self.btn_tick.config(state=NORMAL)
 
@@ -377,8 +300,10 @@ class App:
         self.update_canvas()
         self.in_tick = False
         self.tick_count += 1
-        self.addr_count += 4
+        self.addr_count += 3
         self.update_labels()
+        MIZ.btc_hunter(self)
+
         if self.is_active:
             self.BH16x16.after(self.tick_delay, self.tick)
 
