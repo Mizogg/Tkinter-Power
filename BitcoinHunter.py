@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 13.11.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 16.11.2022 https://t.me/CryptoCrackersUK
 from tkinter import * 
 from tkinter import ttk
 import tkinter.messagebox
@@ -11,13 +11,15 @@ import random, sys, os
 import string
 import psutil
 import mizlib as MIZ
-
+def RandomInteger(minN, maxN):
+    return random.randrange(minN, maxN)
+    
 def random_word_results(self, mnem):
     global total, totaladd
     wordvar = tkinter.StringVar()
     wordvar.set(mnem)
     wordvartext = tkinter.StringVar()
-    wordvartext1 = MIZ.rwr(self, mnem)
+    wordvartext1 = MIZ.rwonline(self, mnem)
     wordvartext.set(wordvartext1)
     self.word_update.config(textvariable = wordvar, relief='flat')
     self.word_update1.config(textvariable = wordvartext, relief='flat')
@@ -62,6 +64,9 @@ which is the smallest possible division, and named in homage to bitcoin's creato
 creditsinfo = ('''
                 Look for Bitcoin with tkinter and python in GUI.
                         Made By Mizogg.co.uk
+                    Version = 1.9 (???? Lines of code)
+                    
+                    
                     Version = 1.8 (1422 Lines of code) 
                 New features added to Brain Wallet Generator
                     New features added to Bitcoin Generator
@@ -112,148 +117,16 @@ run = run1 = run2 = True
 class MainWindow():
     def __init__(self):
         self.found = found
-        def start():
-           global run
-           run= True
-
-        def stop():
-           global run
-           run= False
-           
-        def start1():
-           global run1
-           run1= True
-
-        def stop1():
-           global run1
-           run1= False
-        
+        self.run = run  
         def start2():
            global run2
            run2= True
-
         def stop2():
            global run2
            run2= False
-
-        def RandomInteger(minN, maxN):
-            return random.randrange(minN, maxN)
-        #  Brute Program Main
-        def brute_results(self, dec):
-            global total, totaladd
-            scantext = MIZ.brute_btc(self, dec)
-            self.bfr.config(text = scantext)
-            self.bfr.update()
-            total+=1
-            totaladd+=4
-            self.totalC.config(text = f'{total}')
-            self.totalA.config(text = f'{totaladd}')
-
-        def Random_Bruteforce_Speed():
-            startdec = self._txt_inputstart.get().strip().replace(" ", "")
-            stopdec = self._txt_inputstop.get().strip().replace(" ", "")
-            while run:
-                dec =int(RandomInteger(int(startdec), int(stopdec)))
-                brute_results(self, dec)
-
-        def Sequential_Bruteforce_speed():
-            startdec = self._txt_inputstart.get().strip().replace(" ", "")
-            stopdec = self._txt_inputstop.get().strip().replace(" ", "")
-            mag = self._txt_inputmag.get().strip().replace(" ", "")
-            while run:
-                dec = int(startdec)
-                if dec == int(stopdec):
-                    stop()
-                else:
-                    brute_results(self, dec)
-                    startdec = int(startdec) + int(mag)
-        
-        def Sequential_Bruteforce_speed_back():
-            startdec = self._txt_inputstart.get().strip().replace(" ", "")
-            stopdec = self._txt_inputstop.get().strip().replace(" ", "")
-            mag = self._txt_inputmag.get().strip().replace(" ", "")
-            while run:
-                dec = int(stopdec)
-                if dec == int(startdec):
-                    stop()
-                else:
-                    brute_results(self, dec)
-                    stopdec = int(stopdec) - int(mag)
-        #  Brain Program Main
-        def brain_results_online(self, passphrase):
-            global total, totaladd
-            brainvar = tkinter.StringVar()
-            brainvar.set(passphrase)
-            brainvartext = tkinter.StringVar()
-            brainvartext1 = MIZ.rbonline(self, passphrase)
-            brainvartext.set(brainvartext1)
-            self.brain_update.config(textvariable = brainvar, relief='flat')
-            self.brain_update1.config(textvariable = brainvartext, relief='flat')
-            self.brain_update.update()
-            self.brain_update1.update()
-            total+=1
-            totaladd+=1
-            self.totalC.config(text = f'{total}')
-            self.totalA.config(text = f'{totaladd}')
-
-        def Random_brain_online():
-            while run1:
-                start_amm = self._txt_brain_ammount.get().strip().replace(" ", "")
-                stop_amm = self._txt_brain_total.get().strip().replace(" ", "")
-                passphrase = ' '.join(random.sample(mylist, random.randint(int(start_amm), int(stop_amm))))
-                brain_results_online(self, passphrase)
-        
-        def Random_brain_online1():
-            for i in range(0,len(mylist)):
-                passphrase = mylist[i]
-                brain_results_online(self, passphrase)
-        
-        def Random_brain_online2():
-            start_amm = self._txt_brain_ammount.get().strip().replace(" ", "")
-            stop_amm = self._txt_brain_total.get().strip().replace(" ", "")
-            while run1:
-                words = random.randrange(int(start_amm), int(stop_amm))
-                passphrase = ''.join(random.sample(string.ascii_lowercase, words))
-                brain_results_online(self, passphrase)
-
-        def brain_results_offline(self, passphrase):
-            global total, totaladd
-            brainvar = tkinter.StringVar()
-            brainvar.set(passphrase)
-            brainvartext = tkinter.StringVar()
-            brainvartext1 = MIZ.rboffline(self, passphrase)
-            brainvartext.set(brainvartext1)
-            self.brain_update.config(textvariable = brainvar, relief='flat')
-            self.brain_update1.config(textvariable = brainvartext, relief='flat')
-            self.brain_update.update()
-            self.brain_update1.update()
-            total+=1
-            totaladd+=1
-            self.totalC.config(text = f'{total}')
-            self.totalA.config(text = f'{totaladd}')
-
-        def Random_brain_offline():
-            start_amm = self._txt_brain_ammount.get().strip().replace(" ", "")
-            stop_amm = self._txt_brain_total.get().strip().replace(" ", "")
-            while run1:
-                passphrase = ' '.join(random.sample(mylist, random.randint(int(start_amm), int(stop_amm))))
-                brain_results_offline(self, passphrase)
-                
-        def Random_brain_offline1():
-            for i in range(0,len(mylist)):
-                passphrase = mylist[i]
-                brain_results_offline(self, passphrase)
-        
-        def Random_brain_offline2():
-            start_amm = self._txt_brain_ammount.get().strip().replace(" ", "")
-            stop_amm = self._txt_brain_total.get().strip().replace(" ", "")
-            while run1:
-                words = random.randrange(int(start_amm), int(stop_amm))
-                passphrase = ''.join(random.sample(string.ascii_lowercase, words))
-                brain_results_offline(self, passphrase)
         #  Mnemonic Program Main
         def word_results_online(rnds):
-            global total, totaladd, found
+            global total, totaladd
             mnem = MIZ.create_valid_mnemonics(strength=int(rnds))
             wordvar = tkinter.StringVar()
             wordvar.set(mnem)
@@ -327,7 +200,7 @@ class MainWindow():
             self.word_update.update()
             self.word_update1.update()
             total+=1
-            totaladd+=4
+            totaladd+=3
             self.totalC.config(text = f'{total}')
             self.totalA.config(text = f'{totaladd}')
 
@@ -377,7 +250,7 @@ class MainWindow():
                 word_results_offline(rnds)
         #  Main Window Program Menu Bar
         self._window = tkinter.Tk()
-        self._window.title("BitcoinHunter.py @ Mizogg.co.uk")
+        self._window.title("BitHunter.py @ Mizogg.co.uk")
         self._window.iconbitmap('images/miz.ico')
         self._window.config(bg="black")
         self._window.geometry("860x660")
@@ -393,7 +266,7 @@ class MainWindow():
         self._window.helpmenu = Menu(self._window.menubar, tearoff=0)
         self._window.helpmenu.add_command(label="Help Telegram Group", command=MIZ.opentelegram)
         self._window.helpmenu.add_command(label="Mizogg Website", command=MIZ.openweb)
-        self._window.helpmenu.add_command(label="About BitcoinHunter", command=self.startpop)
+        self._window.helpmenu.add_command(label="About BitHunter", command=self.startpop)
         self._window.menubar.add_cascade(label="Help", menu=self._window.helpmenu)
         self._window.config(menu=self._window.menubar)
         self.my_notebook = ttk.Notebook(self._window)
@@ -454,7 +327,7 @@ class MainWindow():
         self.labelbtca = tkinter.Label(self.main_frame, text=" BTC Address ", font=("Consolas", 16)).place(x=300,y=310)
         self._stringvar_addr = tkinter.StringVar()
         self.txt_outputaddr = tkinter.Label(self.main_frame, textvariable=self._stringvar_addr, font=("Arial", 12))
-        self.txt_outputaddr.place(x=50,y=350)
+        self.txt_outputaddr.place(x=20,y=350)
         #  Widgets
         self.widget = tkinter.Label(self._window, compound='top')
         self.widget.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
@@ -504,8 +377,8 @@ class MainWindow():
         self.brain_update.place(x=30,y=310)
         self.brain_update1 = tkinter.Label(self.brain_frame, bg="#F0F0F0",font=("Arial",14),text="")
         self.brain_update1.place(x=60,y=350)
-        self.start1= tkinter.Button(self.brain_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= start1, fg='green').place(x=690,y=180)
-        self.stop1= tkinter.Button(self.brain_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= stop1, fg='red').place(x=750,y=180)
+        self.start1= tkinter.Button(self.brain_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= self.start, fg='green').place(x=690,y=180)
+        self.stop1= tkinter.Button(self.brain_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= self.stop, fg='red').place(x=750,y=180)
         self.labelbrain = tkinter.Label(self.brain_frame, text="Brain \nWords ", font=("Arial",13)).place(x=5,y=75)
         self._txt_inputbrain = tkinter.Entry(self.brain_frame, width=36, font=("Consolas", 16))
         self._txt_inputbrain.insert(0, 'how much wood could a woodchuck chuck if a woodchuck could chuck wood')
@@ -524,16 +397,16 @@ class MainWindow():
         self.titleerror = tkinter.Label(self.brain_frame, text="!!! Error to be Fixed !!! \n 1 Word from list \n Not stopping  Error !!! ",font=("Arial",8),bg="#F0F0F0",fg="red").place(x=200,y=230)
         self.titlemax = tkinter.Label(self.brain_frame, text="!!! MAX 25 -26 !!!",font=("Arial",12),bg="#F0F0F0",fg="red").place(x=25,y=230)
         self.title1 = tkinter.Label(self.brain_frame, text="Brain Wallet \n Random Generator \n Online & Offline \n Pick Ammount \n to Generate",font=("Arial",8),bg="#F0F0F0",fg="Black").place(x=15,y=150)
-        self.my_button = tkinter.Button(self.brain_frame, text= "1 Word List (On-Line) ",font=("Arial",10),bg="#ee6b6e", command= Random_brain_online1).place(x=200,y=150)
-        self.my_button = tkinter.Button(self.brain_frame, text= "Brain Words (On-Line) ",font=("Arial",10),bg="#A3E4A7", command= Random_brain_online).place(x=350,y=150)
-        self.my_button = tkinter.Button(self.brain_frame, text= "Brain String (On-Line) ",font=("Arial",10),bg="#F3E4C8", command= Random_brain_online2).place(x=510,y=150)
-        self.my_button = tkinter.Button(self.brain_frame, text= "1 Word List (Off-Line) ",font=("Arial",10),bg="#ee6b6e", command= Random_brain_offline1).place(x=200,y=200)
-        self.my_button = tkinter.Button(self.brain_frame, text= "Brain Words (Off-Line) ",font=("Arial",10),bg="#A3E4A7", command= Random_brain_offline).place(x=350,y=200)
-        self.my_button = tkinter.Button(self.brain_frame, text= "Brain String (Off-Line) ",font=("Arial",10),bg="#F3E4C8", command= Random_brain_offline2).place(x=510,y=200)
+        self.my_button = tkinter.Button(self.brain_frame, text= "1 Word List (On-Line) ",font=("Arial",10),bg="#ee6b6e", command= self.Random_brain_online1).place(x=200,y=150)
+        self.my_button = tkinter.Button(self.brain_frame, text= "Brain Words (On-Line) ",font=("Arial",10),bg="#A3E4A7", command= self.Random_brain_online).place(x=350,y=150)
+        self.my_button = tkinter.Button(self.brain_frame, text= "Brain String (On-Line) ",font=("Arial",10),bg="#F3E4C8", command= self.Random_brain_online2).place(x=510,y=150)
+        self.my_button = tkinter.Button(self.brain_frame, text= "1 Word List (Off-Line) ",font=("Arial",10),bg="#ee6b6e", command= self.Random_brain_offline1).place(x=200,y=200)
+        self.my_button = tkinter.Button(self.brain_frame, text= "Brain Words (Off-Line) ",font=("Arial",10),bg="#A3E4A7", command= self.Random_brain_offline).place(x=350,y=200)
+        self.my_button = tkinter.Button(self.brain_frame, text= "Brain String (Off-Line) ",font=("Arial",10),bg="#F3E4C8", command= self.Random_brain_offline2).place(x=510,y=200)
         # bitcoin_frame
         self.bwg = tkinter.Label(self.bitcoin_frame, text="Bitcoin Wallet Generator ",font=("Arial",20),bg="#F0F0F0",fg="Black").place(x=180,y=100)
         self.bfr = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",12),text="")
-        self.bfr.place(x=50,y=280)
+        self.bfr.place(x=20,y=280)
         self.labelstart = tkinter.Label(self.bitcoin_frame, text="Start \nDec ", font=("Arial",13)).place(x=5,y=140)
         self._txt_inputstart = tkinter.Entry(self.bitcoin_frame, width=50, font=("Consolas", 16))
         self._txt_inputstart.insert(0, '1')
@@ -549,11 +422,11 @@ class MainWindow():
         self._txt_inputmag.insert(0, '1')
         self._txt_inputmag.place(x=690,y=225)
         self._txt_inputmag.focus()
-        self.r1 = tkinter.Button(self.bitcoin_frame, text=" Generate Random  ",font=("Arial",13),bg="#A3E4D7",command=Random_Bruteforce_Speed).place(x=60,y=220)
-        self.s1 = tkinter.Button(self.bitcoin_frame, text=" Sequential Start-Stop",font=("Arial",13),bg="#B3B4D7",command=Sequential_Bruteforce_speed).place(x=240,y=220)
-        self.sb1 = tkinter.Button(self.bitcoin_frame, text=" Backward Stop-Start ",font=("Arial",13),bg="#C3C4D7",command=Sequential_Bruteforce_speed_back).place(x=430,y=220)
-        self.start= tkinter.Button(self.bitcoin_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= start, fg='green').place(x=690,y=180)
-        self.stop= tkinter.Button(self.bitcoin_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= stop, fg='red').place(x=750,y=180)
+        self.r1 = tkinter.Button(self.bitcoin_frame, text=" Generate Random  ",font=("Arial",13),bg="#A3E4D7",command=self.Random_Bruteforce_Speed).place(x=60,y=220)
+        self.s1 = tkinter.Button(self.bitcoin_frame, text=" Sequential Start-Stop",font=("Arial",13),bg="#B3B4D7",command=self.Sequential_Bruteforce_speed).place(x=240,y=220)
+        self.sb1 = tkinter.Button(self.bitcoin_frame, text=" Backward Stop-Start ",font=("Arial",13),bg="#C3C4D7",command=self.Sequential_Bruteforce_speed_back).place(x=430,y=220)
+        self.start= tkinter.Button(self.bitcoin_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= self.start, fg='green').place(x=690,y=180)
+        self.stop= tkinter.Button(self.bitcoin_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= self.stop, fg='red').place(x=750,y=180)
         self.totalbtc = tkinter.Label(self.bitcoin_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple").place(x=680,y=70)
         self.foundbtc = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",23),text="0")
         self.foundbtc.place(x=740,y=120)
@@ -566,12 +439,12 @@ class MainWindow():
         self.word_update = tkinter.Entry(self.word_frame, state='readonly', bg="#F0F0F0",font=("Arial",12),text="", width=80,fg="Red")
         self.word_update.place(x=30,y=280)
         self.word_update1 = tkinter.Label(self.word_frame, bg="#F0F0F0",font=("Arial",11),text="")
-        self.word_update1.place(x=60,y=300)
+        self.word_update1.place(x=20,y=300)
         self.start2= tkinter.Button(self.word_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= start2, fg='green').place(x=690,y=180)
         self.stop2= tkinter.Button(self.word_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= stop2, fg='red').place(x=750,y=180)
         self.labelword = tkinter.Label(self.word_frame, text="Mnemonic", font=("Arial",13)).place(x=5,y=75)
         self._txt_inputword = tkinter.Entry(self.word_frame, width=36, font=("Consolas", 16))
-        self._txt_inputword.insert(0, 'witch collapse practice feed shame open despair creek road again ice least')
+        self._txt_inputword.insert(0, 'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon')
         self._txt_inputword.place(x=90,y=80)
         self._txt_inputword.focus()
         self._word_bin = tkinter.Button(self.word_frame, text="Enter", font=("Consolas", 16), command=self.Random_word_single).place(x=545,y=75)
@@ -597,10 +470,146 @@ class MainWindow():
         self.my_buttonword = tkinter.Button(self.word_frame, text= "18 Words ",font=("Arial",10),bg="#F3E4A8", command= Random_word_offline6).place(x=447,y=220)
         self.my_buttonword = tkinter.Button(self.word_frame, text= "21 Words ",font=("Arial",10),bg="#F3E4B8", command= Random_word_offline7).place(x=520,y=220)
         self.my_buttonword = tkinter.Button(self.word_frame, text= "24 Words ",font=("Arial",10),bg="#F3E4C8", command= Random_word_offline8).place(x=593,y=220)
+    
+    def start(self):
+        self.run= True
 
+    def stop(self):
+        self.run= False
+    #  Brute Program Main
+    def brute_results(self, dec):
+        global total, totaladd
+        scantext = MIZ.brute_btc(self, dec)
+        self.bfr.config(text = scantext)
+        self.bfr.update()
+        total+=1
+        totaladd+=3
+        self.totalC.config(text = f'{total}')
+        self.totalA.config(text = f'{totaladd}')
+
+    def Random_Bruteforce_Speed(self):
+        startdec = self._txt_inputstart.get().strip().replace(" ", "")
+        stopdec = self._txt_inputstop.get().strip().replace(" ", "")
+        while self.run:
+            dec =int(RandomInteger(int(startdec), int(stopdec)))
+            self.brute_results(dec)
+
+    def Sequential_Bruteforce_speed(self):
+        startdec = self._txt_inputstart.get().strip().replace(" ", "")
+        stopdec = self._txt_inputstop.get().strip().replace(" ", "")
+        mag = self._txt_inputmag.get().strip().replace(" ", "")
+        while self.run:
+            dec = int(startdec)
+            if dec == int(stopdec):
+                self.stop()
+            else:
+                self.brute_results(dec)
+                startdec = int(startdec) + int(mag)
+    
+    def Sequential_Bruteforce_speed_back(self):
+        startdec = self._txt_inputstart.get().strip().replace(" ", "")
+        stopdec = self._txt_inputstop.get().strip().replace(" ", "")
+        mag = self._txt_inputmag.get().strip().replace(" ", "")
+        while self.run:
+            dec = int(stopdec)
+            if dec == int(startdec):
+                self.stop()
+            else:
+                self.brute_results(dec)
+                stopdec = int(stopdec) - int(mag)
+
+    #  Brain Program Main
+    def brain_results_online(self, passphrase):
+        global total, totaladd
+        brainvar = tkinter.StringVar()
+        brainvar.set(passphrase)
+        brainvartext = tkinter.StringVar()
+        brainvartext1 = MIZ.rbonline(self, passphrase)
+        brainvartext.set(brainvartext1)
+        self.brain_update.config(textvariable = brainvar, relief='flat')
+        self.brain_update1.config(textvariable = brainvartext, relief='flat')
+        self.brain_update.update()
+        self.brain_update1.update()
+        total+=1
+        totaladd+=1
+        self.totalC.config(text = f'{total}')
+        self.totalA.config(text = f'{totaladd}')
+
+    def Random_brain_single(self):
+        passphrase = self._txt_inputbrain.get().strip()
+        global total, totaladd
+        brainvar = tkinter.StringVar()
+        brainvar.set(passphrase)
+        brainvartext = tkinter.StringVar()
+        brainvartext1 = brainvartext1 = MIZ.rbonline(self, passphrase)
+        brainvartext.set(brainvartext1)
+        self.brain_update.config(textvariable = brainvar, relief='flat')
+        self.brain_update1.config(textvariable = brainvartext, relief='flat')
+        self.brain_update.update()
+        self.brain_update1.update()
+        total+=1
+        totaladd+=1
+        self.totalC.config(text = f'{total}')
+        self.totalA.config(text = f'{totaladd}')
+    def Random_brain_online(self):
+        while self.run:
+            start_amm = self._txt_brain_ammount.get().strip().replace(" ", "")
+            stop_amm = self._txt_brain_total.get().strip().replace(" ", "")
+            passphrase = ' '.join(random.sample(mylist, random.randint(int(start_amm), int(stop_amm))))
+            self.brain_results_online(passphrase)
+    
+    def Random_brain_online1(self):
+        for i in range(0,len(mylist)):
+            passphrase = mylist[i]
+            self.brain_results_online(passphrase)
+    
+    def Random_brain_online2(self):
+        start_amm = self._txt_brain_ammount.get().strip().replace(" ", "")
+        stop_amm = self._txt_brain_total.get().strip().replace(" ", "")
+        while self.run:
+            words = random.randrange(int(start_amm), int(stop_amm))
+            passphrase = ''.join(random.sample(string.ascii_lowercase, words))
+            self.brain_results_online(passphrase)
+
+    def brain_results_offline(self, passphrase):
+        global total, totaladd
+        brainvar = tkinter.StringVar()
+        brainvar.set(passphrase)
+        brainvartext = tkinter.StringVar()
+        brainvartext1 = MIZ.rboffline(self, passphrase)
+        brainvartext.set(brainvartext1)
+        self.brain_update.config(textvariable = brainvar, relief='flat')
+        self.brain_update1.config(textvariable = brainvartext, relief='flat')
+        self.brain_update.update()
+        self.brain_update1.update()
+        total+=1
+        totaladd+=1
+        self.totalC.config(text = f'{total}')
+        self.totalA.config(text = f'{totaladd}')
+
+    def Random_brain_offline(self):
+        start_amm = self._txt_brain_ammount.get().strip().replace(" ", "")
+        stop_amm = self._txt_brain_total.get().strip().replace(" ", "")
+        while self.run:
+            passphrase = ' '.join(random.sample(mylist, random.randint(int(start_amm), int(stop_amm))))
+            self.brain_results_offline(passphrase)
+            
+    def Random_brain_offline1(self):
+        for i in range(0,len(mylist)):
+            passphrase = mylist[i]
+            self.brain_results_offline(passphrase)
+    
+    def Random_brain_offline2(self):
+        start_amm = self._txt_brain_ammount.get().strip().replace(" ", "")
+        stop_amm = self._txt_brain_total.get().strip().replace(" ", "")
+        while self.run:
+            words = random.randrange(int(start_amm), int(stop_amm))
+            passphrase = ''.join(random.sample(string.ascii_lowercase, words))
+            self.brain_results_offline(passphrase)
+                
     def popwinner(self):
         self.popwin = Toplevel()
-        self.popwin.title("BitcoinHunter.py")
+        self.popwin.title("BitHunter.py")
         self.popwin.iconbitmap('images/miz.ico')
         self.popwin.geometry("700x250")
         self.widgetwinpop = tkinter.Label(self.popwin, compound='top')
@@ -623,7 +632,7 @@ class MainWindow():
 
     def startpop(self):
         self.pop = Toplevel()
-        self.pop.title("BitcoinHunter.py")
+        self.pop.title("BitHunter.py")
         self.pop.iconbitmap('images/miz.ico')
         self.pop.geometry("700x250")
         self.widgetpop = tkinter.Label(self.pop, compound='top')
@@ -656,23 +665,6 @@ class MainWindow():
         self.stringtime = strftime('%H:%M:%S %p')
         self.lbl.config(text = self.stringtime)
         self.lbl.after(1000, self.time)
-
-    def Random_brain_single(self):
-        passphrase = self._txt_inputbrain.get().strip()
-        global total, totaladd
-        brainvar = tkinter.StringVar()
-        brainvar.set(passphrase)
-        brainvartext = tkinter.StringVar()
-        brainvartext1 = brainvartext1 = MIZ.rbonline(self, passphrase)
-        brainvartext.set(brainvartext1)
-        self.brain_update.config(textvariable = brainvar, relief='flat')
-        self.brain_update1.config(textvariable = brainvartext, relief='flat')
-        self.brain_update.update()
-        self.brain_update1.update()
-        total+=1
-        totaladd+=1
-        self.totalC.config(text = f'{total}')
-        self.totalA.config(text = f'{totaladd}')
         
     def Random_word_single(self):
         mnem = self._txt_inputword.get()
@@ -722,7 +714,7 @@ class MainWindow():
             
     def evt_rd_dec(self):
         try:
-            dec_value = int(random.randrange(startdec, stopdec))
+            dec_value = int(RandomInteger(startdec, stopdec))
             bin_value = MIZ.dec2bin(dec_value)
             hex_value = MIZ.dec2hex(dec_value)
             bit_value = MIZ.dec2bit(dec_value)
@@ -773,7 +765,7 @@ class MainWindow():
     def evt_btc_add(self):
         try:
             btc_value = self._txt_input.get().strip().replace(" ", "")
-            dec_value = int(random.randrange(startdec, stopdec))
+            dec_value = int(RandomInteger(startdec, stopdec))
             bin_value = MIZ.dec2bin(dec_value)
             hex_value = MIZ.dec2hex(dec_value)
             bit_value = MIZ.dec2bit(dec_value)
