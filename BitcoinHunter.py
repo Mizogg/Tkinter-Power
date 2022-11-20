@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 16.11.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 20.11.2022 https://t.me/CryptoCrackersUK
 from tkinter import * 
 from tkinter import ttk
 import tkinter.messagebox
@@ -11,6 +11,7 @@ import random, sys, os
 import string
 import psutil
 import mizlib as MIZ
+import math
 def RandomInteger(minN, maxN):
     return random.randrange(minN, maxN)
     
@@ -64,8 +65,8 @@ which is the smallest possible division, and named in homage to bitcoin's creato
 creditsinfo = ('''
                 Look for Bitcoin with tkinter and python in GUI.
                         Made By Mizogg.co.uk
-                    Version = 1.9 (???? Lines of code)
-                    
+                    Version = 1.9 (1087 Lines of code)
+                        NEW CALCULATOR  added 
                     
                     Version = 1.8 (1422 Lines of code) 
                 New features added to Brain Wallet Generator
@@ -117,7 +118,8 @@ run = run1 = run2 = True
 class MainWindow():
     def __init__(self):
         self.found = found
-        self.run = run  
+        self.run = run
+        self.fact = 1
         def start2():
            global run2
            run2= True
@@ -277,18 +279,63 @@ class MainWindow():
         self.word_frame = Frame(self.my_notebook, width=840, height=620)
         self.about_frame = Frame(self.my_notebook, width=840, height=620)
         self.credits_frame = Frame(self.my_notebook, width=840, height=620)
+        self.windowcal = Frame(self.my_notebook, width=840, height=620)
         self.main_frame.pack(fill="both", expand=1)
         self.bitcoin_frame.pack(fill="both", expand=1)
         self.brain_frame.pack(fill="both", expand=1)
         self.word_frame.pack(fill="both", expand=1)
         self.about_frame.pack(fill="both", expand=1)
         self.credits_frame.pack(fill="both", expand=1)
+        self.windowcal.pack(fill="both", expand=1)
         self.my_notebook.add(self.bitcoin_frame, text="Bitcoin Hunting")
         self.my_notebook.add(self.main_frame, text="Conversion Tools ")
+        self.my_notebook.add(self.windowcal, text="Calulator")
         self.my_notebook.add(self.brain_frame, text="Brain Hunting")
         self.my_notebook.add(self.word_frame, text="Mnemonic Hunting")
         self.my_notebook.add(self.about_frame, text="About Bitcoin")
         self.my_notebook.add(self.credits_frame, text="Credits")
+        # Calulator Tab
+        self.text_valuecal = tkinter.StringVar()
+        self.textoperator = tkinter.StringVar()
+        self.textoperator2 = tkinter.StringVar()
+        self.plus = tkinter.Button(self.windowcal,text="+",width=4,font=("arial",15,"bold"),fg="purple",bg="#F0F0F0", activebackground="#F0F0F0", command=lambda : self.opr("+"), relief=RAISED, bd=3).place(x=470,y=110)
+        self.subs = tkinter.Button(self.windowcal, text="-", width=4, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("-"), relief=RAISED, bd=3).place(x=470, y=170)
+        self.mul = tkinter.Button(self.windowcal, text="X", width=4, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("X"), relief=RAISED, bd=3).place(x=545, y=110)
+        self.div = tkinter.Button(self.windowcal, text="/", width=4, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("/"), relief=RAISED, bd=3).place(x=545, y=170)
+        self.rad = tkinter.Button(self.windowcal, text="Radian", width=11, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("Radian"), relief=RAISED, bd=3).place(x=690, y=260)
+        self.reci = tkinter.Button(self.windowcal, text="1/x", width=4, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("Reciprocal"), relief=RAISED, bd=3).place(x=230, y=260)
+        self.sqr = tkinter.Button(self.windowcal, text="X^2", width=4, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("Square"), relief=RAISED, bd=3).place(x=367, y=260)
+        self.cube = tkinter.Button(self.windowcal, text="X^3", width=4, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("Cube"), relief=RAISED, bd=3).place(x=367, y=310)
+        self.equal = tkinter.Button(self.windowcal, text="=", width=11, font=("arial", 18, "bold"), fg="green",bg="#F0F0F0", activebackground="#F0F0F0",command=self.evaluation_opr, relief=RAISED, bd=3).place(x=640, y=130)
+        self.clear = tkinter.Button(self.windowcal, text="Information", width=11, font=("arial", 10, "bold"), activebackground="#F0F0F0",fg="purple",bg="#F0F0F0",command=self.informationcal, relief=RAISED, bd=3).place(x=680, y=90)
+        self.sqrt = tkinter.Button(self.windowcal, text="Square root", width=11, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("Square root"), relief=RAISED, bd=3).place(x=432, y=260)
+        self.cubert = tkinter.Button(self.windowcal, text="Cube root", width=11, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("Cube root"), relief=RAISED, bd=3).place(x=432, y=310)
+        self.log2 = tkinter.Button(self.windowcal, text="log2", width=8, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("log2"), relief=RAISED, bd=3).place(x=580, y=260)
+        self.log10 = tkinter.Button(self.windowcal, text="log10", width=8, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("log10"), relief=RAISED, bd=3).place(x=580, y=310)
+        self.exponent = tkinter.Button(self.windowcal, text="e^x", width=4, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("Exponent"), relief=RAISED, bd=3).place(x=300, y=260)
+        self.power = tkinter.Button(self.windowcal, text="X^Y", width=4, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("x^y"), relief=RAISED, bd=3).place(x=300, y=310)
+        self.factorial = tkinter.Button(self.windowcal, text="n!", width=4, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("Factorial"), relief=RAISED, bd=3).place(x=15, y=310)
+        self.mod = tkinter.Button(self.windowcal, text="Modulus", width=11, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda: self.opr("Modulus"), relief=RAISED, bd=3).place(x=690, y=310)
+        self.reset = tkinter.Button(self.windowcal, text="Reset", width=5, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=self.reset_now, relief=RAISED, bd=3).place(x=700, y=195)
+        self.sin = tkinter.Button(self.windowcal, text="sin", width=4, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda: self.opr("sin"), relief=RAISED, bd=3).place(x=90 ,y=310)
+        self.cos = tkinter.Button(self.windowcal, text="cos", width=4, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda: self.opr("cos"), relief=RAISED, bd=3).place(x=15, y=260)
+        self.tan = tkinter.Button(self.windowcal, text="tan", width=4, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda: self.opr("tan"), relief=RAISED, bd=3).place(x=90, y=260)
+        self.cot = tkinter.Button(self.windowcal, text="cot", width=4, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda: self.opr("cot"), relief=RAISED, bd=3).place(x=160, y=260)
+        self.lcm = tkinter.Button(self.windowcal, text="LCM", width=4, font=("arial", 15, "bold"), bg="#F0F0F0", fg="purple", activebackground="#F0F0F0",command=lambda : self.opr("lcm"), relief=RAISED, bd=3).place(x=160, y=310)
+        self.hcf = tkinter.Button(self.windowcal, text="HCF", width=4, font=("arial", 15, "bold"), bg="#F0F0F0", fg="purple", activebackground="#F0F0F0",command=lambda : self.opr("hcf"), relief=RAISED, bd=3).place(x=230, y=310)
+        self.result_name = tkinter.Label(self.windowcal, text="Result: ", width=8, font=("arial", 16, "bold", "italic"),fg="black",bg="#F0F0F0").place(x=340, y=360)
+        self.result = tkinter.Entry(self.windowcal,font=("Helvetica",22,"bold","italic"),textvar=self.text_valuecal, bd=5, width=52, relief=SUNKEN, disabledbackground="white", foreground="purple")
+        self.result.place(x=10,y=390)
+        tkinter.Label(self.windowcal, text="Number 1 ",width=8, font=("arial", 15, "bold","italic"),bg="#F0F0F0",fg="black").place(x=10, y=115)
+        self.number1 = tkinter.Entry(self.windowcal,width=24,bg="#3d3d3d",font=("arial",16,"bold","italic"), insertbackground="gold",fg="gold",bd=3,relief=SUNKEN)
+        self.number1.place(x=130,y=115)
+        self.number1.focus()
+        tkinter.Label(self.windowcal, text="Number 2 ", width=8, font=("arial", 16, "bold", "italic"),fg="black", bg="#F0F0F0").place(x=10, y=195)
+        self.number2 = tkinter.Entry(self.windowcal, width=24, bg="#3d3d3d", font=("arial", 16, "bold", "italic"), insertbackground="gold",fg="gold", relief=SUNKEN, bd=4)
+        self.number2.place(x=130, y=195)
+        self.operator_name = tkinter.Label(self.windowcal, text="Operation ", width=12, font=("arial", 16, "bold", "italic"), bg="#F0F0F0", fg="#d96b6b").place(x=10, y=155)
+        self.operator = tkinter.Entry(self.windowcal, width=12, font=("arial", 16, "bold", "italic"), disabledbackground="#3d3d3d",disabledforeground="gold",state="disable",textvar=self.textoperator,bd=5,relief=SUNKEN)
+        self.operator.place(x=250, y=155)
         #  Main Tab
         self.labeltype = tkinter.Label(self.main_frame, text=" Type \n Data \n Here ", font=("Consolas", 16)).place(x=5,y=70)
         self._txt_input = tkinter.Entry(self.main_frame, width=56, font=("Consolas", 16))
@@ -470,7 +517,250 @@ class MainWindow():
         self.my_buttonword = tkinter.Button(self.word_frame, text= "18 Words ",font=("Arial",10),bg="#F3E4A8", command= Random_word_offline6).place(x=447,y=220)
         self.my_buttonword = tkinter.Button(self.word_frame, text= "21 Words ",font=("Arial",10),bg="#F3E4B8", command= Random_word_offline7).place(x=520,y=220)
         self.my_buttonword = tkinter.Button(self.word_frame, text= "24 Words ",font=("Arial",10),bg="#F3E4C8", command= Random_word_offline8).place(x=593,y=220)
-    
+
+    def reset_now(self):
+        self.textoperator.set(" ")
+        self.text_valuecal.set(" ")
+
+    def informationcal(self):
+        self.windowcal_informationcal = Toplevel()
+        self.windowcal_informationcal.title("Information")
+        self.windowcal_informationcal.geometry("540x440")
+        self.windowcal_informationcal.iconbitmap('images/miz.ico')
+        self.windowcal_informationcal.config(bg="#F0F0F0")
+        self.widget = tkinter.Label(self.windowcal_informationcal, compound='top')
+        self.widget.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
+        self.widget['text'] = "© MIZOGG 2018 - 2022"
+        self.widget['image'] = self.widget.miz_image_png
+        self.widget.place(x=150,y=300)
+        infocal = '''
+ 1.Write number and select operator at first, then click on equal(=) sign.
+ 
+ 2.For single digit operation(e.g. rad,exponent,Reciprocal(1/x),
+ square,cube,square root,cube root,log,factorial(n!),exponent etc.)
+ 
+ only write number input in the 'Number1' but not write
+ input in 'Number2' .After that select favourable operator and go.
+ 
+ 3.For single no. operation,if there is present two no. in 'Number1'
+ and 'Number2', only input number in 'Number1' will taken.
+ '''
+        tkinter.Label(self.windowcal_informationcal,fg="black",font=("arial",11,"bold","italic"),text=infocal, bg="#F0F0F0").place(x=5,y=15)
+        self.windowcal_informationcal.mainloop()
+
+    def opr(self,work):
+        self.work = work
+        self.textoperator.set(self.work)
+
+    def evaluation_opr(self):
+        self.n1 = (self.number1.get())
+        self.n2 = (self.number2.get())
+        self.work_done = self.textoperator.get()
+        if self.work_done=="+":
+            try:
+                result_take = eval(self.n1)+eval(self.n2)
+                self.text_valuecal.set(int(result_take)) if int(result_take) == result_take else self.text_valuecal.set(result_take)
+            except:
+                tkinter.messagebox.showerror("Error","Something error in input.please check it.")
+                self.informationcal()
+                self.reset_now()
+        elif self.work_done=="-":
+            try:
+               result_take = eval(self.n1)-eval(self.n2)
+               self.text_valuecal.set(int(result_take)) if int(result_take) == result_take else self.text_valuecal.set(result_take)
+            except:
+                tkinter.messagebox.showerror("Error","Something error in input.please check it.")
+                self.informationcal()
+                self.reset_now()
+        elif self.work_done=="X":
+            try:
+                result_take = eval(self.n1)*eval(self.n2)
+                self.text_valuecal.set(int(result_take)) if int(result_take) == result_take else self.text_valuecal.set(result_take)
+            except:
+                tkinter.messagebox.showerror("Error","Something error in input.please check it.")
+                self.informationcal()
+                self.reset_now()
+        elif self.work_done=="/":
+            try:
+                result_take = eval(self.n1)/eval(self.n2)
+                self.text_valuecal.set(int(result_take)) if int(result_take) == result_take else self.text_valuecal.set(result_take)
+            except ZeroDivisionError:
+                self.text_valuecal.set("Can not divide by zero")
+            except:
+                tkinter.messagebox.showerror("Error","Something error in input.please check it.")
+                self.informationcal()
+                self.reset_now()
+
+        elif self.work_done=="Reciprocal":
+            try:
+                result_take = round(1.0/eval(self.n1),2)
+                self.text_valuecal.set(int(result_take)) if int(result_take) == result_take else self.text_valuecal.set(result_take)
+            except ZeroDivisionError:
+                self.text_valuecal.set("Can not divide by zero")
+            except:
+                tkinter.messagebox.showerror("Input Error","Please write number in the right position.Please read the informationcal carefully")
+                self.informationcal()
+                self.reset_now()
+
+        elif self.work_done=="Square":
+            try:
+                result_take = eval(self.n1) ** 2.0
+                self.text_valuecal.set(int(result_take)) if int(result_take) == result_take else self.text_valuecal.set(result_take)
+            except:
+                tkinter.messagebox.showerror("Error","Something error in input.please check it.")
+                self.informationcal()
+                self.reset_now()
+        elif self.work_done=="Cube":
+            try:
+               result_take = eval(self.n1) ** 3.0
+               self.text_valuecal.set(int(result_take)) if int(result_take) == result_take else self.text_valuecal.set(result_take)
+            except:
+                tkinter.messagebox.showerror("Error","Something error in input.please check it.")
+                self.informationcal()
+                self.reset_now()
+        elif self.work_done=="Square root":
+            try:
+                result_take = eval(self.n1)**0.5
+                self.text_valuecal.set(int(result_take)) if int(result_take) == result_take else self.text_valuecal.set(result_take)
+            except:
+                tkinter.messagebox.showerror("Error","Something error in input.please check it.")
+                self.informationcal()
+                self.reset_now()
+        elif self.work_done == "Cube root":
+            try:
+                result_take = round(eval(self.n1)**(1/3),2)
+                self.text_valuecal.set(int(result_take)) if int(result_take) == result_take else self.text_valuecal.set(result_take)
+            except:
+                tkinter.messagebox.showerror("Error","Something error in input.please check it.")
+                self.informationcal()
+                self.reset_now()
+
+        elif self.work_done == "Exponent":
+            try:
+                result_take = math.exp(eval(self.n1))
+                self.text_valuecal.set(int(result_take)) if int(result_take) == result_take else self.text_valuecal.set(result_take)
+            except:
+                tkinter.messagebox.showerror("Error","Something error in input.please check it.")
+                self.informationcal()
+                self.reset_now()
+        elif self.work_done=="x^y":
+            try:
+                result_take = eval(self.n1) ** eval(self.n2)
+                self.text_valuecal.set(int(result_take)) if int(result_take) == result_take else self.text_valuecal.set(result_take)
+            except:
+                tkinter.messagebox.showerror("Error","Something error in input.please check it.")
+                self.informationcal()
+                self.reset_now()
+        elif self.work_done=="Factorial":
+            try:
+                for i in range(1,eval(self.n1)+1):
+                    self.fact= self.fact * i
+                self.text_valuecal.set(int(self.fact)) if int(self.fact) == self.fact else self.text_valuecal.set(self.fact)
+
+                self.fact=1
+            except:
+                tkinter.messagebox.showerror("Error","Something error in input.please check it.")
+                self.informationcal()
+                self.reset_now()
+        elif self.work_done=="lcm":
+            try:
+                if eval(self.n1)>eval(self.n2):
+                    result_take = (eval(self.n1)*eval(self.n2))/math.gcd(eval(self.n1),eval(self.n2))
+                    self.text_valuecal.set(int(result_take)) if int(result_take) == result_take else self.text_valuecal.set(result_take)
+                else:
+                    result_take = (eval(self.n2)*eval(self.n1))/math.gcd(eval(self.n2),eval(self.n1))
+                    self.text_valuecal.set(int(result_take)) if int(result_take) == result_take else self.text_valuecal.set(result_take)
+            except:
+                tkinter.messagebox.showerror("Error","Something error in input.please check it.")
+                self.informationcal()
+                self.reset_now()
+        elif self.work_done=="hcf":
+            try:
+                if eval(self.n1) > eval(self.n2):
+                    result_take = math.gcd(eval(self.n1),eval(self.n2))
+                    self.text_valuecal.set(int(result_take)) if int(result_take) == result_take else self.text_valuecal.set(result_take)
+                else:
+                    result_take = math.gcd(eval(self.n2), eval(self.n1))
+                    self.text_valuecal.set(int(result_take)) if int(result_take) == result_take else self.text_valuecal.set(result_take)
+            except:
+                tkinter.messagebox.showerror("Error","Something error in input.please check it.")
+                self.informationcal()
+                self.reset_now()
+        elif self.work_done == "log2":
+            try:
+                result_take = math.log2(eval(self.n1))
+                self.text_valuecal.set(int(result_take)) if int(result_take) == result_take else self.text_valuecal.set(result_take)
+            except:
+                tkinter.messagebox.showerror("Error","Something error in input.please check it.")
+                self.informationcal()
+                self.reset_now()
+        elif self.work_done == "log10":
+            try:
+                result_take = math.log10(eval(self.n1))
+                self.text_valuecal.set(int(result_take)) if int(result_take) == result_take else self.text_valuecal.set(result_take)
+            except:
+                tkinter.messagebox.showerror("Error","Something error in input.please check it.")
+                self.informationcal()
+                self.reset_now()
+        elif self.work_done == "Modulus":
+            try:
+                result_take = eval(self.n1)%eval(self.n2)
+                self.text_valuecal.set(int(result_take)) if int(result_take) == result_take else self.text_valuecal.set(result_take)
+            except:
+                tkinter.messagebox.showerror("Error","Something error in input.please check it.")
+                self.informationcal()
+                self.reset_now()
+        elif self.work_done == "Radian":
+            try:
+                self.text_valuecal.set(round(math.radians(eval(self.n1)),3))
+            except:
+                tkinter.messagebox.showerror("Error","Something error in input.please check it.")
+                self.informationcal()
+                self.reset_now()
+        elif self.work_done == "sin":
+            try:
+                result_take = round(math.sin(math.radians(eval(self.n1))),1)
+                self.text_valuecal.set(int(result_take)) if int(result_take) == result_take else self.text_valuecal.set(result_take)
+            except:
+                tkinter.messagebox.showerror("Error","Something error in input.please check it.")
+                self.informationcal()
+                self.reset_now()
+        elif self.work_done == "cos":
+            try:
+                result_take = round(math.cos(math.radians(eval(self.n1))),1)
+                self.text_valuecal.set(int(result_take)) if int(result_take) == result_take else self.text_valuecal.set(result_take)
+            except:
+                tkinter.messagebox.showerror("Error","Something error in input.please check it.")
+                self.informationcal()
+                self.reset_now()
+        elif self.work_done == "tan":
+            try:
+                if eval(self.n1) == 90:
+                    self.text_valuecal.set("Infinite")
+                else:
+                    result_take = round(math.tan(math.radians(eval(self.n1))),1)
+                    self.text_valuecal.set(int(result_take)) if int(result_take) == result_take else self.text_valuecal.set(result_take)
+            except:
+                tkinter.messagebox.showerror("Error","Something error in input.please check it.")
+                self.informationcal()
+                self.reset_now()
+        elif self.work_done == "cot":
+            try:
+                if eval(self.n1) == 0:
+                    self.text_valuecal.set("Infinite")
+                else:
+                    result_take = round(1/(math.tan(math.radians(eval(self.n1)))),1)
+                    self.text_valuecal.set(int(result_take)) if int(result_take) == result_take else self.text_valuecal.set(result_take)
+            except:
+                tkinter.messagebox.showerror("Error","Something error in input.please check it.")
+                self.informationcal()
+                self.reset_now()
+        else:
+            tkinter.messagebox.showerror("Error","Please read the informationcal carefully at first.")
+            self.informationcal()
+            self.reset_now()
+        self.number1.focus()
+        
     def start(self):
         self.run= True
 
@@ -640,7 +930,7 @@ class MainWindow():
         self.widgetpop['text'] = "© MIZOGG 2018 - 2022"
         self.widgetpop['image'] = self.widgetpop.miz_image_png
         self.widgetpop.place(x=220,y=180)
-        self.label = tkinter.Label(self.pop, text='Welcome to BitHunter...... \n\n Made By Mizogg.co.uk \n\n Version 1.8 13/11/22').pack(pady=10)
+        self.label = tkinter.Label(self.pop, text='Welcome to BitHunter...... \n\n Made By Mizogg.co.uk \n\n Version 1.9 20/11/22').pack(pady=10)
         self.label1 = tkinter.Label(self.pop, text= "This window will get closed after 3 seconds...", font=('Helvetica 8 bold')).pack(pady=10)
         self.framepop = Frame(self.pop)
         self.framepop.pack(pady=10)
