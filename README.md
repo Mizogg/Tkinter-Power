@@ -53,6 +53,8 @@ python BitcoinHunter.py
 # Brain Wallet Tools
 ![image](https://user-images.githubusercontent.com/88630056/200415184-4a4a14fe-f501-48ce-83d0-9be41599ee13.png)
 
+# Calculator 
+![image](https://user-images.githubusercontent.com/88630056/202914529-8ade17c1-f474-45e6-b9b5-4a290f547eb7.png)
 
 # Mnemonic Wallet Tools
 ![image](https://user-images.githubusercontent.com/88630056/200415271-29d7d26e-749d-4ee2-b57a-6f0d659ed7e7.png)
