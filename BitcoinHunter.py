@@ -306,7 +306,8 @@ class MainWindow():
         self.reci = tkinter.Button(self.windowcal, text="1/x", width=4, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("Reciprocal"), relief=RAISED, bd=3).place(x=230, y=260)
         self.sqr = tkinter.Button(self.windowcal, text="X^2", width=4, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("Square"), relief=RAISED, bd=3).place(x=367, y=260)
         self.cube = tkinter.Button(self.windowcal, text="X^3", width=4, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("Cube"), relief=RAISED, bd=3).place(x=367, y=310)
-        self.equal = tkinter.Button(self.windowcal, text="=", width=11, font=("arial", 18, "bold"), fg="green",bg="#F0F0F0", activebackground="#F0F0F0",command=self.evaluation_opr, relief=RAISED, bd=3).place(x=640, y=130)
+        self.equal = tkinter.Button(self.windowcal, text="=", width=11, font=("arial", 18, "bold"), fg="green",bg="#F0F0F0", activebackground="#F0F0F0",command=self.evaluation_opr, relief=RAISED, bd=3, ).place(x=640, y=130)
+        self.braincal = tkinter.Button(self.windowcal, text="Sum to Brain Wallet", width=16, font=("arial", 12, "bold"), fg="green",bg="#F0F0F0", activebackground="#F0F0F0",command=self.Random_brain_cal, relief=RAISED, bd=3, ).place(x=630, y=195)
         self.clear = tkinter.Button(self.windowcal, text="Information", width=11, font=("arial", 10, "bold"), activebackground="#F0F0F0",fg="purple",bg="#F0F0F0",command=self.informationcal, relief=RAISED, bd=3).place(x=680, y=90)
         self.sqrt = tkinter.Button(self.windowcal, text="Square root", width=11, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("Square root"), relief=RAISED, bd=3).place(x=432, y=260)
         self.cubert = tkinter.Button(self.windowcal, text="Cube root", width=11, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("Cube root"), relief=RAISED, bd=3).place(x=432, y=310)
@@ -316,7 +317,7 @@ class MainWindow():
         self.power = tkinter.Button(self.windowcal, text="X^Y", width=4, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("x^y"), relief=RAISED, bd=3).place(x=300, y=310)
         self.factorial = tkinter.Button(self.windowcal, text="n!", width=4, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("Factorial"), relief=RAISED, bd=3).place(x=15, y=310)
         self.mod = tkinter.Button(self.windowcal, text="Modulus", width=11, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda: self.opr("Modulus"), relief=RAISED, bd=3).place(x=690, y=310)
-        self.reset = tkinter.Button(self.windowcal, text="Reset", width=5, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=self.reset_now, relief=RAISED, bd=3).place(x=700, y=195)
+        self.reset = tkinter.Button(self.windowcal, text="Reset", width=5, font=("arial", 13, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=self.reset_now, relief=RAISED, bd=3).place(x=520, y=218)
         self.sin = tkinter.Button(self.windowcal, text="sin", width=4, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda: self.opr("sin"), relief=RAISED, bd=3).place(x=90 ,y=310)
         self.cos = tkinter.Button(self.windowcal, text="cos", width=4, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda: self.opr("cos"), relief=RAISED, bd=3).place(x=15, y=260)
         self.tan = tkinter.Button(self.windowcal, text="tan", width=4, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda: self.opr("tan"), relief=RAISED, bd=3).place(x=90, y=260)
@@ -324,7 +325,7 @@ class MainWindow():
         self.lcm = tkinter.Button(self.windowcal, text="LCM", width=4, font=("arial", 15, "bold"), bg="#F0F0F0", fg="purple", activebackground="#F0F0F0",command=lambda : self.opr("lcm"), relief=RAISED, bd=3).place(x=160, y=310)
         self.hcf = tkinter.Button(self.windowcal, text="HCF", width=4, font=("arial", 15, "bold"), bg="#F0F0F0", fg="purple", activebackground="#F0F0F0",command=lambda : self.opr("hcf"), relief=RAISED, bd=3).place(x=230, y=310)
         self.result_name = tkinter.Label(self.windowcal, text="Result: ", width=8, font=("arial", 16, "bold", "italic"),fg="black",bg="#F0F0F0").place(x=340, y=360)
-        self.result = tkinter.Entry(self.windowcal,font=("Helvetica",22,"bold","italic"),textvar=self.text_valuecal, bd=5, width=52, relief=SUNKEN, disabledbackground="white", foreground="purple")
+        self.result = tkinter.Entry(self.windowcal,font=("Helvetica",20,"bold","italic"),textvar=self.text_valuecal, bd=5, width=52, relief=SUNKEN, disabledbackground="white", foreground="purple")
         self.result.place(x=10,y=390)
         tkinter.Label(self.windowcal, text="Number 1 ",width=8, font=("arial", 15, "bold","italic"),bg="#F0F0F0",fg="black").place(x=10, y=115)
         self.number1 = tkinter.Entry(self.windowcal,width=24,bg="#3d3d3d",font=("arial",16,"bold","italic"), insertbackground="gold",fg="gold",bd=3,relief=SUNKEN)
@@ -336,6 +337,8 @@ class MainWindow():
         self.operator_name = tkinter.Label(self.windowcal, text="Operation ", width=12, font=("arial", 16, "bold", "italic"), bg="#F0F0F0", fg="#d96b6b").place(x=10, y=155)
         self.operator = tkinter.Entry(self.windowcal, width=12, font=("arial", 16, "bold", "italic"), disabledbackground="#3d3d3d",disabledforeground="gold",state="disable",textvar=self.textoperator,bd=5,relief=SUNKEN)
         self.operator.place(x=250, y=155)
+        self.brain_updatecal1 = tkinter.Label(self.windowcal, bg="#F0F0F0",font=("Arial",10),text="")
+        self.brain_updatecal1.place(x=160,y=440)
         #  Main Tab
         self.labeltype = tkinter.Label(self.main_frame, text=" Type \n Data \n Here ", font=("Consolas", 16)).place(x=5,y=70)
         self._txt_input = tkinter.Entry(self.main_frame, width=56, font=("Consolas", 16))
@@ -824,7 +827,20 @@ class MainWindow():
         totaladd+=1
         self.totalC.config(text = f'{total}')
         self.totalA.config(text = f'{totaladd}')
-
+    
+    def Random_brain_cal(self):
+        passphrase = self.result.get().strip()
+        global total, totaladd
+        brainvartextcal = tkinter.StringVar()
+        brainvartextcal1 = brainvartextca1 = MIZ.rbonline(self, passphrase)
+        brainvartextcal.set(brainvartextcal1)
+        self.brain_updatecal1.config(textvariable = brainvartextcal, relief='flat')
+        self.brain_updatecal1.update()
+        total+=1
+        totaladd+=1
+        self.totalC.config(text = f'{total}')
+        self.totalA.config(text = f'{totaladd}')
+        
     def Random_brain_single(self):
         passphrase = self._txt_inputbrain.get().strip()
         global total, totaladd
@@ -841,6 +857,7 @@ class MainWindow():
         totaladd+=1
         self.totalC.config(text = f'{total}')
         self.totalA.config(text = f'{totaladd}')
+        
     def Random_brain_online(self):
         while self.run:
             start_amm = self._txt_brain_ammount.get().strip().replace(" ", "")
