@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 20.11.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 25.11.2022 https://t.me/CryptoCrackersUK
 from tkinter import * 
 from tkinter import ttk
 import tkinter.messagebox
@@ -12,24 +12,10 @@ import string
 import psutil
 import mizlib as MIZ
 import math
+
 def RandomInteger(minN, maxN):
     return random.randrange(minN, maxN)
-    
-def random_word_results(self, mnem):
-    global total, totaladd
-    wordvar = tkinter.StringVar()
-    wordvar.set(mnem)
-    wordvartext = tkinter.StringVar()
-    wordvartext1 = MIZ.rwonline(self, mnem)
-    wordvartext.set(wordvartext1)
-    self.word_update.config(textvariable = wordvar, relief='flat')
-    self.word_update1.config(textvariable = wordvartext, relief='flat')
-    self.word_update1.update()
-    self.word_update.update()
-    total+=1
-    totaladd+=1
-    self.totalC.config(text = f'{total}')
-    self.totalA.config(text = f'{totaladd}')
+
 # ============================================================================= 
 information = ('''
 https://en.wikipedia.org/wiki/Bitcoin
@@ -65,6 +51,8 @@ which is the smallest possible division, and named in homage to bitcoin's creato
 creditsinfo = ('''
                 Look for Bitcoin with tkinter and python in GUI.
                         Made By Mizogg.co.uk
+                    Version = 1.10
+               Memory leak Fixed on Brain, Mnemonic and 16x16
                     Version = 1.9 (1087 Lines of code)
                         NEW CALCULATOR  added 
                     
@@ -113,7 +101,7 @@ with open('files/words.txt', newline='', encoding='utf-8') as f:
 startdec = 1
 stopdec = 115792089237316195423570985008687907852837564279074904382605163141518161494336
 totaladd = total = found =0
-run = run1 = run2 = True
+run = run2 = True
 
 class MainWindow():
     def __init__(self):
@@ -126,133 +114,9 @@ class MainWindow():
         def stop2():
            global run2
            run2= False
-        #  Mnemonic Program Main
-        def word_results_online(rnds):
-            global total, totaladd
-            mnem = MIZ.create_valid_mnemonics(strength=int(rnds))
-            wordvar = tkinter.StringVar()
-            wordvar.set(mnem)
-            wordvartext = tkinter.StringVar()
-            wordvartext1 = MIZ.rwonline(self, mnem)
-            wordvartext.set(wordvartext1)
-            self.word_update.config(textvariable = wordvar, relief='flat')
-            self.word_update1.config(textvariable = wordvartext, relief='flat')
-            self.word_update.update()
-            self.word_update1.update()
-            total+=1
-            totaladd+=1
-            self.totalC.config(text = f'{total}')
-            self.totalA.config(text = f'{totaladd}')
-        
-        def Random_word_online():
-            while run2:
-                rnds = '16'
-                word_results_online(rnds)
-                
-        def Random_word_online1():
-            while run2:
-                rnds = '32'
-                word_results_online(rnds)
-                
-        def Random_word_online2():
-            while run2:
-                rnds = '64'
-                word_results_online(rnds)
-                
-        def Random_word_online3():
-            while run2:
-                rnds = '96'
-                word_results_online(rnds)
-                
-        def Random_word_online4():
-            while run2:
-                rnds = '128'
-                word_results_online(rnds)
-                
-        def Random_word_online5():
-            while run2:
-                rnds = '160'
-                word_results_online(rnds)
-                
-        def Random_word_online6():
-            while run2:
-                rnds = '192'
-                word_results_online(rnds)
-                
-        def Random_word_online7():
-            while run2:
-                rnds = '224'
-                word_results_online(rnds)
-                
-        def Random_word_online8():
-            while run2:
-                rnds = '256'
-                word_results_online(rnds)
-
-        def word_results_offline(rnds):
-            global total, totaladd
-            mnem = MIZ.create_valid_mnemonics(strength=int(rnds))
-            wordvar = tkinter.StringVar()
-            wordvar.set(mnem)
-            wordvartext = tkinter.StringVar()
-            wordvartext1 = MIZ.rwoffline(self, mnem)
-            wordvartext.set(wordvartext1)
-            self.word_update.config(textvariable = wordvar, relief='flat')
-            self.word_update1.config(textvariable = wordvartext, relief='flat')
-            self.word_update.update()
-            self.word_update1.update()
-            total+=1
-            totaladd+=3
-            self.totalC.config(text = f'{total}')
-            self.totalA.config(text = f'{totaladd}')
-
-        def Random_word_offline():
-            while run2:
-                rnds = '16'
-                word_results_offline(rnds)
-
-        def Random_word_offline1():
-            while run2:
-                rnds = '32'
-                word_results_offline(rnds)
-
-        def Random_word_offline2():
-            while run2:
-                rnds = '64'
-                word_results_offline(rnds)
-
-        def Random_word_offline3():
-            while run2:
-                rnds = '96'
-                word_results_offline(rnds)
-
-        def Random_word_offline4():
-            while run2:
-                rnds = '128'
-                word_results_offline(rnds)
-
-        def Random_word_offline5():
-            while run2:
-                rnds = '160'
-                word_results_offline(rnds)
-
-        def Random_word_offline6():
-            while run2:
-                rnds = '192'
-                word_results_offline(rnds)
-
-        def Random_word_offline7():
-            while run2:
-                rnds = '224'
-                word_results_offline(rnds)
-
-        def Random_word_offline8():
-            while run2:
-                rnds = '256'
-                word_results_offline(rnds)
         #  Main Window Program Menu Bar
         self._window = tkinter.Tk()
-        self._window.title("BitHunter.py @ Mizogg.co.uk")
+        self._window.title("BitcoinHunter.py @ Mizogg.co.uk")
         self._window.iconbitmap('images/miz.ico')
         self._window.config(bg="black")
         self._window.geometry("860x660")
@@ -423,7 +287,7 @@ class MainWindow():
         self.totalbw = tkinter.Label(self.brain_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple").place(x=680,y=70)
         self.foundbw = tkinter.Label(self.brain_frame, bg="#F0F0F0",font=("Arial",23),text="0")
         self.foundbw.place(x=740,y=120)
-        self.brain_update = tkinter.Entry(self.brain_frame, state='readonly', bg="#F0F0F0",font=("Arial",12),text="", width=80, fg="Red")
+        self.brain_update = tkinter.Label(self.brain_frame, bg="#F0F0F0",font=("Arial",12),text="", width=80, fg="Red")
         self.brain_update.place(x=30,y=310)
         self.brain_update1 = tkinter.Label(self.brain_frame, bg="#F0F0F0",font=("Arial",14),text="")
         self.brain_update1.place(x=60,y=350)
@@ -455,7 +319,7 @@ class MainWindow():
         self.my_button = tkinter.Button(self.brain_frame, text= "Brain String (Off-Line) ",font=("Arial",10),bg="#F3E4C8", command= self.Random_brain_offline2).place(x=510,y=200)
         # bitcoin_frame
         self.bwg = tkinter.Label(self.bitcoin_frame, text="Bitcoin Wallet Generator ",font=("Arial",20),bg="#F0F0F0",fg="Black").place(x=180,y=100)
-        self.bfr = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",12),text="")
+        self.bfr = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",12),text="", wraplength=800)
         self.bfr.place(x=20,y=280)
         self.labelstart = tkinter.Label(self.bitcoin_frame, text="Start \nDec ", font=("Arial",13)).place(x=5,y=140)
         self._txt_inputstart = tkinter.Entry(self.bitcoin_frame, width=50, font=("Consolas", 16))
@@ -486,7 +350,7 @@ class MainWindow():
         self.totalw = tkinter.Label(self.word_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple").place(x=680,y=70)
         self.foundword = tkinter.Label(self.word_frame, bg="#F0F0F0",font=("Arial",23),text="0")
         self.foundword.place(x=740,y=120)
-        self.word_update = tkinter.Entry(self.word_frame, state='readonly', bg="#F0F0F0",font=("Arial",12),text="", width=80,fg="Red")
+        self.word_update = tkinter.Label(self.word_frame, bg="#F0F0F0",font=("Arial",12),text="", width=80,fg="Red")
         self.word_update.place(x=30,y=280)
         self.word_update1 = tkinter.Label(self.word_frame, bg="#F0F0F0",font=("Arial",11),text="")
         self.word_update1.place(x=20,y=300)
@@ -502,24 +366,24 @@ class MainWindow():
         self.titlem1 = tkinter.Label(self.word_frame, text="Random Mnemonic Wallet Generator Online Pick Ammount of Words to Generate",font=("Arial",12),bg="#F0F0F0",fg="Black").place(x=60,y=130)
         self.titlem2 = tkinter.Label(self.word_frame, text="Random Mnemonic Wallet Generator Offline Pick Ammount of Words to Generate",font=("Arial",12),bg="#F0F0F0",fg="Black").place(x=60,y=190)
         self.my_buttonword = tkinter.Button(self.word_frame, text="Random Single", font=("Arial",10),bg="#A3E4A7", command=self.Random_word_random).place(x=690,y=220)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "1 Word ",font=("Arial",10),bg="#A3E4A7", command= Random_word_online).place(x=40,y=160)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "3 Words ",font=("Arial",10),bg="#A3E4B7", command= Random_word_online1).place(x=100,y=160)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "6 Words ",font=("Arial",10),bg="#A3E4C7", command= Random_word_online2).place(x=167,y=160)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "9 Words ",font=("Arial",10),bg="#A3E4D7", command= Random_word_online3).place(x=234,y=160)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "12 Words ",font=("Arial",10),bg="#A3E4E7", command= Random_word_online4).place(x=301,y=160)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "15 Words ",font=("Arial",10),bg="#A3E4F7", command= Random_word_online5).place(x=374,y=160)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "18 Words ",font=("Arial",10),bg="#F3E4A8", command= Random_word_online6).place(x=447,y=160)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "21 Words ",font=("Arial",10),bg="#F3E4B8", command= Random_word_online7).place(x=520,y=160)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "24 Words ",font=("Arial",10),bg="#F3E4C8", command= Random_word_online8).place(x=593,y=160)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "1 Word ",font=("Arial",10),bg="#A3E4A7", command= Random_word_offline).place(x=40,y=220)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "3 Words ",font=("Arial",10),bg="#A3E4B7", command= Random_word_offline1).place(x=100,y=220)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "6 Words ",font=("Arial",10),bg="#A3E4C7", command= Random_word_offline2).place(x=167,y=220)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "9 Words ",font=("Arial",10),bg="#A3E4D7", command= Random_word_offline3).place(x=234,y=220)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "12 Words ",font=("Arial",10),bg="#A3E4E7", command= Random_word_offline4).place(x=301,y=220)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "15 Words ",font=("Arial",10),bg="#A3E4F7", command= Random_word_offline5).place(x=374,y=220)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "18 Words ",font=("Arial",10),bg="#F3E4A8", command= Random_word_offline6).place(x=447,y=220)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "21 Words ",font=("Arial",10),bg="#F3E4B8", command= Random_word_offline7).place(x=520,y=220)
-        self.my_buttonword = tkinter.Button(self.word_frame, text= "24 Words ",font=("Arial",10),bg="#F3E4C8", command= Random_word_offline8).place(x=593,y=220)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "1 Word ",font=("Arial",10),bg="#A3E4A7", command= self.Random_word_online).place(x=40,y=160)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "3 Words ",font=("Arial",10),bg="#A3E4B7", command= self.Random_word_online1).place(x=100,y=160)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "6 Words ",font=("Arial",10),bg="#A3E4C7", command= self.Random_word_online2).place(x=167,y=160)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "9 Words ",font=("Arial",10),bg="#A3E4D7", command= self.Random_word_online3).place(x=234,y=160)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "12 Words ",font=("Arial",10),bg="#A3E4E7", command= self.Random_word_online4).place(x=301,y=160)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "15 Words ",font=("Arial",10),bg="#A3E4F7", command= self.Random_word_online5).place(x=374,y=160)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "18 Words ",font=("Arial",10),bg="#F3E4A8", command= self.Random_word_online6).place(x=447,y=160)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "21 Words ",font=("Arial",10),bg="#F3E4B8", command= self.Random_word_online7).place(x=520,y=160)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "24 Words ",font=("Arial",10),bg="#F3E4C8", command= self.Random_word_online8).place(x=593,y=160)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "1 Word ",font=("Arial",10),bg="#A3E4A7", command= self.Random_word_offline).place(x=40,y=220)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "3 Words ",font=("Arial",10),bg="#A3E4B7", command= self.Random_word_offline1).place(x=100,y=220)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "6 Words ",font=("Arial",10),bg="#A3E4C7", command= self.Random_word_offline2).place(x=167,y=220)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "9 Words ",font=("Arial",10),bg="#A3E4D7", command= self.Random_word_offline3).place(x=234,y=220)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "12 Words ",font=("Arial",10),bg="#A3E4E7", command= self.Random_word_offline4).place(x=301,y=220)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "15 Words ",font=("Arial",10),bg="#A3E4F7", command= self.Random_word_offline5).place(x=374,y=220)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "18 Words ",font=("Arial",10),bg="#F3E4A8", command= self.Random_word_offline6).place(x=447,y=220)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "21 Words ",font=("Arial",10),bg="#F3E4B8", command= self.Random_word_offline7).place(x=520,y=220)
+        self.my_buttonword = tkinter.Button(self.word_frame, text= "24 Words ",font=("Arial",10),bg="#F3E4C8", command= self.Random_word_offline8).place(x=593,y=220)
 
     def reset_now(self):
         self.textoperator.set(" ")
@@ -814,13 +678,10 @@ class MainWindow():
     #  Brain Program Main
     def brain_results_online(self, passphrase):
         global total, totaladd
-        brainvar = tkinter.StringVar()
-        brainvar.set(passphrase)
-        brainvartext = tkinter.StringVar()
+        brainvartext = passphrase
         brainvartext1 = MIZ.rbonline(self, passphrase)
-        brainvartext.set(brainvartext1)
-        self.brain_update.config(textvariable = brainvar, relief='flat')
-        self.brain_update1.config(textvariable = brainvartext, relief='flat')
+        self.brain_update.config(text = brainvartext)
+        self.brain_update1.config(text = brainvartext1)
         self.brain_update.update()
         self.brain_update1.update()
         total+=1
@@ -831,10 +692,8 @@ class MainWindow():
     def Random_brain_cal(self):
         passphrase = self.result.get().strip()
         global total, totaladd
-        brainvartextcal = tkinter.StringVar()
-        brainvartextcal1 = brainvartextca1 = MIZ.rbonline(self, passphrase)
-        brainvartextcal.set(brainvartextcal1)
-        self.brain_updatecal1.config(textvariable = brainvartextcal, relief='flat')
+        brainvartextca1 = MIZ.rbonline(self, passphrase)
+        self.brain_updatecal1.config(text = brainvartextca1)
         self.brain_updatecal1.update()
         total+=1
         totaladd+=1
@@ -844,13 +703,10 @@ class MainWindow():
     def Random_brain_single(self):
         passphrase = self._txt_inputbrain.get().strip()
         global total, totaladd
-        brainvar = tkinter.StringVar()
-        brainvar.set(passphrase)
-        brainvartext = tkinter.StringVar()
-        brainvartext1 = brainvartext1 = MIZ.rbonline(self, passphrase)
-        brainvartext.set(brainvartext1)
-        self.brain_update.config(textvariable = brainvar, relief='flat')
-        self.brain_update1.config(textvariable = brainvartext, relief='flat')
+        brainvartext = passphrase
+        brainvartext1 = MIZ.rbonline(self, passphrase)
+        self.brain_update.config(text = brainvartext)
+        self.brain_update1.config(text = brainvartext1)
         self.brain_update.update()
         self.brain_update1.update()
         total+=1
@@ -880,13 +736,10 @@ class MainWindow():
 
     def brain_results_offline(self, passphrase):
         global total, totaladd
-        brainvar = tkinter.StringVar()
-        brainvar.set(passphrase)
-        brainvartext = tkinter.StringVar()
+        brainvartext = passphrase
         brainvartext1 = MIZ.rboffline(self, passphrase)
-        brainvartext.set(brainvartext1)
-        self.brain_update.config(textvariable = brainvar, relief='flat')
-        self.brain_update1.config(textvariable = brainvartext, relief='flat')
+        self.brain_update.config(text = brainvartext)
+        self.brain_update1.config(text = brainvartext1)
         self.brain_update.update()
         self.brain_update1.update()
         total+=1
@@ -935,7 +788,7 @@ class MainWindow():
         self.framewinpop.pack(padx=10, pady=10)
         self.buttonwinpop = Button(self.framewinpop, text=" Close ", command=self.popwin.destroy)
         self.buttonwinpop.grid(row=0, column=1)
-        self.popwin.after(2000,lambda:self.popwin.destroy())
+        #self.popwin.after(2000,lambda:self.popwin.destroy())
 
     def startpop(self):
         self.pop = Toplevel()
@@ -972,16 +825,147 @@ class MainWindow():
         self.stringtime = strftime('%H:%M:%S %p')
         self.lbl.config(text = self.stringtime)
         self.lbl.after(1000, self.time)
+
+        #  Mnemonic Program Main
+    def word_results_online(self, rnds):
+        global total, totaladd
+        mnem = MIZ.create_valid_mnemonics(strength=int(rnds))
+        wordvar = mnem
+        wordvartext = MIZ.rwonline(self, mnem)
+        self.word_update.config(text = wordvar)
+        self.word_update1.config(text = wordvartext)
+        self.word_update.update()
+        self.word_update1.update()
+        total+=1
+        totaladd+=3
+        self.totalC.config(text = f'{total}')
+        self.totalA.config(text = f'{totaladd}')
+    
+    def Random_word_online(self):
+        while run2:
+            rnds = '16'
+            self.word_results_online(rnds)
+            
+    def Random_word_online1(self):
+        while run2:
+            rnds = '32'
+            self.word_results_online(rnds)
+            
+    def Random_word_online2(self):
+        while run2:
+            rnds = '64'
+            self.word_results_online(rnds)
+            
+    def Random_word_online3(self):
+        while run2:
+            rnds = '96'
+            self.word_results_online(rnds)
+            
+    def Random_word_online4(self):
+        while run2:
+            rnds = '128'
+            self.word_results_online(rnds)
+            
+    def Random_word_online5(self):
+        while run2:
+            rnds = '160'
+            self.word_results_online(rnds)
+            
+    def Random_word_online6(self):
+        while run2:
+            rnds = '192'
+            self.word_results_online(rnds)
+            
+    def Random_word_online7(self):
+        while run2:
+            rnds = '224'
+            self.word_results_online(rnds)
+            
+    def Random_word_online8(self):
+        while run2:
+            rnds = '256'
+            self.word_results_online(rnds)
         
     def Random_word_single(self):
         mnem = self._txt_inputword.get()
-        random_word_results(self, mnem)
+        self.random_word_results(mnem)
         
     def Random_word_random(self):
         lenght= ('128','256')
         rnds = random.choice(lenght)
         mnem = MIZ.create_valid_mnemonics(strength=int(rnds))
-        random_word_results(self, mnem)
+        self.random_word_results(mnem)
+    
+    def random_word_results(self, mnem):
+        global total, totaladd
+        wordvar = mnem
+        wordvartext = MIZ.rwonline(self, mnem)
+        self.word_update.config(text = wordvar)
+        self.word_update1.config(text = wordvartext)
+        self.word_update1.update()
+        self.word_update.update()
+        total+=1
+        totaladd+=1
+        self.totalC.config(text = f'{total}')
+        self.totalA.config(text = f'{totaladd}')
+        
+    def word_results_offline(self, rnds):
+        global total, totaladd
+        mnem = MIZ.create_valid_mnemonics(strength=int(rnds))
+        wordvartext = MIZ.rwoffline(self, mnem)
+        self.word_update.config(text = mnem)
+        self.word_update1.config(text = wordvartext)
+        self.word_update.update()
+        self.word_update1.update()
+        total+=1
+        totaladd+=3
+        self.totalC.config(text = f'{total}')
+        self.totalA.config(text = f'{totaladd}')
+
+    def Random_word_offline(self):
+        while run2:
+            rnds = '16'
+            self.word_results_offline(rnds)
+
+    def Random_word_offline1(self):
+        while run2:
+            rnds = '32'
+            self.word_results_offline(rnds)
+
+    def Random_word_offline2(self):
+        while run2:
+            rnds = '64'
+            self.word_results_offline(rnds)
+
+    def Random_word_offline3(self):
+        while run2:
+            rnds = '96'
+            self.word_results_offline(rnds)
+
+    def Random_word_offline4(self):
+        while run2:
+            rnds = '128'
+            self.word_results_offline(rnds)
+
+    def Random_word_offline5(self):
+        while run2:
+            rnds = '160'
+            self.word_results_offline(rnds)
+
+    def Random_word_offline6(self):
+        while run2:
+            rnds = '192'
+            self.word_results_offline(rnds)
+
+    def Random_word_offline7(self):
+        while run2:
+            rnds = '224'
+            self.word_results_offline(rnds)
+
+    def Random_word_offline8(self):
+        while run2:
+            rnds = '256'
+            self.word_results_offline(rnds)
     
     def evt_btc_bin(self):
         try:
