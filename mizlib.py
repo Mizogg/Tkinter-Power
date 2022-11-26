@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 16.11.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 25.11.2022 https://t.me/CryptoCrackersUK
 import hmac, struct, codecs, sys, os, binascii, hashlib
 import webbrowser
 import random
@@ -453,7 +453,7 @@ def rwonline(self, mnem):
     txs_id3 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
     txsid3 = source_code3.xpath(txs_id3)
     txs3 = str(txsid3[0].text_content())
-    wordvartext1 = (f'''====================================================:Balance:Received:Sent:TXS:
+    wordvartext = (f'''====================================================:Balance:Received:Sent:TXS:
 Bitcoin Address : {caddr} : [{balance}] : [{totalReceived}] : [{totalSent}] : [{txs}]
 Hexadecimal Private Key : {HEX}
 
@@ -467,10 +467,11 @@ Hexadecimal Private Key : {HEX3}
     if int(txs) > 0 or int(txs2) > 0 or int(txs3) > 0:
         self.found+=1
         self.foundword.config(text = f'{self.found}')
-        WINTEXT = f'\n Mnemonic : {mnem} \n\n {wordvartext1}'
+        self.WINTEXT = f'\n Mnemonic : {mnem} \n\n {wordvartext}'
         with open('found.txt', 'a', encoding='utf-8') as f:
-            f.write(WINTEXT)
-    return wordvartext1
+            f.write(self.WINTEXT)
+        self.popwinner()
+    return wordvartext
 
 def rwoffline(self, mnem):
     seed = mnem_to_seed(mnem)
@@ -489,7 +490,7 @@ def rwoffline(self, mnem):
     caddr = ice.privatekey_to_address(0, True, (int.from_bytes(pvk, "big")))
     p2sh = ice.privatekey_to_address(1, True, (int.from_bytes(pvk2, "big")))
     bech32 = ice.privatekey_to_address(2, True, (int.from_bytes(pvk3, "big")))
-    wordvartext1 = (f' Bitcoin {cpath} :  {caddr} \n Bitcoin {cpath} : Decimal Private Key \n {dec} \n Bitcoin {cpath} : Hexadecimal Private Key \n {HEX}  \n Bitcoin {ppath} :  {p2sh}\n Bitcoin {ppath} : Decimal Private Key \n {dec2} \n Bitcoin {ppath} :  Hexadecimal Private Key \n {HEX2} \n Bitcoin {bpath} : {bech32}\n Bitcoin {bpath} : Decimal Private Key \n {dec3} \n Bitcoin {bpath} : Hexadecimal Private Key \n {HEX3} ')
+    wordvartext = (f' Bitcoin {cpath} :  {caddr} \n Bitcoin {cpath} : Decimal Private Key \n {dec} \n Bitcoin {cpath} : Hexadecimal Private Key \n {HEX}  \n Bitcoin {ppath} :  {p2sh}\n Bitcoin {ppath} : Decimal Private Key \n {dec2} \n Bitcoin {ppath} :  Hexadecimal Private Key \n {HEX2} \n Bitcoin {bpath} : {bech32}\n Bitcoin {bpath} : Decimal Private Key \n {dec3} \n Bitcoin {bpath} : Hexadecimal Private Key \n {HEX3} ')
     if caddr in bloom_filterbtc:
         self.found+=1
         self.foundword.config(text = f'{self.found}')
@@ -511,7 +512,7 @@ def rwoffline(self, mnem):
         with open("found.txt", "a", encoding="utf-8") as f:
             f.write(self.WINTEXT)
         self.popwinner()
-    return wordvartext1
+    return wordvartext
     
 def brute_btc(self, dec):
     caddr = ice.privatekey_to_address(0, True, dec)
@@ -587,7 +588,7 @@ def rbonline(self, passphrase):
     txs_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
     txsid = source_code.xpath(txs_id)
     txs = str(txsid[0].text_content())
-    brainvartext1 = (f'\n Private Key In HEX : \n\n {private_key} \n\n Bitcoin Adress : {caddr} \n Balance  [{balance}] \n TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]')
+    brainvartext = (f'\n Private Key In HEX : \n {private_key} \n Bitcoin Adress : {caddr} \n Balance  [{balance}] \n TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]')
     if int(txs) > 0 :
         self.found+=1
         self.foundbw.config(text = f'{self.found}')
@@ -595,12 +596,12 @@ def rbonline(self, passphrase):
             f.write(f'\n BrainWallet : {passphrase} \n Private Key In HEX : {private_key} \n Bitcoin Adress : {caddr} \n Balance  [{balance}] TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]')
         self.WINTEXT = (f"BrainWallet : {passphrase}\n HEX Key: {private_key} \n BTC Address Compressed: {caddr}  \n \n Balance  [{balance}] \n TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]")
         self.popwinner()
-    return brainvartext1
+    return brainvartext
     
 def rboffline(self, passphrase):
     wallet = BrainWallet()
     private_key, caddr = wallet.generate_address_from_passphrase(passphrase)
-    brainvartext1 = (f'\n Private Key In HEX : \n\n {private_key} \n\n Bitcoin Adress : {caddr} ')
+    brainvartext = (f'\n Private Key In HEX : \n\n {private_key} \n\n Bitcoin Adress : {caddr} ')
     if caddr in bloom_filterbtc:
         self.found+=1
         self.foundbw.config(text = f'{self.found}')
@@ -608,55 +609,37 @@ def rboffline(self, passphrase):
         with open("found.txt", "a", encoding="utf-8") as f:
             f.write(self.WINTEXT)
         self.popwinner()
-    return brainvartext1
+    return brainvartext
 
 def btc_hunter(self):
     arr = np.array(self.grid)
     binstring = ''.join(''.join(map(str, l)) for l in arr)
-    self.binstringvar = tkinter.StringVar()
-    self.binstringvar.set(binstring)
-    self.binstring_update.config(textvariable = self.binstringvar, relief='flat')
+    self.binstring_update.config(text = binstring)
     self.binstring_update.update()
     dec = int(binstring, 2)
-    self.decstringvar = tkinter.StringVar()
-    self.decstringvar.set(dec)
-    self.decstring_update.config(textvariable = self.decstringvar, relief='flat')
+    self.decstring_update.config(text = dec)
     self.decstring_update.update()
     HEX = hex(int(binstring, 2))
-    self.hexstringvar = tkinter.StringVar()
-    self.hexstringvar.set(HEX)
-    self.hexstring_update.config(textvariable = self.hexstringvar, relief='flat')
+    self.hexstring_update.config(text = HEX)
     self.hexstring_update.update()
     caddr = ice.privatekey_to_address(0, True, dec)
     uaddr = ice.privatekey_to_address(0, False, dec)
     HEX = "%064x" % dec
     wifc = ice.btc_pvk_to_wif(HEX)
     wifu = ice.btc_pvk_to_wif(HEX, False)
-    self.caddrstringvar = tkinter.StringVar()
-    self.caddrstringvar.set(caddr)
-    self.caddrstring_update.config(textvariable = self.caddrstringvar, relief='flat')
+    self.caddrstring_update.config(text = caddr)
     self.caddrstring_update.update()
-    self.wifcstringvar = tkinter.StringVar()
-    self.wifcstringvar.set(wifc)
-    self.wifcstring_update.config(textvariable = self.wifcstringvar, relief='flat')
+    self.wifcstring_update.config(text = wifc)
     self.wifcstring_update.update()
-    self.uaddrstringvar = tkinter.StringVar()
-    self.uaddrstringvar.set(uaddr)
-    self.uaddrstring_update.config(textvariable = self.uaddrstringvar, relief='flat')
+    self.uaddrstring_update.config(text = uaddr)
     self.uaddrstring_update.update()
-    self.wifustringvar = tkinter.StringVar()
-    self.wifustringvar.set(wifu)
-    self.wifustring_update.config(textvariable = self.wifustringvar, relief='flat')
+    self.wifustring_update.config(text = wifu)
     self.wifustring_update.update()
     p2sh = ice.privatekey_to_address(1, True, dec)
-    self.p2shstringvar = tkinter.StringVar()
-    self.p2shstringvar.set(p2sh)
-    self.p2shstring_update.config(textvariable = self.p2shstringvar, relief='flat')
+    self.p2shstring_update.config(text = p2sh)
     self.p2shstring_update.update()
     bech32 = ice.privatekey_to_address(2, True, dec)
-    self.bech32stringvar = tkinter.StringVar()
-    self.bech32stringvar.set(bech32)
-    self.bech32string_update.config(textvariable = self.bech32stringvar, relief='flat')
+    self.bech32string_update.config(text = bech32)
     self.bech32string_update.update()
     if caddr in bloom_filterbtc:
         self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc} \nBinary Data: \n {binstring}")
