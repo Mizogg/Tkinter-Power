@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 16.11.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 25.11.2022 https://t.me/CryptoCrackersUK
 import random, sys, os
 from tkinter import *
 from tkinter import ttk
@@ -105,39 +105,39 @@ class App:
         self.hunter_win.pack(fill='both', expand='yes')
         self.Binary_data = "Binary Data"
         self.Binarylable = tkinter.Label(self.hunter_win, text=self.Binary_data, font=("Arial",10),bg='#A1A1A1',fg="Black").pack(padx=10, pady=3)
-        self.binstring_update = tkinter.Entry(self.hunter_win, state='readonly', bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
+        self.binstring_update = tkinter.Label(self.hunter_win, bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
         self.binstring_update.pack(padx=10, pady=2)
         self.DEC_data = "Private Key Dec"
         self.DEClable = tkinter.Label(self.hunter_win, text=self.DEC_data, font=("Arial",10),bg='#A1A1A1',fg="Black").pack(padx=10, pady=3)
-        self.decstring_update = tkinter.Entry(self.hunter_win, state='readonly', bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
+        self.decstring_update = tkinter.Label(self.hunter_win, bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
         self.decstring_update.pack(padx=10, pady=2)
         self.HEX_data = "Private Key HEX"
         self.HEXlable = tkinter.Label(self.hunter_win, text=self.HEX_data, font=("Arial",10),bg='#A1A1A1',fg="Black").pack(padx=10, pady=3)
-        self.hexstring_update = tkinter.Entry(self.hunter_win, state='readonly', bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
+        self.hexstring_update = tkinter.Label(self.hunter_win, bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
         self.hexstring_update.pack(padx=10, pady=2)
         self.caddr_data = "Address Compressed"
         self.caddrlable = tkinter.Label(self.hunter_win, text=self.caddr_data, font=("Arial",10),bg='#A1A1A1',fg="Black").pack(padx=10, pady=3)
-        self.caddrstring_update = tkinter.Entry(self.hunter_win, state='readonly', bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
+        self.caddrstring_update = tkinter.Label(self.hunter_win, bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
         self.caddrstring_update.pack(padx=10, pady=2)
         self.wifc_data = "WIF Compressed"
         self.wifclable = tkinter.Label(self.hunter_win, text=self.wifc_data, font=("Arial",10),bg='#A1A1A1',fg="Black").pack(padx=10, pady=3)
-        self.wifcstring_update = tkinter.Entry(self.hunter_win, state='readonly', bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
+        self.wifcstring_update = tkinter.Label(self.hunter_win, bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
         self.wifcstring_update.pack(padx=10, pady=2)
         self.uaddr_data = "Address Uncompressed"
         self.uaddrlable = tkinter.Label(self.hunter_win, text=self.uaddr_data, font=("Arial",10),bg='#A1A1A1',fg="Black").pack(padx=10, pady=3)
-        self.uaddrstring_update = tkinter.Entry(self.hunter_win, state='readonly', bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
+        self.uaddrstring_update = tkinter.Label(self.hunter_win, bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
         self.uaddrstring_update.pack(padx=10, pady=2)
         self.wifu_data = "WIF Uncompressed"
         self.wifulable = tkinter.Label(self.hunter_win, text=self.wifu_data, font=("Arial",10),bg='#A1A1A1',fg="Black").pack(padx=10, pady=3)
-        self.wifustring_update = tkinter.Entry(self.hunter_win, state='readonly', bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
+        self.wifustring_update = tkinter.Label(self.hunter_win, bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
         self.wifustring_update.pack(padx=10, pady=2)
         self.p2sh_data = "Address P2SH"
         self.p2shlable = tkinter.Label(self.hunter_win, text=self.p2sh_data, font=("Arial",10),bg='#A1A1A1',fg="Black").pack(padx=10, pady=3)
-        self.p2shstring_update = tkinter.Entry(self.hunter_win, state='readonly', bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
+        self.p2shstring_update = tkinter.Label(self.hunter_win, bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
         self.p2shstring_update.pack(padx=10, pady=2)
         self.bc1_data = "Address P2WPKH"
         self.bc1lable = tkinter.Label(self.hunter_win, text=self.bc1_data, font=("Arial",10),bg='#A1A1A1',fg="Black").pack(padx=10, pady=3)
-        self.bech32string_update = tkinter.Entry(self.hunter_win, state='readonly', bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
+        self.bech32string_update = tkinter.Label(self.hunter_win, bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
         self.bech32string_update.pack(padx=10, pady=2)
         self.addcount = tkinter.Label(self.BH16x16, text=MIZ.countadd(), font=("Arial",14),bg="#F0F0F0",fg="purple").place(x=540,y=580)
         self.lbl_tickno = tkinter.Label(self.hunter_win, text='Total Private Keys Scanned : 0', font=("Arial",10),bg='#A1A1A1',fg="Purple")
