@@ -24,6 +24,47 @@ pip install lxml
 pip install requests
 pip install psutil
 ```
+
+# Ubuntu Install.
+```
+sudo apt install python3-pip
+sudo apt install python3-tk
+python3 -m pip install psutil
+python3 -m pip install base58
+python3 -m pip install ecdsa
+python3 -m pip install simplebloomfilter
+python3 -m pip install lxml
+python3 -m pip install bit
+python3 -m pip install numpy
+python3 -m pip install bitarray==1.9.2
+```
+https://github.com/openssl/openssl/issues/16994
+
+Find out where your config file is.
+```
+openssl version -d
+```
+Edit Config File
+```
+sudo nano openssl.cn
+```
+```
+openssl_conf = openssl_init
+
+[openssl_init]
+providers = provider_sect
+
+[provider_sect]
+default = default_sect
+legacy = legacy_sect
+
+[default_sect]
+activate = 1
+
+[legacy_sect]
+activate = 1
+```
+
 Make a Bloomfilter database. Within the file folder is Cbloom.py file will convert any bitcoin text file to a bloomfile.
 
 You will have to run the command below.
