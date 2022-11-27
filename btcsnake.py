@@ -231,7 +231,7 @@ class Snake(Frame):
         super().__init__()
                 
         self.master.title('Bitcoin Game With Mizogg')
-        self.master.iconbitmap('images/miz.ico')
+        # self.master.iconbitmap('images/miz.ico')
         self.board = Board()
         self.pack()
 
