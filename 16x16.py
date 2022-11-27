@@ -51,7 +51,7 @@ class App:
     def init_tk(self):
         self.BH16x16 = Tk()
         self.BH16x16.title('BitcoinHunter 16x16.py')
-        self.BH16x16.iconbitmap('images/miz.ico')
+        # self.BH16x16.iconbitmap('images/miz.ico')
         self.BH16x16.geometry("1160x680")
         self.BH16x16.menubar = Menu(self.BH16x16)
         self.BH16x16.filemenu = Menu(self.BH16x16.menubar, tearoff=0)
@@ -310,7 +310,7 @@ class App:
     def popwinner(self):
         self.popwin = Toplevel()
         self.popwin.title("BitcoinHunter 16x16.py")
-        self.popwin.iconbitmap('images/miz.ico')
+        # self.popwin.iconbitmap('images/miz.ico')
         self.popwin.geometry("700x250")
         self.widgetwinpop = tkinter.Label(self.popwin, compound='top')
         self.widgetwinpop.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
@@ -332,7 +332,7 @@ class App:
     def startpop(self):
         self.pop = Toplevel()
         self.pop.title("16x16.py")
-        self.pop.iconbitmap('images/miz.ico')
+        # self.pop.iconbitmap('images/miz.ico')
         self.pop.geometry("700x250")
         self.widgetpop = tkinter.Label(self.pop, compound='top')
         self.widgetpop.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
