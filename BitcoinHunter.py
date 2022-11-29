@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 25.11.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 29.11.2022 https://t.me/CryptoCrackersUK
 from tkinter import * 
 from tkinter import ttk
 import tkinter.messagebox
@@ -52,6 +52,7 @@ creditsinfo = ('''
                 Look for Bitcoin with tkinter and python in GUI.
                         Made By Mizogg.co.uk
                     Version = 1.10
+    Added Seach by Pages 128 Private keys per page 512 Addresses (Much Faster)
                Memory leak Fixed on Brain, Mnemonic and 16x16
                     Version = 1.9 (1087 Lines of code)
                         NEW CALCULATOR  added 
@@ -101,13 +102,19 @@ with open('files/words.txt', newline='', encoding='utf-8') as f:
 startdec = 1
 stopdec = 115792089237316195423570985008687907852837564279074904382605163141518161494336
 totaladd = total = found =0
-run = run2 = True
+run = run1=  run2 = True
 
 class MainWindow():
     def __init__(self):
         self.found = found
         self.run = run
         self.fact = 1
+        def start1():
+           global run1
+           run1= True
+        def stop1():
+           global run1
+           run1= False
         def start2():
            global run2
            run2= True
@@ -117,7 +124,7 @@ class MainWindow():
         #  Main Window Program Menu Bar
         self._window = tkinter.Tk()
         self._window.title("BitcoinHunter.py @ Mizogg.co.uk")
-        # self._window.iconbitmap('images/miz.ico')
+        self._window.iconbitmap('images/miz.ico')
         self._window.config(bg="black")
         self._window.geometry("860x660")
         self._window.resizable(False, False)
@@ -139,6 +146,7 @@ class MainWindow():
         self.my_notebook.pack(pady=5)
         self.main_frame = Frame(self.my_notebook, width=840, height=620)
         self.bitcoin_frame = Frame(self.my_notebook, width=840, height=620)
+        self.page_frame = Frame(self.my_notebook, width=840, height=620)
         self.brain_frame = Frame(self.my_notebook, width=840, height=620)
         self.word_frame = Frame(self.my_notebook, width=840, height=620)
         self.about_frame = Frame(self.my_notebook, width=840, height=620)
@@ -146,12 +154,14 @@ class MainWindow():
         self.windowcal = Frame(self.my_notebook, width=840, height=620)
         self.main_frame.pack(fill="both", expand=1)
         self.bitcoin_frame.pack(fill="both", expand=1)
+        self.page_frame.pack(fill="both", expand=1)
         self.brain_frame.pack(fill="both", expand=1)
         self.word_frame.pack(fill="both", expand=1)
         self.about_frame.pack(fill="both", expand=1)
         self.credits_frame.pack(fill="both", expand=1)
         self.windowcal.pack(fill="both", expand=1)
         self.my_notebook.add(self.bitcoin_frame, text="Bitcoin Hunting")
+        self.my_notebook.add(self.page_frame, text="Bitcoin Hunting by Pages")
         self.my_notebook.add(self.main_frame, text="Conversion Tools ")
         self.my_notebook.add(self.windowcal, text="Calulator")
         self.my_notebook.add(self.brain_frame, text="Brain Hunting")
@@ -319,7 +329,7 @@ class MainWindow():
         self.my_button = tkinter.Button(self.brain_frame, text= "Brain String (Off-Line) ",font=("Arial",10),bg="#F3E4C8", command= self.Random_brain_offline2).place(x=510,y=200)
         # bitcoin_frame
         self.bwg = tkinter.Label(self.bitcoin_frame, text="Bitcoin Wallet Generator ",font=("Arial",20),bg="#F0F0F0",fg="Black").place(x=180,y=100)
-        self.bfr = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",12),text="", wraplength=800)
+        self.bfr = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",12),text="")
         self.bfr.place(x=20,y=280)
         self.labelstart = tkinter.Label(self.bitcoin_frame, text="Start \nDec ", font=("Arial",13)).place(x=5,y=140)
         self._txt_inputstart = tkinter.Entry(self.bitcoin_frame, width=50, font=("Consolas", 16))
@@ -346,6 +356,35 @@ class MainWindow():
         self.foundbtc.place(x=740,y=120)
         self.pricelable_data = f"Todays Bitcoin Price £ {MIZ.price()} "
         self.pricelable = tkinter.Label(self.bitcoin_frame, text=self.pricelable_data, font=("Arial",14),bg="#F0F0F0",fg="purple").place(x=90, y=530)
+        # page_frame
+        self.bwgpage = tkinter.Label(self.page_frame, text="Bitcoin Wallet Generator Based on Keys.lol 128 Private Keys per page",font=("Arial",17),bg="#F0F0F0",fg="Black").place(x=20,y=100)
+        self.page_brute = tkinter.Label(self.page_frame, bg="#F0F0F0",font=("Arial",12),text="")
+        self.page_brute.place(x=20,y=280)
+        self.labelstart = tkinter.Label(self.page_frame, text="Start \n Page ", font=("Arial",13)).place(x=5,y=140)
+        self._txt_inputstartpage = tkinter.Entry(self.page_frame, width=50, font=("Consolas", 16))
+        self._txt_inputstartpage.insert(0, '1')
+        self._txt_inputstartpage.place(x=65,y=145)
+        self._txt_inputstartpage.focus()
+        self.labelstoppage = tkinter.Label(self.page_frame, text="Stop \n Page ", font=("Arial",13)).place(x=5,y= 180)
+        self._txt_inputstoppage = tkinter.Entry(self.page_frame, width=50, font=("Consolas", 16))
+        self._txt_inputstoppage.insert(0, '904625697166532776746648320380374280100293470930272690489102837043110636675')
+        self._txt_inputstoppage.place(x=65,y=185)
+        self._txt_inputstoppage.focus()
+        self.labelmagpage = tkinter.Label(self.page_frame, text="Jump \nMag ", font=("Arial",13)).place(x=640,y= 220)
+        self._txt_inputmagpage = tkinter.Entry(self.page_frame, width=8, font=("Consolas", 16))
+        self._txt_inputmagpage.insert(0, '1')
+        self._txt_inputmagpage.place(x=690,y=225)
+        self._txt_inputmagpage.focus()
+        self.r1page = tkinter.Button(self.page_frame, text=" Generate Random  ",font=("Arial",13),bg="#A3E4D7",command=self.Random_Bruteforce_Speed_page).place(x=60,y=220)
+        self.s1page = tkinter.Button(self.page_frame, text=" Sequential Start-Stop",font=("Arial",13),bg="#B3B4D7",command=self.Sequential_Bruteforce_speed_page).place(x=240,y=220)
+        self.sb1page = tkinter.Button(self.page_frame, text=" Backward Stop-Start ",font=("Arial",13),bg="#C3C4D7",command=self.Sequential_Bruteforce_speed_back_page).place(x=430,y=220)
+        self.startpage= tkinter.Button(self.page_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= start1, fg='green').place(x=690,y=180)
+        self.stoppage= tkinter.Button(self.page_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= stop1, fg='red').place(x=750,y=180)
+        self.totalbtc = tkinter.Label(self.page_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple").place(x=680,y=70)
+        self.foundbtc = tkinter.Label(self.page_frame, bg="#F0F0F0",font=("Arial",23),text="0")
+        self.foundbtc.place(x=740,y=120)
+        self.pricelable_data = f"Todays Bitcoin Price £ {MIZ.price()} "
+        self.pricelable = tkinter.Label(self.page_frame, text=self.pricelable_data, font=("Arial",14),bg="#F0F0F0",fg="purple").place(x=90, y=530)
         # word_frame
         self.totalw = tkinter.Label(self.word_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple").place(x=680,y=70)
         self.foundword = tkinter.Label(self.word_frame, bg="#F0F0F0",font=("Arial",23),text="0")
@@ -393,7 +432,7 @@ class MainWindow():
         self.windowcal_informationcal = Toplevel()
         self.windowcal_informationcal.title("Information")
         self.windowcal_informationcal.geometry("540x440")
-        #  self.windowcal_informationcal.iconbitmap('images/miz.ico')
+        self.windowcal_informationcal.iconbitmap('images/miz.ico')
         self.windowcal_informationcal.config(bg="#F0F0F0")
         self.widget = tkinter.Label(self.windowcal_informationcal, compound='top')
         self.widget.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
@@ -411,6 +450,8 @@ class MainWindow():
  
  3.For single no. operation,if there is present two no. in 'Number1'
  and 'Number2', only input number in 'Number1' will taken.
+ 
+ Covert Sum to brain wallet !!! Good Luck
  '''
         tkinter.Label(self.windowcal_informationcal,fg="black",font=("arial",11,"bold","italic"),text=infocal, bg="#F0F0F0").place(x=5,y=15)
         self.windowcal_informationcal.mainloop()
@@ -633,6 +674,51 @@ class MainWindow():
 
     def stop(self):
         self.run= False
+        
+    '''def copy_data(self, data):
+        self.bfr.clipboard_clear()
+        self.bfr.clipboard_append(data)'''
+    #  Brute page Program Main
+    def brute_results_page(self, page):
+        global total, totaladd
+        scantext = MIZ.get_page(self, page)
+        self.page_brute.config(text = scantext)
+        self.page_brute.update()
+        total+=128
+        totaladd+=512
+        self.totalC.config(text = f'{total}')
+        self.totalA.config(text = f'{totaladd}')
+    
+    def Random_Bruteforce_Speed_page(self):
+        startpage = self._txt_inputstartpage.get().strip().replace(" ", "")
+        stoppage = self._txt_inputstoppage.get().strip().replace(" ", "")
+        while run1:
+            page =int(RandomInteger(int(startpage), int(stoppage)))
+            self.brute_results_page(page)
+    
+    def Sequential_Bruteforce_speed_page(self):
+        startpage = self._txt_inputstart.get().strip().replace(" ", "")
+        stoppage = self._txt_inputstoppage.get().strip().replace(" ", "")
+        mag = self._txt_inputmagpage.get().strip().replace(" ", "")
+        while run1:
+            dec = int(startpage)
+            if dec == int(stoppage):
+                stop1()
+            else:
+                self.brute_results_page(dec)
+                startpage = int(startpage) + int(mag)
+    
+    def Sequential_Bruteforce_speed_back_page(self):
+        startpage = self._txt_inputstartpage.get().strip().replace(" ", "")
+        stoppage = self._txt_inputstoppage.get().strip().replace(" ", "")
+        mag = self._txt_inputmagpage.get().strip().replace(" ", "")
+        while run1:
+            dec = int(stoppage)
+            if dec == int(startpage):
+                stop1()
+            else:
+                self.brute_results_page(dec)
+                stoppage = int(stoppage) - int(mag)
     #  Brute Program Main
     def brute_results(self, dec):
         global total, totaladd
@@ -640,9 +726,10 @@ class MainWindow():
         self.bfr.config(text = scantext)
         self.bfr.update()
         total+=1
-        totaladd+=3
+        totaladd+=4
         self.totalC.config(text = f'{total}')
         self.totalA.config(text = f'{totaladd}')
+        #self.copy_data(scantext)
 
     def Random_Bruteforce_Speed(self):
         startdec = self._txt_inputstart.get().strip().replace(" ", "")
@@ -770,7 +857,7 @@ class MainWindow():
     def popwinner(self):
         self.popwin = Toplevel()
         self.popwin.title("BitHunter.py")
-        # self.popwin.iconbitmap('images/miz.ico')
+        self.popwin.iconbitmap('images/miz.ico')
         self.popwin.geometry("700x250")
         self.widgetwinpop = tkinter.Label(self.popwin, compound='top')
         self.widgetwinpop.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
@@ -793,7 +880,7 @@ class MainWindow():
     def startpop(self):
         self.pop = Toplevel()
         self.pop.title("BitHunter.py")
-        # self.pop.iconbitmap('images/miz.ico')
+        self.pop.iconbitmap('images/miz.ico')
         self.pop.geometry("700x250")
         self.widgetpop = tkinter.Label(self.pop, compound='top')
         self.widgetpop.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
