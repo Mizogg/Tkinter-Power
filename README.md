@@ -1,4 +1,9 @@
 # Tkinter-Power
+
+Bitcoin private generator made with tkinter. Looks for Bitcoin in a nice GUI interface. Private key, Wallet Generation, Hex, Dec, WIF and Mnemonic.
+
+Many functions and tools. Calculator games 16x16 Visual Hex.
+
 Bitcoin&amp;Crypto  Tkinter  GUI Hunter
 
 MADE IN 🐍 PYTHON 🐍
