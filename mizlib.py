@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 25.11.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 29.11.2022 https://t.me/CryptoCrackersUK
 import hmac, struct, codecs, sys, os, binascii, hashlib
 import webbrowser
 import random
@@ -48,6 +48,7 @@ def countadd():
     addr_count_print = (f'Total Bitcoin Addresses Loaded and Checking : {addr_count}')
     return addr_count_print
 
+lines = '=' * 70
 # For Menu
 def donothing():
    x = 0
@@ -568,8 +569,122 @@ def brute_btc(self, dec):
         WIF Compressed: {wifu}
  BTC Address p2sh: {p2sh}
  BTC Address bech32: {bech32}
-====================================='''
+{lines}'''
 
+    return scantext
+
+def get_page(self, page):
+    #max = 904625697166532776746648320380374280100293470930272690489102837043110636675
+    num = page
+
+    startPrivKey = (page - 1) * 128 + 1
+    for i in range(0, 128):
+        dec = int(startPrivKey)
+        starting_key_hex = hex(startPrivKey)[2:].zfill(64)
+        if startPrivKey == 115792089237316195423570985008687907852837564279074904382605163141518161494336:
+            break
+        caddr = ice.privatekey_to_address(0, True, dec)
+        uaddr = ice.privatekey_to_address(0, False, dec)
+        p2sh = ice.privatekey_to_address(1, True, dec)
+        bech32 = ice.privatekey_to_address(2, True, dec)
+        length = len(bin(dec))
+        length -=2
+        if caddr in bloom_filterbtc:
+            output = f'''\n
+  : Private Key Page : {num}
+{lines}
+  : Private Key DEC : {startPrivKey} Bits : {length}
+{lines}
+  : Private Key HEX : {starting_key_hex}
+{lines}
+  : BTC Address Compressed : {caddr}
+{lines}
+'''
+            print(output)
+            self.page_brute.config(text = output)
+            self.found+=1
+            self.foundbtc.config(text = f'{self.found}')
+            with open('foundcaddr.txt', 'a', encoding='utf-8') as f:
+                f.write(output)
+            self.WINTEXT = output
+            self.popwinner()
+
+        if uaddr in bloom_filterbtc:
+            output = f'''\n
+
+  : Private Key Page : {num}
+{lines}
+  : Private Key DEC : {startPrivKey} Bits : {length}
+{lines}
+  : Private Key HEX : {starting_key_hex}
+{lines}
+  : BTC Address Uncompressed : {uaddr}
+{lines}
+'''
+            print(output)
+            self.page_brute.config(text = output)
+            self.found+=1
+            self.foundbtc.config(text = f'{self.found}')
+            with open('founduaddr.txt', 'a', encoding='utf-8') as f:
+                f.write(output)
+            self.WINTEXT = output
+            self.popwinner()
+        if p2sh in bloom_filterbtc:
+            output = f'''\n
+
+  : Private Key Page : {num}
+{lines}
+  : Private Key DEC : {startPrivKey} Bits : {length}
+{lines}
+  : Private Key HEX : {starting_key_hex}
+{lines}
+  : BTC Address Segwit : {p2sh}
+{lines}
+'''
+            print(output)
+            self.page_brute.config(text = output)
+            self.found+=1
+            self.foundbtc.config(text = f'{self.found}')
+            with open('foundp2sh.txt', 'a', encoding='utf-8') as f:
+                f.write(output)
+            self.WINTEXT = output
+            self.popwinner()
+
+        if bech32 in bloom_filterbtc:
+            output = f'''\n
+
+  : Private Key Page : {num}
+{lines}
+  : Private Key DEC : {startPrivKey} Bits : {length}
+{lines}
+  : Private Key HEX : {starting_key_hex}
+{lines}
+  : BTC Address Bc1 : {bech32}
+{lines}
+'''
+            print(output)
+            self.page_brute.config(text = output)
+            self.found+=1
+            self.foundbtc.config(text = f'{self.found}')
+            with open('foundbech32.txt', 'a', encoding='utf-8') as f:
+                f.write(output)
+            self.WINTEXT = output
+            self.popwinner()
+        startPrivKey += 1
+    scantext = f'''
+  : Private Key Page : 
+  {num}
+  : Private Key DEC :
+  {startPrivKey} 
+  Bits : {length}
+  : Private Key HEX : 
+  {starting_key_hex}
+{lines}
+ BTC Address Compressed: {caddr}
+ BTC Address Uncompressed: {uaddr}
+ BTC Address p2sh: {p2sh}
+ BTC Address bech32: {bech32}
+{lines}'''
     return scantext
 
 def rbonline(self, passphrase):
