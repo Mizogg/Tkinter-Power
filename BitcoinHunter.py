@@ -124,7 +124,7 @@ class MainWindow():
         #  Main Window Program Menu Bar
         self._window = tkinter.Tk()
         self._window.title("BitcoinHunter.py @ Mizogg.co.uk")
-        self._window.iconbitmap('images/miz.ico')
+        #self._window.iconbitmap('images/miz.ico')
         self._window.config(bg="black")
         self._window.geometry("860x660")
         self._window.resizable(False, False)
@@ -432,7 +432,7 @@ class MainWindow():
         self.windowcal_informationcal = Toplevel()
         self.windowcal_informationcal.title("Information")
         self.windowcal_informationcal.geometry("540x440")
-        self.windowcal_informationcal.iconbitmap('images/miz.ico')
+        #self.windowcal_informationcal.iconbitmap('images/miz.ico')
         self.windowcal_informationcal.config(bg="#F0F0F0")
         self.widget = tkinter.Label(self.windowcal_informationcal, compound='top')
         self.widget.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
@@ -857,7 +857,7 @@ class MainWindow():
     def popwinner(self):
         self.popwin = Toplevel()
         self.popwin.title("BitHunter.py")
-        self.popwin.iconbitmap('images/miz.ico')
+        #self.popwin.iconbitmap('images/miz.ico')
         self.popwin.geometry("700x250")
         self.widgetwinpop = tkinter.Label(self.popwin, compound='top')
         self.widgetwinpop.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
@@ -880,7 +880,7 @@ class MainWindow():
     def startpop(self):
         self.pop = Toplevel()
         self.pop.title("BitHunter.py")
-        self.pop.iconbitmap('images/miz.ico')
+        #self.pop.iconbitmap('images/miz.ico')
         self.pop.geometry("700x250")
         self.widgetpop = tkinter.Label(self.pop, compound='top')
         self.widgetpop.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
