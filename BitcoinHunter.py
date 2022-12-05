@@ -1,18 +1,246 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 04.12.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 05.12.2022 https://t.me/CryptoCrackersUK
 from tkinter import * 
 from tkinter import ttk
 import tkinter.messagebox
 import tkinter.scrolledtext as tkst
 from tkinter.ttk import *
+from signal import signal, SIGINT
+from datetime import datetime
 from time import strftime, sleep
-import random, sys, os
+import mizlib as MIZ 
+import traceback 
+import threading
+import requests 
+import binascii
+import hashlib
+import logging
 import string
 import psutil
-import mizlib as MIZ
 import math
+import random
+import socket
+import time
+import json
+import sys
+import os
 
+# Mining Program
+sock = None
+
+def timer() :
+    tcx = datetime.now().time()
+    return tcx
+    
+def handler(signal_received , frame) :
+    MIZ.fShutdown = True
+    close_error = f'[  {timer()}  ] Terminating Miner, Please Wait..'
+    tkinter.messagebox.showerror("Error", close_error)
+
+def logg(msg) :
+    logging.basicConfig(level = logging.INFO , filename = "miner.log" ,
+                        format = '%(asctime)s %(message)s')
+    logging.info(msg)
+
+def get_current_block_height() :
+    r = requests.get('https://blockchain.info/latestblock')
+    return int(r.json()['height'])
+
+def check_for_shutdown(t) :
+    n = t.n
+    if MIZ.fShutdown :
+        if n != -1 :
+            MIZ.listfThreadRunning[n] = False
+            t.exit = True
+
+class ExitedThread(threading.Thread) :
+    def __init__(self , arg , n) :
+        super(ExitedThread , self).__init__()
+        self.exit = False
+        self.arg = arg
+        self.n = n
+
+    def run(self) :
+        self.thread_handler(self.arg , self.n)
+        pass
+
+    def thread_handler(self , arg , n) :
+        while True :
+            check_for_shutdown(self)
+            if self.exit :
+                break
+            MIZ.listfThreadRunning[n] = True
+            try :
+                self.thread_handler2(arg)
+            except Exception as e :
+                logg("ThreadHandler()")
+                print('[' , timer() , '] ThreadHandler()')
+                logg(e)
+                print(e)
+            MIZ.listfThreadRunning[n] = False
+
+            time.sleep(2)
+            pass
+
+    def thread_handler2(self , arg) :
+        raise NotImplementedError("must impl this func")
+
+    def check_self_shutdown(self) :
+        check_for_shutdown(self)
+
+    def try_exit(self) :
+        self.exit = True
+        MIZ.listfThreadRunning[self.n] = False
+        pass
+
+def bitcoin_miner(t , restarted = False) :
+    if restarted :
+        logg('\n[*] Bitcoin Miner restarted')
+        print('[' , timer() , '] [*] Bitcoin Miner Restarted')
+        time.sleep(5)
+    target = (MIZ.nbits[2 :] + '00' * (int(MIZ.nbits[:2] , 16) - 3)).zfill(64)
+    extranonce2 = hex(random.randint(0 , 2 ** 32 - 1))[2 :].zfill(2 * MIZ.extranonce2_size)  # create random
+    coinbase = MIZ.coinb1 + MIZ.extranonce1 + extranonce2 + MIZ.coinb2
+    coinbase_hash_bin = hashlib.sha256(hashlib.sha256(binascii.unhexlify(coinbase)).digest()).digest()
+    merkle_root = coinbase_hash_bin
+    for h in MIZ.merkle_branch :
+        merkle_root = hashlib.sha256(hashlib.sha256(merkle_root + binascii.unhexlify(h)).digest()).digest()
+    merkle_root = binascii.hexlify(merkle_root).decode()
+    merkle_root = ''.join([merkle_root[i] + merkle_root[i + 1] for i in range(0 , len(merkle_root) , 2)][: :-1])
+    work_on = get_current_block_height()
+    MIZ.nHeightDiff[work_on + 1] = 0
+    _diff = int("00000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" , 16)
+    logg('[*] Working to solve block with height {}'.format(work_on + 1))
+    print('[' , timer() , '] [*] Working to solve block with height {}'.format(work_on + 1))
+    #scantext3 = f'[  {timer()}  ]  [*] Working to solve block with height {work_on + 1}'
+    #logg(scantext3)
+    #self.mine_label3.config(text = scantext3)
+    #self.mine_label3.update()
+    while True :
+        t.check_self_shutdown()
+        if t.exit :
+            break
+        if MIZ.prevhash != MIZ.updatedPrevHash :
+            logg('[*] New block {} detected on network '.format(MIZ.prevhash))
+            print('[' , timer() , '] [*] New block {} detected on network '.format(MIZ.prevhash))
+            logg('[*] Best difficulty will trying to solve block {} was {}'.format(work_on + 1 , MIZ.nHeightDiff[work_on + 1]))
+            print('[' , timer() , '] [*] Best difficulty will trying to solve block  {} was {}'.format(work_on + 1 , MIZ.nHeightDiff[work_on + 1]))
+            MIZ.updatedPrevHash = MIZ.prevhash
+            bitcoin_miner(t , restarted = True)
+            print('[' , timer() , '] Bitcoin Miner Restart Now...')
+            continue
+
+        nonce = hex(random.randint(0 , 2 ** 32 - 1))[2 :].zfill(8)  # nNonce   #hex(int(nonce,16)+1)[2:]
+        blockheader = MIZ.version + MIZ.prevhash + merkle_root + MIZ.ntime + MIZ.nbits + nonce + \
+                      '000000800000000000000000000000000000000000000000000000000000000000000000000000000000000080020000'
+        hash = hashlib.sha256(hashlib.sha256(binascii.unhexlify(blockheader)).digest()).digest()
+        hash = binascii.hexlify(hash).decode()
+
+        # Logg all hashes that start with 7 zeros or more
+        if hash.startswith('0000000') :
+            logg('[*] New hash: {} for block {}'.format(hash , work_on + 1))
+            print('[' , timer() , '] [*] New hash:  {} for block {}'.format(hash , work_on + 1))
+            print('[' , timer() , '] Hash:' , str(hash))
+        this_hash = int(hash , 16)
+        print(this_hash, end='\r')
+
+        difficulty = _diff / this_hash
+
+        if MIZ.nHeightDiff[work_on + 1] < difficulty :
+            MIZ.nHeightDiff[work_on + 1] = difficulty
+
+        if hash < target :
+            logg('[*] Block {} solved.'.format(work_on + 1))
+            print('[' , timer() , '][*] Block {} solved.'.format(work_on + 1))
+            logg('[*] Block hash: {}'.format(hash))
+            print('[' , timer() , '][*] Block hash: {}'.format(hash))
+            logg('[*] Blockheader: {}'.format(blockheader))
+            print('[*] Blockheader: {}'.format(blockheader))
+            payload = bytes('{"params": ["' + address + '", "' + MIZ.job_id + '", "' + MIZ.extranonce2 \
+                            + '", "' + MIZ.ntime + '", "' + nonce + '"], "id": 1, "method": "mining.submit"}\n' ,
+                            'utf-8')
+            logg('[*] Payload: {}'.format(payload))
+            print('[' , timer() , '][*] Payload: {}'.format(payload))
+            sock.sendall(payload)
+            ret = sock.recv(1024)
+            logg('[*] Pool response: {}'.format(ret))
+            print('[' , timer() , '][*] Pool Response: {}'.format(ret))
+            return True
+
+def block_listener(t) :
+    sock = socket.socket(socket.AF_INET , socket.SOCK_STREAM)
+    sock.connect(('solo.ckpool.org' , 3333))
+    sock.sendall(b'{"id": 1, "method": "mining.subscribe", "params": []}\n')
+    lines = sock.recv(1024).decode().split('\n')
+    response = json.loads(lines[0])
+    MIZ.sub_details , MIZ.extranonce1 , MIZ.extranonce2_size = response['result']
+    sock.sendall(b'{"params": ["' + address.encode() + b'", "password"], "id": 2, "method": "mining.authorize"}\n')
+    response = b''
+    while response.count(b'\n') < 4 and not (b'mining.notify' in response) : response += sock.recv(1024)
+
+    responses = [json.loads(res) for res in response.decode().split('\n') if
+                 len(res.strip()) > 0 and 'mining.notify' in res]
+    MIZ.job_id , MIZ.prevhash , MIZ.coinb1 , MIZ.coinb2 , MIZ.merkle_branch , MIZ.version , MIZ.nbits , MIZ.ntime , MIZ.clean_jobs = \
+        responses[0]['params']
+    MIZ.updatedPrevHash = MIZ.prevhash
+    while True :
+        t.check_self_shutdown()
+        if t.exit :
+            break
+        response = b''
+        while response.count(b'\n') < 4 and not (b'mining.notify' in response) : response += sock.recv(1024)
+        responses = [json.loads(res) for res in response.decode().split('\n') if
+                     len(res.strip()) > 0 and 'mining.notify' in res]
+
+        if responses[0]['params'][1] != MIZ.prevhash :
+            MIZ.job_id , MIZ.prevhash , MIZ.coinb1 , MIZ.coinb2 , MIZ.merkle_branch , MIZ.version , MIZ.nbits , MIZ.ntime , MIZ.clean_jobs = \
+                responses[0]['params']
+
+class CoinMinerThread(ExitedThread) :
+    def __init__(self , arg = None) :
+        super(CoinMinerThread , self).__init__(arg , n = 0)
+
+    def thread_handler2(self , arg) :
+        self.thread_bitcoin_miner(arg)
+
+    def thread_bitcoin_miner(self , arg) :
+        MIZ.listfThreadRunning[self.n] = True
+        check_for_shutdown(self)
+        try :
+            ret = bitcoin_miner(self)
+            logg("[" , timer() , "] [*] Miner returned %s\n\n" % "true" if ret else "false")
+            print("[*] Miner returned %s\n\n" % "true" if ret else "false")
+        except Exception as e :
+            logg("[*] Miner()")
+            print("[" , timer() , "][*] Miner()")
+            logg(e)
+            traceback.print_exc()
+        MIZ.listfThreadRunning[self.n] = False
+
+    pass
+
+class NewSubscribeThread(ExitedThread) :
+    def __init__(self , arg = None) :
+        super(NewSubscribeThread , self).__init__(arg , n = 1)
+
+    def thread_handler2(self , arg) :
+        self.thread_new_block(arg)
+
+    def thread_new_block(self , arg) :
+        MIZ.listfThreadRunning[self.n] = True
+        check_for_shutdown(self)
+        try :
+            ret = block_listener(self)
+        except Exception as e :
+            logg("[*] Subscribe thread()")
+            print("[" , timer() , "][*] Subscribe thread()")
+            logg(e)
+            traceback.print_exc()
+        MIZ.listfThreadRunning[self.n] = False
+
+    pass
+    
 def RandomInteger(minN, maxN):
     return random.randrange(minN, maxN)
 
@@ -51,7 +279,12 @@ which is the smallest possible division, and named in homage to bitcoin's creato
 creditsinfo = ('''
                 Look for Bitcoin with tkinter and python in GUI.
                         Made By Mizogg.co.uk
-                        
+
+                    Version = 1.12  (1727 Lines of code) 
+        Added Bitcoin Miner (TEST Work in Progress) Add you own wallet to miner Page.
+    Start the miner and hunt for Bitcoin. the Miner will run in the CMD window Behind
+            Fixed error in rotaion4 report to file
+            Fixed error with starting private key in Pages Sequential
                     Version = 1.11  (1450 Lines of code) 
             Added Rotation4Bit @AlphaCentury, 28.04.22 
      Script to print all rotations of a randomly generated string.(EDITED)
@@ -162,6 +395,7 @@ class MainWindow():
         self.hex_frame = Frame(self.my_notebook, width=880, height=700)
         self.brain_frame = Frame(self.my_notebook, width=880, height=700)
         self.word_frame = Frame(self.my_notebook, width=880, height=700)
+        self.mine_frame = Frame(self.my_notebook, width=880, height=700)
         self.about_frame = Frame(self.my_notebook, width=880, height=700)
         self.credits_frame = Frame(self.my_notebook, width=880, height=700)
         self.windowcal = Frame(self.my_notebook, width=880, height=700)
@@ -171,6 +405,7 @@ class MainWindow():
         self.hex_frame.pack(fill="both", expand=1)
         self.brain_frame.pack(fill="both", expand=1)
         self.word_frame.pack(fill="both", expand=1)
+        self.mine_frame.pack(fill="both", expand=1)
         self.about_frame.pack(fill="both", expand=1)
         self.credits_frame.pack(fill="both", expand=1)
         self.windowcal.pack(fill="both", expand=1)
@@ -181,6 +416,7 @@ class MainWindow():
         self.my_notebook.add(self.windowcal, text="Calulator")
         self.my_notebook.add(self.brain_frame, text="Brain Hunting")
         self.my_notebook.add(self.word_frame, text="Mnemonic Hunting")
+        self.my_notebook.add(self.mine_frame, text="BTC Mining")
         self.my_notebook.add(self.about_frame, text="About Bitcoin")
         self.my_notebook.add(self.credits_frame, text="Credits")
         # Calulator Tab
@@ -445,7 +681,7 @@ class MainWindow():
         self._txt_inputstarthex.focus()
         self.labelstophex = tkinter.Label(self.hex_frame, text="Stop \nBIT ", font=("Arial",11), fg='orange').place(x=5,y= 200)
         self._txt_inputstophex = tkinter.Entry(self.hex_frame, width=4, font=("Consolas", 13))
-        self._txt_inputstophex.insert(0, '256')
+        self._txt_inputstophex.insert(0, '160')
         self._txt_inputstophex.place(x=55,y=210)
         self._txt_inputstophex.focus()
         self.labelstarthexnum0 = tkinter.Label(self.hex_frame, text="2", font=("Arial",16), fg='red').place(x=120,y=130)
@@ -454,16 +690,16 @@ class MainWindow():
         self._txt_inputstarthex0.place(x=110,y=170)
         self._txt_inputstarthex0.focus()
         self._txt_inputstophex0 = tkinter.Entry(self.hex_frame, width=4, font=("Consolas", 13))
-        self._txt_inputstophex0.insert(0, '249')
+        self._txt_inputstophex0.insert(0, '160')
         self._txt_inputstophex0.place(x=110,y=210)
         self._txt_inputstophex0.focus()
         self.labelstarthexnum1 = tkinter.Label(self.hex_frame, text="3", font=("Arial",16), fg='red').place(x=175,y=130)
         self._txt_inputstarthex1 = tkinter.Entry(self.hex_frame, width=4, font=("Consolas", 13))
-        self._txt_inputstarthex1.insert(0, '241')
+        self._txt_inputstarthex1.insert(0, '120')
         self._txt_inputstarthex1.place(x=165,y=170)
         self._txt_inputstarthex1.focus()
         self._txt_inputstophex1 = tkinter.Entry(self.hex_frame, width=4, font=("Consolas", 13))
-        self._txt_inputstophex1.insert(0, '242')
+        self._txt_inputstophex1.insert(0, '160')
         self._txt_inputstophex1.place(x=165,y=210)
         self._txt_inputstophex1.focus()
         self.labelstarthexnum2 = tkinter.Label(self.hex_frame, text="4", font=("Arial",16), fg='red').place(x=230,y=130)
@@ -627,7 +863,46 @@ class MainWindow():
         self.totalbtc = tkinter.Label(self.hex_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple").place(x=690,y=70)
         self.foundbtc = tkinter.Label(self.hex_frame, bg="#F0F0F0",font=("Arial",23),text="0")
         self.foundbtc.place(x=750,y=120)
-
+        # mining_frame
+        self.mine_title = tkinter.Label(self.mine_frame, text="Bitcoin Solo Mining ",font=("Arial",20),bg="#F0F0F0",fg="Black").place(x=180,y=100)
+        self.labeladd_mine = tkinter.Label(self.mine_frame, text="Insert Your Address bitcoin Address  ", font=("Arial",15),fg="red").place(x=220,y=140)
+        self._txt_inputadd_mine = tkinter.Entry(self.mine_frame, width=40, font=("Consolas", 16))
+        self._txt_inputadd_mine.insert(0, '3GCypcW8LWzNfJEsTvcFwUny3ygPzpTfL4')
+        self._txt_inputadd_mine.place(x=100,y=180)
+        self._txt_inputadd_mine.focus()
+        self.mine_label1 = tkinter.Label(self.mine_frame, bg="#F0F0F0",font=("Arial",12),text="")
+        self.mine_label1.place(x=20,y=280)
+        self.mine_label2 = tkinter.Label(self.mine_frame, bg="#F0F0F0",font=("Arial",12),text="")
+        self.mine_label2.place(x=20,y=300)
+        self.mine_label3 = tkinter.Label(self.mine_frame, bg="#F0F0F0",font=("Arial",12),text="")
+        self.mine_label3.place(x=20,y=320)
+        self.startmine= tkinter.Button(self.mine_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= self.miz_miner, fg='green').place(x=700,y=180)
+        #self.startmine= tkinter.Button(self.mine_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= self.stop, fg='red').place(x=760,y=180)
+        self.totalbtc = tkinter.Label(self.mine_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple").place(x=690,y=70)
+        self.foundbtc = tkinter.Label(self.mine_frame, bg="#F0F0F0",font=("Arial",23),text="0")
+        self.foundbtc.place(x=750,y=120)
+    
+    def StartMining(self) :
+        subscribe_t = NewSubscribeThread(None)
+        subscribe_t.start()
+        scantext = f'[  {timer()}  ]  [*] Subscribe thread started.'
+        logg(scantext)
+        self.mine_label1.config(text = scantext)
+        self.mine_label1.update()
+        time.sleep(1)
+        miner_t = CoinMinerThread(None)
+        miner_t.start()
+        scantext1 = f'[  {timer()}  ]  [*] Bitcoin Miner Thread Started.'
+        logg(scantext1)
+        self.mine_label2.config(text = scantext1)
+        self.mine_label2.update()
+    
+    def miz_miner(self):
+        global address
+        address = self._txt_inputadd_mine.get().strip().replace(" ", "")
+        signal(SIGINT , handler)
+        self.StartMining()
+    
     def reset_now(self):
         self.textoperator.set(" ")
         self.text_valuecal.set(" ")
@@ -898,7 +1173,7 @@ class MainWindow():
             self.brute_results_page(page)
     
     def Sequential_Bruteforce_speed_page(self):
-        startpage = self._txt_inputstart.get().strip().replace(" ", "")
+        startpage = self._txt_inputstartpage.get().strip().replace(" ", "")
         stoppage = self._txt_inputstoppage.get().strip().replace(" ", "")
         mag = self._txt_inputmagpage.get().strip().replace(" ", "")
         while run1:
@@ -1156,19 +1431,21 @@ class MainWindow():
         self.pop = Toplevel()
         self.pop.title("BitHunter.py")
         #self.pop.iconbitmap('images/miz.ico')
-        self.pop.geometry("700x250")
+        self.pop.geometry("500x300")
         self.widgetpop = tkinter.Label(self.pop, compound='top')
         self.widgetpop.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
         self.widgetpop['text'] = "© MIZOGG 2018 - 2022"
         self.widgetpop['image'] = self.widgetpop.miz_image_png
-        self.widgetpop.place(x=220,y=180)
-        self.label = tkinter.Label(self.pop, text='Welcome to BitcoinHunter...... \n\n Made By Mizogg.co.uk \n\n Version 1.11 04/12/22').pack(pady=10)
-        self.label1 = tkinter.Label(self.pop, text= "This window will get closed after 3 seconds...", font=('Helvetica 8 bold')).pack(pady=10)
+        self.widgetpop.place(x=140,y=220)
+        self.label = tkinter.Label(self.pop, text='Welcome to BitcoinHunter...... \n\n Made By Mizogg.co.uk \n\n Version 1.12 05/12/22').pack(pady=10)
+        self.label1 = tkinter.Label(self.pop, text= "BitcoinHunter application use at your own risk.\n There is no promise of warranty.\n\n  Auto Agree 5 secs", font=('Helvetica 8 bold')).pack(pady=10)
         self.framepop = Frame(self.pop)
         self.framepop.pack(pady=10)
-        self.buttonpop = Button(self.framepop, text=" Close ", command=self.CLOSEWINDOW)
+        self.buttonpop = Button(self.framepop, text=" Agree ", command=lambda: self.pop.destroy())
         self.buttonpop.grid(row=0, column=1)
-        self.pop.after(3000,lambda:self.pop.destroy())
+        self.buttonpop = Button(self.framepop, text=" Disagree ", command=quit)
+        self.buttonpop.grid(row=0, column=2)
+        self.pop.after(5000,lambda:self.pop.destroy())
         
     def CLOSEWINDOW(self):
         self.pop.destroy()
