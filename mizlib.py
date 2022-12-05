@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 04.12.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 05.12.2022 https://t.me/CryptoCrackersUK
 import hmac, struct, codecs, sys, os, binascii, hashlib
 import webbrowser
 import random
@@ -40,6 +40,24 @@ except ImportError:
     from bit import Key
     from bit.format import bytes_to_wif
     import numpy as np
+
+fShutdown = False
+listfThreadRunning = [False] * 2
+local_height = 0
+nHeightDiff = {}
+updatedPrevHash = None
+job_id = None
+prevhash = None
+coinb1 = None
+coinb2 = None
+merkle_branch = None
+version = None
+nbits = None
+ntime = None
+clean_jobs = None
+sub_details = None
+extranonce1 = None
+extranonce2_size = None
     
 with open('puzzle.bf', "rb") as fp:
     bloom_filterbtc = BloomFilter.load(fp)
@@ -496,21 +514,21 @@ def rwoffline(self, mnem):
         self.found+=1
         self.foundword.config(text = f'{self.found}')
         self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {cpath} :  {caddr} \n Decimal Private Key \n {dec} \n Hexadecimal Private Key \n {HEX}  \n'
-        with open("found.txt", "a", encoding="utf-8") as f:
+        with open("foundcaddr.txt", "a", encoding="utf-8") as f:
             f.write(self.WINTEXT)
         self.popwinner()
     if p2sh in bloom_filterbtc:
         self.found+=1
         self.foundword.config(text = f'{self.found}')
         self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {ppath} :  {p2sh}\nDecimal Private Key \n {dec2} \n Hexadecimal Private Key \n {HEX2} \n'
-        with open("found.txt", "a", encoding="utf-8") as f:
+        with open("foundp2sh.txt", "a", encoding="utf-8") as f:
             f.write(self.WINTEXT)
         self.popwinner()
     if bech32 in bloom_filterbtc:
         self.found+=1
         self.foundword.config(text = f'{self.found}')
         self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {bpath} : {bech32}\n Decimal Private Key \n {dec3} \n Hexadecimal Private Key \n {HEX3} \n'
-        with open("found.txt", "a", encoding="utf-8") as f:
+        with open("foundbech32.txt", "a", encoding="utf-8") as f:
             f.write(self.WINTEXT)
         self.popwinner()
     return wordvartext
@@ -529,7 +547,7 @@ def brute_btc(self, dec):
         self.bfr.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc}')
         self.found+=1
         self.foundbtc.config(text = f'{self.found}')
-        with open('found.txt', 'a') as result:
+        with open('foundcaddr.txt', 'a') as result:
             result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc}\n')
         self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc}")
         self.popwinner()
@@ -537,7 +555,7 @@ def brute_btc(self, dec):
         self.bfr.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu}')
         self.found+=1
         self.foundbtc.config(text = f'{self.found}')
-        with open('found.txt', 'a') as result:
+        with open('founduaddr.txt', 'a') as result:
             result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu}\n')
         self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu}")
         self.popwinner()
@@ -545,7 +563,7 @@ def brute_btc(self, dec):
         self.bfr.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address p2sh: {p2sh}')
         self.found+=1
         self.foundbtc.config(text = f'{self.found}')
-        with open('found.txt', 'a') as result:
+        with open('foundp2sh.txt', 'a') as result:
             result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address p2sh: {p2sh} \n')
         self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address p2sh: {p2sh}")
         self.popwinner()
@@ -553,7 +571,7 @@ def brute_btc(self, dec):
         self.bfr.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address bech32: {bech32}')
         self.found+=1
         self.foundbtc.config(text = f'{self.found}')
-        with open('found.txt', 'a') as result:
+        with open('foundbech32.txt', 'a') as result:
             result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address bech32: {bech32}')
         self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address bech32: {bech32}")
         self.popwinner()
@@ -758,7 +776,7 @@ def btc_hunter(self):
     self.bech32string_update.update()
     if caddr in bloom_filterbtc:
         self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc} \nBinary Data: \n {binstring}")
-        with open("found.txt", "a", encoding="utf-8") as f:
+        with open("foundcaddr.txt", "a", encoding="utf-8") as f:
             f.write(self.WINTEXT)
         self.popwinner()
     if uaddr in bloom_filterbtc:
@@ -911,9 +929,9 @@ BTC p2sh    : {btcP}
 BTC BC1     : {btcB}
 =================================
 '''
-            f=open('Winner.txt','a')
+            f=open('found.txt','a')
             f.write(wintext)
-            self.hex_brute.config(text = wintext)
+            self.rotation_brute.config(text = wintext)
             self.found+=1
             self.foundbtc.config(text = f'{self.found}')
             self.WINTEXT = wintext
@@ -928,9 +946,9 @@ BTC p2sh    : {btcP0}
 BTC BC1     : {btcB0}
 =================================
 '''
-            f=open('Winner.txt','a')
+            f=open('found.txt','a')
             f.write(wintext)
-            self.hex_brute.config(text = wintext)
+            self.rotation_brute.config(text = wintext)
             self.found+=1
             self.foundbtc.config(text = f'{self.found}')
             self.WINTEXT = wintext
@@ -945,9 +963,9 @@ BTC p2sh    : {btcP1}
 BTC BC1     : {btcB1}
 =================================
 '''
-            f=open('Winner.txt','a')
+            f=open('found.txt','a')
             f.write(wintext)
-            self.hex_brute.config(text = wintext)
+            self.rotation_brute.config(text = wintext)
             self.found+=1
             self.foundbtc.config(text = f'{self.found}')
             self.WINTEXT = wintext
@@ -962,9 +980,9 @@ BTC p2sh    : {btcP2}
 BTC BC1     : {btcB2}
 =================================
 '''
-            f=open('Winner.txt','a')
+            f=open('found.txt','a')
             f.write(wintext)
-            self.hex_brute.config(text = wintext)
+            self.rotation_brute.config(text = wintext)
             self.found+=1
             self.foundbtc.config(text = f'{self.found}')
             self.WINTEXT = wintext
@@ -979,9 +997,9 @@ BTC p2sh    : {btcP3}
 BTC BC1     : {btcB3}
 =================================
 '''
-            f=open('Winner.txt','a')
+            f=open('found.txt','a')
             f.write(wintext)
-            self.hex_brute.config(text = wintext)
+            self.rotation_brute.config(text = wintext)
             self.found+=1
             self.foundbtc.config(text = f'{self.found}')
             self.WINTEXT = wintext
@@ -996,9 +1014,9 @@ BTC p2sh    : {btcP4}
 BTC BC1     : {btcB4}
 =================================
 '''
-            f=open('Winner.txt','a')
+            f=open('found.txt','a')
             f.write(wintext)
-            self.hex_brute.config(text = wintext)
+            self.rotation_brute.config(text = wintext)
             self.found+=1
             self.foundbtc.config(text = f'{self.found}')
             self.WINTEXT = wintext
@@ -1013,9 +1031,9 @@ BTC p2sh    : {btcP5}
 BTC BC1     : {btcB5}
 =================================
 '''
-            f=open('Winner.txt','a')
+            f=open('found.txt','a')
             f.write(wintext)
-            self.hex_brute.config(text = wintext)
+            self.rotation_brute.config(text = wintext)
             self.found+=1
             self.foundbtc.config(text = f'{self.found}')
             self.WINTEXT = wintext
@@ -1030,9 +1048,9 @@ BTC p2sh    : {btcP6}
 BTC BC1     : {btcB6}
 =================================
 '''
-            f=open('Winner.txt','a')
+            f=open('found.txt','a')
             f.write(wintext)
-            self.hex_brute.config(text = wintext)
+            self.rotation_brute.config(text = wintext)
             self.found+=1
             self.foundbtc.config(text = f'{self.found}')
             self.WINTEXT = wintext
@@ -1047,9 +1065,9 @@ BTC p2sh    : {btcP7}
 BTC BC1     : {btcB7}
 =================================
 '''
-            f=open('Winner.txt','a')
+            f=open('found.txt','a')
             f.write(wintext)
-            self.hex_brute.config(text = wintext)
+            self.rotation_brute.config(text = wintext)
             self.found+=1
             self.foundbtc.config(text = f'{self.found}')
             self.WINTEXT = wintext
@@ -1064,9 +1082,9 @@ BTC p2sh    : {btcP8}
 BTC BC1     : {btcB8}
 =================================
 '''
-            f=open('Winner.txt','a')
+            f=open('found.txt','a')
             f.write(wintext)
-            self.hex_brute.config(text = wintext)
+            self.rotation_brute.config(text = wintext)
             self.found+=1
             self.foundbtc.config(text = f'{self.found}')
             self.WINTEXT = wintext
@@ -1081,9 +1099,9 @@ BTC p2sh    : {btcP9}
 BTC BC1     : {btcB9}
 =================================
 '''
-            f=open('Winner.txt','a')
+            f=open('found.txt','a')
             f.write(wintext)
-            self.hex_brute.config(text = wintext)
+            self.rotation_brute.config(text = wintext)
             self.found+=1
             self.foundbtc.config(text = f'{self.found}')
             self.WINTEXT = wintext
@@ -1098,9 +1116,9 @@ BTC p2sh    : {btcP10}
 BTC BC1     : {btcB10}
 =================================
 '''
-            f=open('Winner.txt','a')
+            f=open('found.txt','a')
             f.write(wintext)
-            self.hex_brute.config(text = wintext)
+            self.rotation_brute.config(text = wintext)
             self.found+=1
             self.foundbtc.config(text = f'{self.found}')
             self.WINTEXT = wintext
@@ -1115,9 +1133,9 @@ BTC p2sh    : {btcP11}
 BTC BC1     : {btcB11}
 =================================
 '''
-            f=open('Winner.txt','a')
+            f=open('found.txt','a')
             f.write(wintext)
-            self.hex_brute.config(text = wintext)
+            self.rotation_brute.config(text = wintext)
             self.found+=1
             self.foundbtc.config(text = f'{self.found}')
             self.WINTEXT = wintext
@@ -1132,9 +1150,9 @@ BTC p2sh    : {btcP12}
 BTC BC1     : {btcB12}
 =================================
 '''
-            f=open('Winner.txt','a')
+            f=open('found.txt','a')
             f.write(wintext)
-            self.hex_brute.config(text = wintext)
+            self.rotation_brute.config(text = wintext)
             self.found+=1
             self.foundbtc.config(text = f'{self.found}')
             self.WINTEXT = wintext
@@ -1149,9 +1167,9 @@ BTC p2sh    : {btcP13}
 BTC BC1     : {btcB13}
 =================================
 '''
-            f=open('Winner.txt','a')
+            f=open('found.txt','a')
             f.write(wintext)
-            self.hex_brute.config(text = wintext)
+            self.rotation_brute.config(text = wintext)
             self.found+=1
             self.foundbtc.config(text = f'{self.found}')
             self.WINTEXT = wintext
@@ -1166,9 +1184,9 @@ BTC p2sh    : {btcP14}
 BTC BC1     : {btcB14}
 =================================
 '''
-            f=open('Winner.txt','a')
+            f=open('found.txt','a')
             f.write(wintext)
-            self.hex_brute.config(text = wintext)
+            self.rotation_brute.config(text = wintext)
             self.found+=1
             self.foundbtc.config(text = f'{self.found}')
             self.WINTEXT = wintext
@@ -1183,9 +1201,9 @@ BTC p2sh    : {btcP15}
 BTC BC1     : {btcB15}
 =================================
 '''
-            f=open('Winner.txt','a')
+            f=open('found.txt','a')
             f.write(wintext)
-            self.hex_brute.config(text = wintext)
+            self.rotation_brute.config(text = wintext)
             self.found+=1
             self.foundbtc.config(text = f'{self.found}')
             self.WINTEXT = wintext
@@ -1200,9 +1218,9 @@ BTC p2sh    : {btcP16}
 BTC BC1     : {btcB16}
 =================================
 '''
-            f=open('Winner.txt','a')
+            f=open('found.txt','a')
             f.write(wintext)
-            self.hex_brute.config(text = wintext)
+            self.rotation_brute.config(text = wintext)
             self.found+=1
             self.foundbtc.config(text = f'{self.found}')
             self.WINTEXT = wintext
@@ -1217,9 +1235,9 @@ BTC p2sh    : {btcP17}
 BTC BC1     : {btcB17}
 =================================
 '''
-            f=open('Winner.txt','a')
+            f=open('found.txt','a')
             f.write(wintext)
-            self.hex_brute.config(text = wintext)
+            self.rotation_brute.config(text = wintext)
             self.found+=1
             self.foundbtc.config(text = f'{self.found}')
             self.WINTEXT = wintext
@@ -1234,9 +1252,9 @@ BTC p2sh    : {btcP18}
 BTC BC1     : {btcB18}
 =================================
 '''
-            f=open('Winner.txt','a')
+            f=open('found.txt','a')
             f.write(wintext)
-            self.hex_brute.config(text = wintext)
+            self.rotation_brute.config(text = wintext)
             self.found+=1
             self.foundbtc.config(text = f'{self.found}')
             self.WINTEXT = wintext
@@ -1254,4 +1272,5 @@ BTC BC1     : {btcB18}
 {hex(pk7)[2:].zfill(64)}    |   {hex(pk17)[2:].zfill(64)}
 {hex(pk8)[2:].zfill(64)}    |   {hex(pk18)[2:].zfill(64)}
 '''
+        #print(hex(pk0)[2:].zfill(64)) # //remove scan #text return
         return scantext
