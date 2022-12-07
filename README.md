@@ -1,8 +1,8 @@
 # Tkinter-Power
 
-NEW UPDATE COMING JUST NEED MORE STARS ⭐⭐⭐⭐
+New Version1.13 Recovery Tools and Fixes
 
-![image](https://user-images.githubusercontent.com/88630056/206031958-0761823c-0a42-4100-aecc-74d899b0f29b.png)
+![image](https://user-images.githubusercontent.com/88630056/206264660-a0d4ab62-a4e8-4543-960a-92388a226cb9.png)
 
 Bitcoin private generator made with tkinter. Looks for Bitcoin in a nice GUI interface. Private key, Wallet Generation, Hex, Dec, WIF and Mnemonic.
 
@@ -118,6 +118,8 @@ python BitcoinHunter.py
 
 # Some Fun 
 ![image](https://user-images.githubusercontent.com/88630056/200417289-851ae053-d838-4e1b-807c-f3714cb9a677.png)
+
+# If you Like Give me a Star ⭐⭐⭐⭐
 
 ## More Information please join me on Telegram https://t.me/CryptoCrackersUK
 
