@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 06.12.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 07.12.2022 https://t.me/CryptoCrackersUK
 from tkinter import * 
 from tkinter import ttk
 import tkinter.messagebox
