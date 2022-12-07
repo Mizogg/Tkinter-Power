@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 05.12.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 07.12.2022 https://t.me/CryptoCrackersUK
 import hmac, struct, codecs, sys, os, binascii, hashlib
 import webbrowser
 import random
@@ -10,6 +10,8 @@ import tkinter.messagebox
 import tkinter.scrolledtext as tkst
 from tkinter.ttk import *
 import secp256k1 as ice
+import string
+import re, trotter
 try:
     import base58
     import ecdsa
@@ -61,6 +63,7 @@ extranonce2_size = None
     
 with open('puzzle.bf', "rb") as fp:
     bloom_filterbtc = BloomFilter.load(fp)
+
 def countadd():
     addr_count = len(bloom_filterbtc)
     addr_count_print = (f'Total Bitcoin Addresses Loaded and Checking : {addr_count}')
@@ -514,21 +517,21 @@ def rwoffline(self, mnem):
         self.found+=1
         self.foundword.config(text = f'{self.found}')
         self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {cpath} :  {caddr} \n Decimal Private Key \n {dec} \n Hexadecimal Private Key \n {HEX}  \n'
-        with open("foundcaddr.txt", "a", encoding="utf-8") as f:
+        with open("foundcaddr.txt", "a") as f:
             f.write(self.WINTEXT)
         self.popwinner()
     if p2sh in bloom_filterbtc:
         self.found+=1
         self.foundword.config(text = f'{self.found}')
         self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {ppath} :  {p2sh}\nDecimal Private Key \n {dec2} \n Hexadecimal Private Key \n {HEX2} \n'
-        with open("foundp2sh.txt", "a", encoding="utf-8") as f:
+        with open("foundp2sh.txt", "a") as f:
             f.write(self.WINTEXT)
         self.popwinner()
     if bech32 in bloom_filterbtc:
         self.found+=1
         self.foundword.config(text = f'{self.found}')
         self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {bpath} : {bech32}\n Decimal Private Key \n {dec3} \n Hexadecimal Private Key \n {HEX3} \n'
-        with open("foundbech32.txt", "a", encoding="utf-8") as f:
+        with open("foundbech32.txt", "a") as f:
             f.write(self.WINTEXT)
         self.popwinner()
     return wordvartext
@@ -618,10 +621,9 @@ def get_page(self, page):
   : BTC Address Compressed : {caddr}
 {lines}
 '''
-            print(output)
             self.page_brute.config(text = output)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_page.config(text = f'{self.found}')
             with open('foundcaddr.txt', 'a', encoding='utf-8') as f:
                 f.write(output)
             self.WINTEXT = output
@@ -639,10 +641,9 @@ def get_page(self, page):
   : BTC Address Uncompressed : {uaddr}
 {lines}
 '''
-            print(output)
             self.page_brute.config(text = output)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_page.config(text = f'{self.found}')
             with open('founduaddr.txt', 'a', encoding='utf-8') as f:
                 f.write(output)
             self.WINTEXT = output
@@ -659,10 +660,9 @@ def get_page(self, page):
   : BTC Address Segwit : {p2sh}
 {lines}
 '''
-            print(output)
             self.page_brute.config(text = output)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_page.config(text = f'{self.found}')
             with open('foundp2sh.txt', 'a', encoding='utf-8') as f:
                 f.write(output)
             self.WINTEXT = output
@@ -680,10 +680,10 @@ def get_page(self, page):
   : BTC Address Bc1 : {bech32}
 {lines}
 '''
-            print(output)
+
             self.page_brute.config(text = output)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_page.config(text = f'{self.found}')
             with open('foundbech32.txt', 'a', encoding='utf-8') as f:
                 f.write(output)
             self.WINTEXT = output
@@ -725,7 +725,7 @@ def rbonline(self, passphrase):
     if int(txs) > 0 :
         self.found+=1
         self.foundbw.config(text = f'{self.found}')
-        with open("found.txt", "a", encoding="utf-8") as f:
+        with open("found.txt", "a") as f:
             f.write(f'\n BrainWallet : {passphrase} \n Private Key In HEX : {private_key} \n Bitcoin Adress : {caddr} \n Balance  [{balance}] TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]')
         self.WINTEXT = (f"BrainWallet : {passphrase}\n HEX Key: {private_key} \n BTC Address Compressed: {caddr}  \n \n Balance  [{balance}] \n TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]")
         self.popwinner()
@@ -739,7 +739,7 @@ def rboffline(self, passphrase):
         self.found+=1
         self.foundbw.config(text = f'{self.found}')
         self.WINTEXT = (f'\n BrainWallet: {passphrase} \n Private Key In HEX : {private_key} \n Bitcoin Adress : {caddr}')
-        with open("found.txt", "a", encoding="utf-8") as f:
+        with open("found.txt", "a") as f:
             f.write(self.WINTEXT)
         self.popwinner()
     return brainvartext
@@ -776,28 +776,28 @@ def btc_hunter(self):
     self.bech32string_update.update()
     if caddr in bloom_filterbtc:
         self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc} \nBinary Data: \n {binstring}")
-        with open("foundcaddr.txt", "a", encoding="utf-8") as f:
+        with open("foundcaddr.txt", "a") as f:
             f.write(self.WINTEXT)
         self.popwinner()
     if uaddr in bloom_filterbtc:
         self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu} \nBinary Data: \n {binstring}")
-        with open("found.txt", "a", encoding="utf-8") as f:
+        with open("found.txt", "a") as f:
             f.write(self.WINTEXT)
         self.popwinner()
     if p2sh in bloom_filterbtc:
         self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address p2sh: {p2sh} \nBinary Data: \n {binstring}")
-        with open("found.txt", "a", encoding="utf-8") as f:
+        with open("found.txt", "a") as f:
             f.write(self.WINTEXT)
         self.popwinner()
     if bech32 in bloom_filterbtc:
         self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Bc1: {bech32} \nBinary Data: \n {binstring}")
-        with open("found.txt", "a", encoding="utf-8") as f:
+        with open("found.txt", "a") as f:
             f.write(self.WINTEXT)
         self.popwinner()
 
 def hexhunter(self, dec, dec0, dec1, dec2, dec3, dec4, dec5, dec6, dec7, dec8, dec9, dec10, dec11, dec12, dec13, dec14, dec15, dec16, dec17, dec18):
     s = (hex(dec)[2:]).zfill(64)
-    s0 = (hex(dec0)[2:]).zfill(64) # P64
+    s0 = (hex(dec0)[2:]).zfill(64)
     s1 = (hex(dec1)[2:]).zfill(64)
     s2 = (hex(dec2)[2:]).zfill(64)
     s3 = (hex(dec3)[2:]).zfill(64)
@@ -933,7 +933,7 @@ BTC BC1     : {btcB}
             f.write(wintext)
             self.rotation_brute.config(text = wintext)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
         if btcC0 in bloom_filterbtc or btcU0 in bloom_filterbtc or btcP0 in bloom_filterbtc or btcB0 in bloom_filterbtc:
@@ -950,7 +950,7 @@ BTC BC1     : {btcB0}
             f.write(wintext)
             self.rotation_brute.config(text = wintext)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
         if btcC1 in bloom_filterbtc or btcU1 in bloom_filterbtc or btcP1 in bloom_filterbtc or btcB1 in bloom_filterbtc:
@@ -967,7 +967,7 @@ BTC BC1     : {btcB1}
             f.write(wintext)
             self.rotation_brute.config(text = wintext)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
         if btcC2 in bloom_filterbtc or btcU2 in bloom_filterbtc or btcP2 in bloom_filterbtc or btcB2 in bloom_filterbtc:
@@ -984,7 +984,7 @@ BTC BC1     : {btcB2}
             f.write(wintext)
             self.rotation_brute.config(text = wintext)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
         if btcC3 in bloom_filterbtc or btcU3 in bloom_filterbtc or btcP3 in bloom_filterbtc or btcB3 in bloom_filterbtc:
@@ -1001,7 +1001,7 @@ BTC BC1     : {btcB3}
             f.write(wintext)
             self.rotation_brute.config(text = wintext)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
         if btcC4 in bloom_filterbtc or btcU4 in bloom_filterbtc or btcP4 in bloom_filterbtc or btcB4 in bloom_filterbtc:
@@ -1018,7 +1018,7 @@ BTC BC1     : {btcB4}
             f.write(wintext)
             self.rotation_brute.config(text = wintext)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
         if btcC5 in bloom_filterbtc or btcU5 in bloom_filterbtc or btcP5 in bloom_filterbtc or btcB5 in bloom_filterbtc:
@@ -1035,7 +1035,7 @@ BTC BC1     : {btcB5}
             f.write(wintext)
             self.rotation_brute.config(text = wintext)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
         if btcC6 in bloom_filterbtc or btcU6 in bloom_filterbtc or btcP6 in bloom_filterbtc or btcB6 in bloom_filterbtc:
@@ -1052,7 +1052,7 @@ BTC BC1     : {btcB6}
             f.write(wintext)
             self.rotation_brute.config(text = wintext)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
         if btcC7 in bloom_filterbtc or btcU7 in bloom_filterbtc or btcP7 in bloom_filterbtc or btcB7 in bloom_filterbtc:
@@ -1069,7 +1069,7 @@ BTC BC1     : {btcB7}
             f.write(wintext)
             self.rotation_brute.config(text = wintext)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
         if btcC8 in bloom_filterbtc or btcU8 in bloom_filterbtc or btcP8 in bloom_filterbtc or btcB8 in bloom_filterbtc:
@@ -1086,7 +1086,7 @@ BTC BC1     : {btcB8}
             f.write(wintext)
             self.rotation_brute.config(text = wintext)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
         if btcC9 in bloom_filterbtc or btcU9 in bloom_filterbtc or btcP9 in bloom_filterbtc or btcB9 in bloom_filterbtc:
@@ -1103,7 +1103,7 @@ BTC BC1     : {btcB9}
             f.write(wintext)
             self.rotation_brute.config(text = wintext)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
         if btcC10 in bloom_filterbtc or btcU10 in bloom_filterbtc or btcP10 in bloom_filterbtc or btcB10 in bloom_filterbtc:
@@ -1120,7 +1120,7 @@ BTC BC1     : {btcB10}
             f.write(wintext)
             self.rotation_brute.config(text = wintext)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
         if btcC11 in bloom_filterbtc or btcU11 in bloom_filterbtc or btcP11 in bloom_filterbtc or btcB11 in bloom_filterbtc:
@@ -1137,7 +1137,7 @@ BTC BC1     : {btcB11}
             f.write(wintext)
             self.rotation_brute.config(text = wintext)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
         if btcC12 in bloom_filterbtc or btcU12 in bloom_filterbtc or btcP12 in bloom_filterbtc or btcB12 in bloom_filterbtc:
@@ -1154,7 +1154,7 @@ BTC BC1     : {btcB12}
             f.write(wintext)
             self.rotation_brute.config(text = wintext)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
         if btcC13 in bloom_filterbtc or btcU13 in bloom_filterbtc or btcP13 in bloom_filterbtc or btcB13 in bloom_filterbtc:
@@ -1171,7 +1171,7 @@ BTC BC1     : {btcB13}
             f.write(wintext)
             self.rotation_brute.config(text = wintext)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
         if btcC14 in bloom_filterbtc or btcU14 in bloom_filterbtc or btcP14 in bloom_filterbtc or btcB14 in bloom_filterbtc:
@@ -1188,7 +1188,7 @@ BTC BC1     : {btcB14}
             f.write(wintext)
             self.rotation_brute.config(text = wintext)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
         if btcC15 in bloom_filterbtc or btcU15 in bloom_filterbtc or btcP15 in bloom_filterbtc or btcB15 in bloom_filterbtc:
@@ -1205,7 +1205,7 @@ BTC BC1     : {btcB15}
             f.write(wintext)
             self.rotation_brute.config(text = wintext)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
         if btcC16 in bloom_filterbtc or btcU16 in bloom_filterbtc or btcP16 in bloom_filterbtc or btcB16 in bloom_filterbtc:
@@ -1222,7 +1222,7 @@ BTC BC1     : {btcB16}
             f.write(wintext)
             self.rotation_brute.config(text = wintext)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
         if btcC17 in bloom_filterbtc or btcU17 in bloom_filterbtc or btcP17 in bloom_filterbtc or btcB17 in bloom_filterbtc:
@@ -1239,7 +1239,7 @@ BTC BC1     : {btcB17}
             f.write(wintext)
             self.rotation_brute.config(text = wintext)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
         if btcC18 in bloom_filterbtc or btcU18 in bloom_filterbtc or btcP18 in bloom_filterbtc or btcB18 in bloom_filterbtc:
@@ -1256,7 +1256,7 @@ BTC BC1     : {btcB18}
             f.write(wintext)
             self.rotation_brute.config(text = wintext)
             self.found+=1
-            self.foundbtc.config(text = f'{self.found}')
+            self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
         scantext =f'''
@@ -1274,3 +1274,98 @@ BTC BC1     : {btcB18}
 '''
         #print(hex(pk0)[2:].zfill(64)) # //remove scan #text return
         return scantext
+
+# Recovery Program
+def complete_key(rec_IN_string, missing_letters):
+    for letter in missing_letters:
+        rec_IN_string = rec_IN_string.replace('*', letter, 1)
+    return rec_IN_string
+
+def btc_address_from_private_key(my_secret, secret_type):
+    assert secret_type in ['WIF', 'HEX', 'DEC', 'mnemonic']
+    match secret_type:
+        case 'WIF':
+            if my_secret.startswith('5H') or my_secret.startswith('5J') or my_secret.startswith('5K') or my_secret.startswith('K') or my_secret.startswith('L'):
+                if my_secret.startswith('5H') or my_secret.startswith('5J') or my_secret.startswith('5K'):
+                    first_encode = base58.b58decode(my_secret)
+                    private_key_full = binascii.hexlify(first_encode)
+                    private_key = private_key_full[2:-8]
+                    private_key_hex = private_key.decode("utf-8")
+                    dec = int(private_key_hex,16)
+                elif my_secret.startswith('K') or my_secret.startswith('L'):
+                    first_encode = base58.b58decode(my_secret)
+                    private_key_full = binascii.hexlify(first_encode)
+                    private_key = private_key_full[2:-8]
+                    private_key_hex = private_key.decode("utf-8")
+                    dec = int(private_key_hex[0:64],16)
+        case 'HEX':
+            dec = int(my_secret[0:64],16)
+        case 'mnemonic':
+            raise "Mnemonic secrets not implemented"
+        case 'DEC':
+            dec = int(my_secret)
+        case _:
+            raise "I don't know how to handle this type."
+
+    return dec
+
+def recovery_main(self, scan_IN, rec_IN, mode):
+    missing_length = rec_IN.count('*')
+    key_length = len(rec_IN)
+    recoverytext = f'Looking for {missing_length} characters in {rec_IN}'
+    self.labelWIF1.config(text = recoverytext)
+    self.labelWIF1.update()
+    match scan_IN:
+        case 'WIF':
+            secret_type = 'WIF'
+            allowed_characters = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
+        case 'HEX':
+            secret_type = 'HEX'
+            allowed_characters = '0123456789abcdef'
+        case 'DEC':
+            secret_type = 'DEC'
+            allowed_characters = '0123456789'
+        case _:
+            # Unknown Length
+            secret_type = 'unhandled'
+            allowed_characters = string.ascii_uppercase + string.ascii_lowercase + string.digits
+
+    missing_letters_master_list = trotter.Amalgams(missing_length, allowed_characters)
+    try:
+        self.labelWIF2.config(text = missing_letters_master_list)
+        self.labelWIF2.update()
+        max_loop_length = len(missing_letters_master_list)
+    except OverflowError:
+        max_loop_length = sys.maxsize
+        if mode == 'sequential':
+            print(f"Warning: Some letters will not be processed in sequential mode because "
+                  f"the possible space is too large. Try random mode.")
+    remaining = max_loop_length
+    for i in range(max_loop_length):
+        if mode == 'sequential':
+            potential_key = complete_key(rec_IN, missing_letters_master_list[i])
+        elif mode == 'random':
+            potential_key = complete_key(rec_IN, missing_letters_master_list.random())
+        dec = btc_address_from_private_key(potential_key, secret_type=secret_type)
+        uaddr = ice.privatekey_to_address(0, False, dec)
+        caddr = ice.privatekey_to_address(0, True, dec)
+        self.labelWIF3.config(text = potential_key)
+        self.labelWIF3.update()
+        remaining -= 1
+        self.labelWIF4.config(text = remaining)
+        self.labelWIF4.update()
+        if caddr in bloom_filterbtc:
+            wintext = f"\n key: {potential_key} address: {caddr}"
+            f=open('found.txt','a')
+            f.write(wintext)
+            self.found+=1
+            self.foundbtc_recovery.config(text = f'{self.found}')
+            self.WINTEXT = wintext
+            self.popwinner()
+        if uaddr in bloom_filterbtc:
+            wintext = f"\n key: {potential_key} address: {uaddr}"
+            f=open('found.txt','a')
+            self.found+=1
+            self.foundbtc_recovery.config(text = f'{self.found}')
+            self.WINTEXT = wintext
+            self.popwinner()
