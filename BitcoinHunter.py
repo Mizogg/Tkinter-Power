@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 07.12.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 08.12.2022 https://t.me/CryptoCrackersUK
 from tkinter import * 
 from tkinter import ttk
 import tkinter.messagebox
@@ -9,15 +9,14 @@ from tkinter.ttk import *
 from signal import signal, SIGINT
 from datetime import datetime
 from time import strftime, sleep
-import mizlib as MIZ 
+import mizlib as MIZ
+import mizinfo as MIZINFO 
 import traceback 
 import threading
-import requests 
 import binascii
 import hashlib
 import logging
 import string
-import psutil
 import math
 import random
 import socket
@@ -25,6 +24,16 @@ import time
 import json
 import sys
 import os
+try:
+    import psutil
+    import requests 
+    
+except ImportError:
+    import subprocess
+    subprocess.check_call(["python", '-m', 'pip', 'install', 'psutil'])
+    subprocess.check_call(["python", '-m', 'pip', 'install', 'requests'])
+    import psutil
+    import requests     
 
 ########### Mining Program ########### (WORK IN PROGRESS) 
 sock = None
@@ -241,97 +250,6 @@ class NewSubscribeThread(ExitedThread) :
 def RandomInteger(minN, maxN):
     return random.randrange(minN, maxN)
 
-# ============================================================================= 
-information = ('''
-https://en.wikipedia.org/wiki/Bitcoin
-
-Bitcoin (Abbreviation: BTC; sign: ₿) is a decentralized digital currency that can be transferred 
-on the peer-to-peer bitcoin network.Bitcoin transactions are verified by network nodes through 
-cryptography and recorded in a public distributed ledger called a blockchain. 
-The cryptocurrency was invented in 2008 by an unknown person or group of people using the name Satoshi Nakamoto.
-
-The currency began use in 2009, when its implementation was released as open-source software.
-
-Bitcoin has been described as an economic bubble by at least eight Nobel Memorial Prize in Economic Sciences recipients.
-
-The word bitcoin was defined in a white paper published on 31 October 2008. 
-It is a compound of the words bit and coin. No uniform convention for bitcoin capitalization exists; 
-some sources use Bitcoin, capitalized, to refer to the technology and network and bitcoin, lowercase, 
-for the unit of account.[15] The Wall Street Journal, The Chronicle of Higher Education, 
-and the Oxford English Dictionary advocate the use of lowercase bitcoin in all cases.
-
-The legality of bitcoin varies by region. Nine countries have fully banned bitcoin use, 
-while a further fifteen have implicitly banned it. A few governments have used bitcoin in some capacity. 
-El Salvador has adopted Bitcoin as legal tender, although use by merchants remains low. 
-Ukraine has accepted cryptocurrency donations to fund the resistance to the 2022 Russian invasion. 
-Iran has used bitcoin to bypass sanctions.
-
-The unit of account of the bitcoin system is the bitcoin. Currency codes for representing bitcoin are BTC and XBT.
-Its Unicode character is ₿. One bitcoin is divisible to eight decimal places. 
-Units for smaller amounts of bitcoin are the millibitcoin (mBTC), equal to 1⁄1000 bitcoin, and the satoshi (sat), 
-which is the smallest possible division, and named in homage to bitcoin's creator, representing 1⁄100000000 (one hundred millionth) bitcoin.
- 100,000 satoshis are one mBTC.
-''')
-
-creditsinfo = ('''
-                Look for Bitcoin with tkinter and python in GUI.
-                        Made By Mizogg.co.uk
-                    Version = 1.13  (1810 Lines of code)
-        New Recovery Tools Added Hunt for WIF DEC HEX Missing characters.
-            
-                    Version = 1.12  (1727 Lines of code) 
-        Added Bitcoin Miner (TEST Work in Progress) Add you own wallet to miner Page.
-    Start the miner and hunt for Bitcoin. the Miner will run in the CMD window Behind
-            Fixed error in rotaion4 report to file
-            Fixed error with starting private key in Pages Sequential
-            
-                    Version = 1.11  (1450 Lines of code) 
-            Added Rotation4Bit @AlphaCentury, 28.04.22 
-     Script to print all rotations of a randomly generated string.(EDITED)
-        20 Ranges 64 private keys per range 4 addresses per key.
-                        
-                    Version = 1.10
-    Added Seach by Pages 128 Private keys per page 512 Addresses (Much Faster)
-               Memory leak Fixed on Brain, Mnemonic and 16x16
-                    Version = 1.9 (1087 Lines of code)
-                        NEW CALCULATOR  added 
-                    
-                    Version = 1.8 (1422 Lines of code) 
-                New features added to Brain Wallet Generator
-                    New features added to Bitcoin Generator
-
-                            Version = 1.7
-                New Conversion BITS to HEX DEC Binary
-                Plus and Minus Ranges in conversion
-                Updates to brain and Words auto start input
-            Input start and stop Decimal main Bitcoin Generator
-        1 Brain word from list TODO make stop function on 1 Brain
-
-                    Version = 1.6 (1654 Lines of code) 
-                    16x16Hunter speed improvements
-                Other Fixes and code reduced in size
-                    removed Puzzle Tab and block game
-                        
-                            Version = 1.5
-                        16x16Hunter added Offline
-
-                            Version = 1.4
-                            Pop Up boxes
-
-                            Version = 1.3
-                        Mnemonic added NEW Feature
-                    Added Random Button To Convertor Tab
-            Added Start and Stop to Brain Wallet also Added Input screen
-                        Puzzle page Updated
-
-                Version = 1.2 (3100 Lines of code) 
-                    Added Brain Online and Oflline
-                        Added Conversion Tools
-                        Added Atomic Wallet API
-                Big Thanks TO @Clintsoff and CryptoCrackers
-            More Information and help please check links in menu help !!!
-''')
-
 ########### Database Load and Files ###########
 mylist = []
  
@@ -397,7 +315,6 @@ class MainWindow():
         self.word_frame = Frame(self.my_notebook, width=880, height=700)
         self.mine_frame = Frame(self.my_notebook, width=880, height=700)
         self.about_frame = Frame(self.my_notebook, width=880, height=700)
-        self.credits_frame = Frame(self.my_notebook, width=880, height=700)
         self.windowcal = Frame(self.my_notebook, width=880, height=700)
         self.recovery_frame = Frame(self.my_notebook, width=880, height=700)
         self.main_frame.pack(fill="both", expand=1)
@@ -408,7 +325,6 @@ class MainWindow():
         self.word_frame.pack(fill="both", expand=1)
         self.mine_frame.pack(fill="both", expand=1)
         self.about_frame.pack(fill="both", expand=1)
-        self.credits_frame.pack(fill="both", expand=1)
         self.windowcal.pack(fill="both", expand=1)
         self.recovery_frame.pack(fill="both", expand=1)
         ########### TAB ORDER ###########
@@ -421,8 +337,7 @@ class MainWindow():
         self.my_notebook.add(self.brain_frame, text="Brain Hunting")
         self.my_notebook.add(self.word_frame, text="Mnemonic Hunting")
         self.my_notebook.add(self.mine_frame, text="BTC Mining")
-        self.my_notebook.add(self.about_frame, text="About Bitcoin")
-        self.my_notebook.add(self.credits_frame, text="Credits")
+        self.my_notebook.add(self.about_frame, text="About Bitcoinhunter")
         ########### Calulator Tab ###########
         self.text_valuecal = tkinter.StringVar()
         self.textoperator = tkinter.StringVar()
@@ -437,7 +352,7 @@ class MainWindow():
         self.cube = tkinter.Button(self.windowcal, text="X^3", width=4, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("Cube"), relief=RAISED, bd=3).place(x=367, y=310)
         self.equal = tkinter.Button(self.windowcal, text="=", width=11, font=("arial", 18, "bold"), fg="green",bg="#F0F0F0", activebackground="#F0F0F0",command=self.evaluation_opr, relief=RAISED, bd=3, ).place(x=690, y=130)
         self.braincal = tkinter.Button(self.windowcal, text="Sum to Brain Wallet", width=16, font=("arial", 12, "bold"), fg="green",bg="#F0F0F0", activebackground="#F0F0F0",command=self.Random_brain_cal, relief=RAISED, bd=3, ).place(x=690, y=195)
-        self.clear = tkinter.Button(self.windowcal, text="Information", width=11, font=("arial", 10, "bold"), activebackground="#F0F0F0",fg="purple",bg="#F0F0F0",command=self.informationcal, relief=RAISED, bd=3).place(x=720, y=90)
+        self.get_infoCAL = tkinter.Button(self.windowcal, text="Information/Help", width=16, font=("arial", 10, "bold"), activebackground="#F0F0F0",fg="red",bg="#F0F0F0",command=self.informationcal, relief=RAISED, bd=3).place(x=710, y=535)
         self.sqrt = tkinter.Button(self.windowcal, text="Square root", width=11, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("Square root"), relief=RAISED, bd=3).place(x=432, y=260)
         self.cubert = tkinter.Button(self.windowcal, text="Cube root", width=11, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("Cube root"), relief=RAISED, bd=3).place(x=432, y=310)
         self.log2 = tkinter.Button(self.windowcal, text="log2", width=8, font=("arial", 15, "bold"), fg="purple",bg="#F0F0F0", activebackground="#F0F0F0",command=lambda : self.opr("log2"), relief=RAISED, bd=3).place(x=580, y=260)
@@ -537,13 +452,7 @@ class MainWindow():
         self.about1.pack(fill='both', expand='yes')
         self.editArea = tkst.ScrolledText(master = self.about1, wrap = tkinter.WORD, width  = 40, height = 16,font=("Arial",12))
         self.editArea.pack(padx=10, pady=90, fill=tkinter.BOTH, expand=True)
-        self.editArea.insert(tkinter.INSERT, information)
-        ########### credits_frame ###########
-        self.credits1 = tkinter.Frame(master = self.credits_frame, bg = '#F0F0F0')
-        self.credits1.pack(fill='both', expand='yes')
-        self.editArea = tkst.ScrolledText(master = self.credits1, wrap = tkinter.WORD, width  = 40, height = 16,font=("Arial",12))
-        self.editArea.pack(padx=10, pady=90, fill=tkinter.BOTH, expand=True)
-        self.editArea.insert(tkinter.INSERT, creditsinfo)
+        self.editArea.insert(tkinter.INSERT, MIZINFO.information)
         ########### brain_frame ###########
         self.totalbw = tkinter.Label(self.brain_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple").place(x=690,y=70)
         self.foundbw = tkinter.Label(self.brain_frame, bg="#F0F0F0",font=("Arial",23),text="0")
@@ -578,10 +487,11 @@ class MainWindow():
         self.my_button = tkinter.Button(self.brain_frame, text= "1 Word List (Off-Line) ",font=("Arial",10),bg="#ee6b6e", command= self.Random_brain_offline1).place(x=200,y=200)
         self.my_button = tkinter.Button(self.brain_frame, text= "Brain Words (Off-Line) ",font=("Arial",10),bg="#A3E4A7", command= self.Random_brain_offline).place(x=350,y=200)
         self.my_button = tkinter.Button(self.brain_frame, text= "Brain String (Off-Line) ",font=("Arial",10),bg="#F3E4C8", command= self.Random_brain_offline2).place(x=510,y=200)
+        self.get_infoBRAIN = tkinter.Button(self.brain_frame, text="Information/Help", width=16, font=("arial", 10, "bold"), activebackground="#F0F0F0",fg="red",bg="#F0F0F0",command=self.informationBRAIN, relief=RAISED, bd=3).place(x=710, y=535)
         ########### bitcoin_frame ###########
         self.bwg = tkinter.Label(self.bitcoin_frame, text="Bitcoin Wallet Generator ",font=("Arial",20),bg="#F0F0F0",fg="Black").place(x=180,y=100)
         self.bfr = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",12),text="")
-        self.bfr.place(x=20,y=280)
+        self.bfr.place(x=20,y=300)
         self.labelstart = tkinter.Label(self.bitcoin_frame, text="Start \nDec ", font=("Arial",13)).place(x=5,y=140)
         self._txt_inputstart = tkinter.Entry(self.bitcoin_frame, width=50, font=("Consolas", 16))
         self._txt_inputstart.insert(0, '1')
@@ -597,14 +507,18 @@ class MainWindow():
         self._txt_inputmag.insert(0, '1')
         self._txt_inputmag.place(x=710,y=225)
         self._txt_inputmag.focus()
-        self.r1 = tkinter.Button(self.bitcoin_frame, text=" Generate Random  ",font=("Arial",13),bg="#A3E4D7",command=self.Random_Bruteforce_Speed).place(x=60,y=220)
-        self.s1 = tkinter.Button(self.bitcoin_frame, text=" Sequential Start-Stop",font=("Arial",13),bg="#B3B4D7",command=self.Sequential_Bruteforce_speed).place(x=240,y=220)
-        self.sb1 = tkinter.Button(self.bitcoin_frame, text=" Backward Stop-Start ",font=("Arial",13),bg="#C3C4D7",command=self.Sequential_Bruteforce_speed_back).place(x=430,y=220)
+        self.r1 = tkinter.Button(self.bitcoin_frame, text=" Off-Line Random ",font=("Arial",13),bg="#A3E4D7",command=self.Random_Bruteforce_Speed).place(x=15,y=220)
+        self.bal1 = tkinter.Button(self.bitcoin_frame, text=" On-line Random  ",font=("Arial",13),bg="#A3E4D7",command=self.Random_Bruteforce_Speed_online).place(x=15,y=260)
+        self.s1 = tkinter.Button(self.bitcoin_frame, text=" Off-Line Sequential Start-Stop",font=("Arial",13),bg="#B3B4D7",command=self.Sequential_Bruteforce_speed).place(x=170,y=220)
+        self.bals1 = tkinter.Button(self.bitcoin_frame, text=" On-Line Sequential Start-Stop",font=("Arial",13),bg="#B3B4D7",command=self.Sequential_Bruteforce_speed_online).place(x=170,y=260)
+        self.sb1 = tkinter.Button(self.bitcoin_frame, text=" Off-Line Backward Stop-Start ",font=("Arial",13),bg="#C3C4D7",command=self.Sequential_Bruteforce_speed_back).place(x=415,y=220)
+        self.balsb1 = tkinter.Button(self.bitcoin_frame, text=" On-Line Backward Stop-Start ",font=("Arial",13),bg="#C3C4D7",command=self.Sequential_Bruteforce_speed_back_online).place(x=415,y=260)
         self.start= tkinter.Button(self.bitcoin_frame, text= "Start",font=("Arial",13),bg="#F0F0F0", command= self.start, fg='green').place(x=700,y=180)
         self.stop= tkinter.Button(self.bitcoin_frame, text= "Stop",font=("Arial",13),bg="#F0F0F0", command= self.stop, fg='red').place(x=760,y=180)
         self.totalbtc = tkinter.Label(self.bitcoin_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple").place(x=690,y=70)
         self.foundbtc = tkinter.Label(self.bitcoin_frame, bg="#F0F0F0",font=("Arial",23),text="0")
         self.foundbtc.place(x=750,y=120)
+        self.get_infoMAIN = tkinter.Button(self.bitcoin_frame, text="Information/Help", width=16, font=("arial", 10, "bold"), activebackground="#F0F0F0",fg="red",bg="#F0F0F0",command=self.informationMAIN, relief=RAISED, bd=3).place(x=710, y=535)
         ########### page_frame ###########
         self.bwgpage = tkinter.Label(self.page_frame, text="Bitcoin Wallet Generator Based on Keys.lol 128 Private Keys per page",font=("Arial",17),bg="#F0F0F0",fg="Black").place(x=20,y=100)
         self.page_brute = tkinter.Label(self.page_frame, bg="#F0F0F0",font=("Arial",12),text="")
@@ -632,6 +546,7 @@ class MainWindow():
         self.totalbtc_page = tkinter.Label(self.page_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple").place(x=690,y=70)
         self.foundbtc_page = tkinter.Label(self.page_frame, bg="#F0F0F0",font=("Arial",23),text="0")
         self.foundbtc_page.place(x=750,y=120)
+        self.get_infoPAGE = tkinter.Button(self.page_frame, text="Information/Help", width=16, font=("arial", 10, "bold"), activebackground="#F0F0F0",fg="red",bg="#F0F0F0",command=self.informationPAGE, relief=RAISED, bd=3).place(x=710, y=535)
         ########### word_frame ###########
         self.totalw = tkinter.Label(self.word_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple").place(x=690,y=70)
         self.foundword = tkinter.Label(self.word_frame, bg="#F0F0F0",font=("Arial",23),text="0")
@@ -670,6 +585,7 @@ class MainWindow():
         self.my_buttonword = tkinter.Button(self.word_frame, text= "18 Words ",font=("Arial",10),bg="#F3E4A8", command= self.Random_word_offline6).place(x=450,y=220)
         self.my_buttonword = tkinter.Button(self.word_frame, text= "21 Words ",font=("Arial",10),bg="#F3E4B8", command= self.Random_word_offline7).place(x=527,y=220)
         self.my_buttonword = tkinter.Button(self.word_frame, text= "24 Words ",font=("Arial",10),bg="#F3E4C8", command= self.Random_word_offline8).place(x=603,y=220)
+        self.get_infoWORD = tkinter.Button(self.word_frame, text="Information/Help", width=16, font=("arial", 10, "bold"), activebackground="#F0F0F0",fg="red",bg="#F0F0F0",command=self.informationWORD, relief=RAISED, bd=3).place(x=710, y=535)
         ########### hex_frame ###########
         self.hext = tkinter.Label(self.hex_frame, text="Rotation4 Bitcoin 20 Scans 64 private keys per scan 6800 Addresses  ",font=("Arial",14),bg="#F0F0F0",fg="Black").place(x=30,y=95)
         self.hexl1 = tkinter.Label(self.hex_frame, text="Private Keys 1 - 10  ",font=("Arial",14),bg="#F0F0F0",fg="purple").place(x=150,y=350)
@@ -867,6 +783,7 @@ class MainWindow():
         self.totalbtc_rot = tkinter.Label(self.hex_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple").place(x=690,y=70)
         self.foundbtc_rot = tkinter.Label(self.hex_frame, bg="#F0F0F0",font=("Arial",23),text="0")
         self.foundbtc_rot.place(x=750,y=120)
+        self.get_infoROT = tkinter.Button(self.hex_frame, text="Information/Help", width=16, font=("arial", 10, "bold"), activebackground="#F0F0F0",fg="red",bg="#F0F0F0",command=self.informationROT, relief=RAISED, bd=3).place(x=710, y=535)
         ########### mining_frame ###########
         self.mine_title = tkinter.Label(self.mine_frame, text="Bitcoin Solo Mining ",font=("Arial",20),bg="#F0F0F0",fg="Black").place(x=180,y=100)
         self.labeladd_mine = tkinter.Label(self.mine_frame, text="Insert Your Address bitcoin Address  ", font=("Arial",15),fg="red").place(x=220,y=140)
@@ -885,6 +802,7 @@ class MainWindow():
         self.totalbtc_mine = tkinter.Label(self.mine_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple").place(x=690,y=70)
         self.foundbtc_mine = tkinter.Label(self.mine_frame, bg="#F0F0F0",font=("Arial",23),text="0")
         self.foundbtc_mine.place(x=750,y=120)
+        self.get_infoMINE = tkinter.Button(self.mine_frame, text="Information/Help", width=16, font=("arial", 10, "bold"), activebackground="#F0F0F0",fg="red",bg="#F0F0F0",command=self.informationMINE, relief=RAISED, bd=3).place(x=710, y=535)
         ########### recovery_frame ###########
         self.recovery_title = tkinter.Label(self.recovery_frame, text=" WIF HEX DEC Recovery Tools ",font=("Arial",20),bg="#F0F0F0",fg="Black").place(x=200,y=80)
         self.labeladd_WIF = tkinter.Label(self.recovery_frame, text="WIF HERE (WIF Recovery Tool ****  MAX 10 MISSING  ****)  ", font=("Arial",14),fg="#FF6700").place(x=90,y=130)
@@ -913,19 +831,21 @@ class MainWindow():
         self.labelWIF2.place(x=20,y=420)
         self.labelWIF3 = tkinter.Label(self.recovery_frame, bg="#F0F0F0",font=("Arial",16),text="",fg="red")
         self.labelWIF3.place(x=20,y=450)
-        self.labelREC = tkinter.Label(self.recovery_frame, text="Remaining  ", font=("Arial",18),fg="purple").place(x=260,y=500)
+        self.labelREC = tkinter.Label(self.recovery_frame, text="Remaining ", font=("Arial",18),fg="purple").place(x=260,y=500)
         self.labelWIF4 = tkinter.Label(self.recovery_frame, bg="#F0F0F0",font=("Arial",18),text="",fg="red")
         self.labelWIF4.place(x=400,y=500)
-        self.sqWIF= tkinter.Button(self.recovery_frame, text= "WIF SEQ",font=("Arial",12),bg="#F3F4F8", command= self.start_recovery_wif_S, fg='black').place(x=680,y=165)
-        self.sqHEX= tkinter.Button(self.recovery_frame, text= "HEX SEQ",font=("Arial",12),bg="#F3F4F8", command= self.start_recovery_HEX_S, fg='black').place(x=680,y=230)
-        self.sqDEC= tkinter.Button(self.recovery_frame, text= "DEC SEQ",font=("Arial",12),bg="#F3F4F8", command= self.start_recovery_DEC_S, fg='black').place(x=680,y=300)
-        self.ranWIF= tkinter.Button(self.recovery_frame, text= "WIF Random",font=("Arial",12),bg="#F3E4C8", command= self.start_recovery_wif_R, fg='black').place(x=770,y=165)
-        self.ranHEX= tkinter.Button(self.recovery_frame, text= "HEX Random",font=("Arial",12),bg="#F3E4C8", command= self.start_recovery_HEX_R, fg='black').place(x=770,y=230)
-        self.ranDEC= tkinter.Button(self.recovery_frame, text= "DEC Random",font=("Arial",12),bg="#F3E4C8", command= self.start_recovery_DEC_R, fg='black').place(x=770,y=300)
+        self.sqWIF= tkinter.Button(self.recovery_frame, text= "WIF SEQ",font=("Arial",12),bg="#F3F4F8", command= self.start_recovery_wif_S, fg='black').place(x=677,y=165)
+        self.sqHEX= tkinter.Button(self.recovery_frame, text= "HEX SEQ",font=("Arial",12),bg="#F3F4F8", command= self.start_recovery_HEX_S, fg='black').place(x=677,y=230)
+        self.sqDEC= tkinter.Button(self.recovery_frame, text= "DEC SEQ",font=("Arial",12),bg="#F3F4F8", command= self.start_recovery_DEC_S, fg='black').place(x=677,y=300)
+        self.ranWIF= tkinter.Button(self.recovery_frame, text= "WIF Random",font=("Arial",12),bg="#F3E4C8", command= self.start_recovery_wif_R, fg='black').place(x=767,y=165)
+        self.ranHEX= tkinter.Button(self.recovery_frame, text= "HEX Random",font=("Arial",12),bg="#F3E4C8", command= self.start_recovery_HEX_R, fg='black').place(x=767,y=230)
+        self.ranDEC= tkinter.Button(self.recovery_frame, text= "DEC Random",font=("Arial",12),bg="#F3E4C8", command= self.start_recovery_DEC_R, fg='black').place(x=767,y=300)
         #self.startWORD= tkinter.Button(self.recovery_frame, text= "DEC",font=("Arial",13),bg="#F0F0F0", command= self.start_recovery_WORD, fg='black').place(x=700,y=360)
         self.totalbtc_recovery = tkinter.Label(self.recovery_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple").place(x=690,y=70)
         self.foundbtc_recovery = tkinter.Label(self.recovery_frame, bg="#F0F0F0",font=("Arial",23),text="0")
         self.foundbtc_recovery.place(x=750,y=120)
+        self.get_infoREC = tkinter.Button(self.recovery_frame, text="Information/Help", width=16, font=("arial", 10, "bold"), activebackground="#F0F0F0",fg="red",bg="#F0F0F0",command=self.informationREC, relief=RAISED, bd=3).place(x=710, y=535)
+
     ########### Recovery Tools  ###########
     def start_recovery_wif_S(self):
         scan_IN = 'WIF'
@@ -1002,23 +922,107 @@ class MainWindow():
         self.widget['text'] = "© MIZOGG 2018 - 2022"
         self.widget['image'] = self.widget.miz_image_png
         self.widget.place(x=150,y=300)
-        infocal = '''
- 1.Write number and select operator at first, then click on equal(=) sign.
- 
- 2.For single digit operation(e.g. rad,exponent,Reciprocal(1/x),
- square,cube,square root,cube root,log,factorial(n!),exponent etc.)
- 
- only write number input in the 'Number1' but not write
- input in 'Number2' .After that select favourable operator and go.
- 
- 3.For single no. operation,if there is present two no. in 'Number1'
- and 'Number2', only input number in 'Number1' will taken.
- 
- Covert Sum to brain wallet !!! Good Luck
- '''
-        tkinter.Label(self.windowcal_informationcal,fg="black",font=("arial",11,"bold","italic"),text=infocal, bg="#F0F0F0").place(x=5,y=15)
+        tkinter.Label(self.windowcal_informationcal,fg="black",font=("arial",11,"bold","italic"),text=MIZINFO.infocal, bg="#F0F0F0").place(x=5,y=15)
         self.windowcal_informationcal.mainloop()
+    
+    def informationROT(self):
+        self.window_informationROT = Toplevel()
+        self.window_informationROT.title("Information")
+        self.window_informationROT.geometry("600x440")
+        #self.window_informationROT.iconbitmap('images/miz.ico')
+        self.window_informationROT.config(bg="#F0F0F0")
+        self.widget = tkinter.Label(self.window_informationROT, compound='top')
+        self.widget.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
+        self.widget['text'] = "© MIZOGG 2018 - 2022"
+        self.widget['image'] = self.widget.miz_image_png
+        self.widget.place(x=150,y=300)
+        tkinter.Label(self.window_informationROT,fg="black",font=("arial",11,"bold","italic"),text=MIZINFO.infoROT, bg="#F0F0F0").place(x=5,y=15)
+        self.window_informationROT.mainloop()
 
+    def informationREC(self):
+        self.window_informationREC = Toplevel()
+        self.window_informationREC.title("Information")
+        self.window_informationREC.geometry("540x440")
+        #self.window_informationREC.iconbitmap('images/miz.ico')
+        self.window_informationREC.config(bg="#F0F0F0")
+        self.widget = tkinter.Label(self.window_informationREC, compound='top')
+        self.widget.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
+        self.widget['text'] = "© MIZOGG 2018 - 2022"
+        self.widget['image'] = self.widget.miz_image_png
+        self.widget.place(x=150,y=300)
+        tkinter.Label(self.window_informationREC,fg="black",font=("arial",11,"bold","italic"),text=MIZINFO.infoREC, bg="#F0F0F0").place(x=5,y=15)
+        self.window_informationREC.mainloop()
+        
+    def informationMAIN(self):
+        self.window_informationMAIN = Toplevel()
+        self.window_informationMAIN.title("Information")
+        self.window_informationMAIN.geometry("540x440")
+        #self.window_informationMAIN.iconbitmap('images/miz.ico')
+        self.window_informationMAIN.config(bg="#F0F0F0")
+        self.widget = tkinter.Label(self.window_informationMAIN, compound='top')
+        self.widget.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
+        self.widget['text'] = "© MIZOGG 2018 - 2022"
+        self.widget['image'] = self.widget.miz_image_png
+        self.widget.place(x=150,y=300)
+        tkinter.Label(self.window_informationMAIN,fg="black",font=("arial",11,"bold","italic"),text=MIZINFO.infoMAIN, bg="#F0F0F0").place(x=5,y=15)
+        self.window_informationMAIN.mainloop()
+        
+    def informationPAGE(self):
+        self.window_informationPAGE = Toplevel()
+        self.window_informationPAGE.title("Information")
+        self.window_informationPAGE.geometry("720x540")
+        #self.window_informationPAGE.iconbitmap('images/miz.ico')
+        self.window_informationPAGE.config(bg="#F0F0F0")
+        self.widget = tkinter.Label(self.window_informationPAGE, compound='top')
+        self.widget.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
+        self.widget['text'] = "© MIZOGG 2018 - 2022"
+        self.widget['image'] = self.widget.miz_image_png
+        self.widget.place(x=170,y=430)
+        tkinter.Label(self.window_informationPAGE,fg="black",font=("arial",11,"bold","italic"),text=MIZINFO.infoPAGE, bg="#F0F0F0").place(x=5,y=15)
+        self.window_informationPAGE.mainloop()
+    
+    def informationBRAIN(self):
+        self.window_informationBRAIN = Toplevel()
+        self.window_informationBRAIN.title("Information")
+        self.window_informationBRAIN.geometry("800x440")
+        #self.window_informationBRAIN.iconbitmap('images/miz.ico')
+        self.window_informationBRAIN.config(bg="#F0F0F0")
+        self.widget = tkinter.Label(self.window_informationBRAIN, compound='top')
+        self.widget.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
+        self.widget['text'] = "© MIZOGG 2018 - 2022"
+        self.widget['image'] = self.widget.miz_image_png
+        self.widget.place(x=270,y=300)
+        tkinter.Label(self.window_informationBRAIN,fg="black",font=("arial",11,"bold","italic"),text=MIZINFO.infoBRAIN, bg="#F0F0F0").place(x=5,y=15)
+        self.window_informationBRAIN.mainloop()
+        
+    def informationWORD(self):
+        self.window_informationWORD = Toplevel()
+        self.window_informationWORD.title("Information")
+        self.window_informationWORD.geometry("620x440")
+        #self.window_informationWORD.iconbitmap('images/miz.ico')
+        self.window_informationWORD.config(bg="#F0F0F0")
+        self.widget = tkinter.Label(self.window_informationWORD, compound='top')
+        self.widget.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
+        self.widget['text'] = "© MIZOGG 2018 - 2022"
+        self.widget['image'] = self.widget.miz_image_png
+        self.widget.place(x=230,y=300)
+        tkinter.Label(self.window_informationWORD,fg="black",font=("arial",11,"bold","italic"),text=MIZINFO.infoWORD, bg="#F0F0F0").place(x=5,y=15)
+        self.window_informationWORD.mainloop()
+        
+    def informationMINE(self):
+        self.window_informationMINE = Toplevel()
+        self.window_informationMINE.title("Information")
+        self.window_informationMINE.geometry("780x540")
+        #self.window_informationMINE.iconbitmap('images/miz.ico')
+        self.window_informationMINE.config(bg="#F0F0F0")
+        self.widget = tkinter.Label(self.window_informationMINE, compound='top')
+        self.widget.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
+        self.widget['text'] = "© MIZOGG 2018 - 2022"
+        self.widget['image'] = self.widget.miz_image_png
+        self.widget.place(x=290,y=440)
+        tkinter.Label(self.window_informationMINE,fg="black",font=("arial",11,"bold","italic"),text=MIZINFO.infoMINE, bg="#F0F0F0").place(x=5,y=15)
+        self.window_informationMINE.mainloop()
+        
     def opr(self,work):
         self.work = work
         self.textoperator.set(self.work)
@@ -1319,6 +1323,47 @@ class MainWindow():
             else:
                 self.brute_results(dec)
                 stopdec = int(stopdec) - int(mag)
+    
+    def brute_results_online(self, dec):
+        global total, totaladd
+        scantext = MIZ.super_bal(self, dec)
+        self.bfr.config(text = scantext)
+        self.bfr.update()
+        total+=1
+        totaladd+=1
+        self.totalC.config(text = f'{total}')
+        self.totalA.config(text = f'{totaladd}')
+        
+    def Random_Bruteforce_Speed_online(self):
+        startdec = self._txt_inputstart.get().strip().replace(" ", "")
+        stopdec = self._txt_inputstop.get().strip().replace(" ", "")
+        while self.run:
+            dec =int(RandomInteger(int(startdec), int(stopdec)))
+            self.brute_results_online(dec)
+
+    def Sequential_Bruteforce_speed_online(self):
+        startdec = self._txt_inputstart.get().strip().replace(" ", "")
+        stopdec = self._txt_inputstop.get().strip().replace(" ", "")
+        mag = self._txt_inputmag.get().strip().replace(" ", "")
+        while self.run:
+            dec = int(startdec)
+            if dec == int(stopdec):
+                self.stop()
+            else:
+                self.brute_results_online(dec)
+                startdec = int(startdec) + int(mag)
+    
+    def Sequential_Bruteforce_speed_back_online(self):
+        startdec = self._txt_inputstart.get().strip().replace(" ", "")
+        stopdec = self._txt_inputstop.get().strip().replace(" ", "")
+        mag = self._txt_inputmag.get().strip().replace(" ", "")
+        while self.run:
+            dec = int(stopdec)
+            if dec == int(startdec):
+                self.stop()
+            else:
+                self.brute_results_online(dec)
+                stopdec = int(stopdec) - int(mag)
 
     ###########  Rotation 4 Program Main ###########
     def rotation_results(self, dec, dec0, dec1, dec2, dec3, dec4, dec5, dec6, dec7, dec8, dec9, dec10, dec11, dec12, dec13, dec14, dec15, dec16, dec17, dec18):
@@ -1394,7 +1439,6 @@ class MainWindow():
             dec17 =int(RandomInteger(2**(int(startbit17)), 2**(int(stopbit17))))
             dec18 =int(RandomInteger(2**(int(startbit18)), 2**(int(stopbit18))))
             self.rotation_results(dec, dec0, dec1, dec2, dec3, dec4, dec5, dec6, dec7, dec8, dec9, dec10, dec11, dec12, dec13, dec14, dec15, dec16, dec17, dec18)
-            
     ###########  Brain Program Main ###########
     def brain_results_online(self, passphrase):
         global total, totaladd
