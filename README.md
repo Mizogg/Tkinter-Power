@@ -121,6 +121,65 @@ python BitcoinHunter.py
 
 # If you Like Give me a Star ⭐⭐⭐⭐
 
+```
+                Look for Bitcoin with tkinter and python in GUI.
+                        Made By Mizogg.co.uk
+                    Version = 1.13  (1810 Lines of code)
+        New Recovery Tools Added Hunt for WIF DEC HEX Missing characters.
+            
+                    Version = 1.12  (1727 Lines of code) 
+        Added Bitcoin Miner (TEST Work in Progress) Add you own wallet to miner Page.
+    Start the miner and hunt for Bitcoin. the Miner will run in the CMD window Behind
+            Fixed error in rotaion4 report to file
+            Fixed error with starting private key in Pages Sequential
+            
+                    Version = 1.11  (1450 Lines of code) 
+            Added Rotation4Bit @AlphaCentury, 28.04.22 
+     Script to print all rotations of a randomly generated string.(EDITED)
+        20 Ranges 64 private keys per range 4 addresses per key.
+                        
+                    Version = 1.10
+    Added Seach by Pages 128 Private keys per page 512 Addresses (Much Faster)
+               Memory leak Fixed on Brain, Mnemonic and 16x16
+                    Version = 1.9 (1087 Lines of code)
+                        NEW CALCULATOR  added 
+                    
+                    Version = 1.8 (1422 Lines of code) 
+                New features added to Brain Wallet Generator
+                    New features added to Bitcoin Generator
+
+                            Version = 1.7
+                New Conversion BITS to HEX DEC Binary
+                Plus and Minus Ranges in conversion
+                Updates to brain and Words auto start input
+            Input start and stop Decimal main Bitcoin Generator
+        1 Brain word from list TODO make stop function on 1 Brain
+
+                    Version = 1.6 (1654 Lines of code) 
+                    16x16Hunter speed improvements
+                Other Fixes and code reduced in size
+                    removed Puzzle Tab and block game
+                        
+                            Version = 1.5
+                        16x16Hunter added Offline
+
+                            Version = 1.4
+                            Pop Up boxes
+
+                            Version = 1.3
+                        Mnemonic added NEW Feature
+                    Added Random Button To Convertor Tab
+            Added Start and Stop to Brain Wallet also Added Input screen
+                        Puzzle page Updated
+
+                Version = 1.2 (3100 Lines of code) 
+                    Added Brain Online and Oflline
+                        Added Conversion Tools
+                        Added Atomic Wallet API
+                Big Thanks TO @Clintsoff and CryptoCrackers
+            More Information and help please check links in menu help !!!
+```
+
 ## More Information please join me on Telegram https://t.me/CryptoCrackersUK
 
 ## Good Luck and Happy hunting 
