@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 07.12.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 08.12.2022 https://t.me/CryptoCrackersUK
 import hmac, struct, codecs, sys, os, binascii, hashlib
 import webbrowser
 import random
@@ -11,17 +11,17 @@ import tkinter.scrolledtext as tkst
 from tkinter.ttk import *
 import secp256k1 as ice
 import string
-import re, trotter
+import re
 try:
     import base58
     import ecdsa
     from bloomfilter import BloomFilter, ScalableBloomFilter, SizeGrowthRate
-    from lxml import html
     import requests
     import bit
     from bit import Key
     from bit.format import bytes_to_wif
     import numpy as np
+    import trotter
 
 except ImportError:
     import subprocess
@@ -29,19 +29,19 @@ except ImportError:
     subprocess.check_call(["python", '-m', 'pip', 'install', 'ecdsa'])
     subprocess.check_call(["python", '-m', 'pip', 'install', 'simplebloomfilter'])
     subprocess.check_call(["python", '-m', 'pip', 'install', 'bitarray==1.9.2'])
-    subprocess.check_call(["python", '-m', 'pip', 'install', 'lxml'])
     subprocess.check_call(["python", '-m', 'pip', 'install', 'requests'])
     subprocess.check_call(["python", '-m', 'pip', 'install', 'bit'])
     subprocess.check_call(["python", '-m', 'pip', 'install', 'numpy'])
+    subprocess.check_call(["python", '-m', 'pip', 'install', 'trotter'])
     import base58
     import ecdsa
     from bloomfilter import BloomFilter, ScalableBloomFilter, SizeGrowthRate
-    from lxml import html
     import requests
     import bit
     from bit import Key
     from bit.format import bytes_to_wif
     import numpy as np
+    import trotter
 
 fShutdown = False
 listfThreadRunning = [False] * 2
@@ -93,31 +93,35 @@ def price():
     return data
 # Balance Checking 
 def get_balance(caddr):
-    urlblock = "https://bitcoin.atomicwallet.io/address/" + caddr
-    respone_block = requests.get(urlblock)
-    byte_string = respone_block.content
-    source_code = html.fromstring(byte_string)
+    response = requests.get("https://blockstream.info/api/address/" + str(caddr))
+    balance = float(response.json()['chain_stats']['funded_txo_sum'])
+    totalSent = float(response.json()['chain_stats']['spent_txo_sum'])
+    txs = response.json()['chain_stats']['funded_txo_count']
+    source_code = f'TotalReceived = [{balance}] : TotalSent =  [{totalSent}] : Transactions = [{txs}]'
     return source_code
     
 def get_balance1(uaddr):
-    urlblock = "https://bitcoin.atomicwallet.io/address/" + uaddr
-    respone_block = requests.get(urlblock)
-    byte_string = respone_block.content
-    source_code1 = html.fromstring(byte_string)
+    response = requests.get("https://blockstream.info/api/address/" + str(uaddr))
+    balance = float(response.json()['chain_stats']['funded_txo_sum'])
+    totalSent = float(response.json()['chain_stats']['spent_txo_sum'])
+    txs = response.json()['chain_stats']['funded_txo_count']
+    source_code1 = f'TotalReceived = [{balance}] : TotalSent =  [{totalSent}] : Transactions = [{txs}]'
     return source_code1
 
 def get_balance2(p2sh):
-    urlblock = "https://bitcoin.atomicwallet.io/address/" + p2sh
-    respone_block = requests.get(urlblock)
-    byte_string = respone_block.content
-    source_code2 = html.fromstring(byte_string)
+    response = requests.get("https://blockstream.info/api/address/" + str(p2sh))
+    balance = float(response.json()['chain_stats']['funded_txo_sum'])
+    totalSent = float(response.json()['chain_stats']['spent_txo_sum'])
+    txs = response.json()['chain_stats']['funded_txo_count']
+    source_code2 = f'TotalReceived = [{balance}] : TotalSent =  [{totalSent}] : Transactions = [{txs}]'
     return source_code2
 
 def get_balance3(bech32):
-    urlblock = "https://bitcoin.atomicwallet.io/address/" + bech32
-    respone_block = requests.get(urlblock)
-    byte_string = respone_block.content
-    source_code3 = html.fromstring(byte_string)
+    response = requests.get("https://blockstream.info/api/address/" + str(bech32))
+    balance = float(response.json()['chain_stats']['funded_txo_sum'])
+    totalSent = float(response.json()['chain_stats']['spent_txo_sum'])
+    txs = response.json()['chain_stats']['funded_txo_count']
+    source_code3 = f'TotalReceived = [{balance}] : TotalSent =  [{totalSent}] : Transactions = [{txs}]'
     return source_code3
 # FOR Conversion TAB 
 def bin2dec(value):
@@ -166,21 +170,9 @@ def hex2bit(value):
 
 def addr2int(value):
     source_code = get_balance(value)
-    received_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
-    receivedid = source_code.xpath(received_id)
-    totalReceived = str(receivedid[0].text_content())
-    sent_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[2]/td[2]'
-    sentid = source_code.xpath(sent_id)
-    totalSent = str(sentid[0].text_content())
-    balance_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[3]/td[2]'
-    balanceid = source_code.xpath(balance_id)
-    balance = str(balanceid[0].text_content())
-    txs_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
-    txsid = source_code.xpath(txs_id)
-    txs = str(txsid[0].text_content())
     dataadd= (f'''==================================================================================
 Bitcoin Address : {value} : 
-:Balance: [{balance}] :Total Received: [{totalReceived}] :TotalSent: [{totalSent}] :Transactions: [{txs}]
+{source_code}
 ==================================================================================
 ''')
     return dataadd
@@ -193,62 +185,18 @@ def int2addr(value):
     p2sh = ice.privatekey_to_address(1, True, dec) #p2sh
     bech32 = ice.privatekey_to_address(2, True, dec)  #bech32
     source_code = get_balance(caddr)
-    received_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
-    receivedid = source_code.xpath(received_id)
-    totalReceived = str(receivedid[0].text_content())
-    sent_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[2]/td[2]'
-    sentid = source_code.xpath(sent_id)
-    totalSent = str(sentid[0].text_content())
-    balance_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[3]/td[2]'
-    balanceid = source_code.xpath(balance_id)
-    balance = str(balanceid[0].text_content())
-    txs_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
-    txsid = source_code.xpath(txs_id)
-    txs = str(txsid[0].text_content())
     source_code1 = get_balance1(uaddr)
-    received_id1 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
-    receivedid1 = source_code1.xpath(received_id1)
-    totalReceived1 = str(receivedid1[0].text_content())
-    sent_id1 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[2]/td[2]'
-    sentid1 = source_code1.xpath(sent_id1)
-    totalSent1 = str(sentid1[0].text_content())
-    balance_id1 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[3]/td[2]'
-    balanceid1 = source_code1.xpath(balance_id1)
-    balance1 = str(balanceid1[0].text_content())
-    txs_id1 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
-    txsid1 = source_code1.xpath(txs_id1)
-    txs1 = str(txsid1[0].text_content())
     source_code2 = get_balance2(p2sh)
-    received_id2 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
-    receivedid2 = source_code2.xpath(received_id2)
-    totalReceived2 = str(receivedid2[0].text_content())
-    sent_id2 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[2]/td[2]'
-    sentid2 = source_code2.xpath(sent_id2)
-    totalSent2 = str(sentid2[0].text_content())
-    balance_id2 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[3]/td[2]'
-    balanceid2 = source_code2.xpath(balance_id2)
-    balance2 = str(balanceid2[0].text_content())
-    txs_id2 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
-    txsid2 = source_code2.xpath(txs_id2)
-    txs2 = str(txsid2[0].text_content())
     source_code3 = get_balance3(bech32)
-    received_id3 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
-    receivedid3 = source_code3.xpath(received_id3)
-    totalReceived3 = str(receivedid3[0].text_content())
-    sent_id3 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[2]/td[2]'
-    sentid3 = source_code3.xpath(sent_id3)
-    totalSent3 = str(sentid3[0].text_content())
-    balance_id3 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[3]/td[2]'
-    balanceid3 = source_code3.xpath(balance_id3)
-    balance3 = str(balanceid3[0].text_content())
-    txs_id3 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
-    txsid3 = source_code3.xpath(txs_id3)
-    txs3 = str(txsid3[0].text_content())
-    dataadd= (f'''====================================================:Balance:Received:Sent:TXS:
-Bitcoin Address : {caddr} : [{balance}] : [{totalReceived}] : [{totalSent}] : [{txs}]
-Bitcoin Address : {uaddr} : [{balance1}] : [{totalReceived1}] : [{totalSent1}] : [{txs1}]
-Bitcoin Address : {p2sh} : [{balance2}] : [{totalReceived2}] : [{totalSent2}] : [{txs2}]
-Bitcoin Address : {bech32} : [{balance3}] : [{totalReceived3}] : [{totalSent3}] : [{txs3}]
+    dataadd= (f'''==================================================================================
+Bitcoin Address : {caddr} : 
+{source_code}
+Bitcoin Address : {uaddr} : 
+{source_code1}
+Bitcoin Address : {p2sh} : 
+{source_code2}
+Bitcoin Address : {bech32} : 
+{source_code3}
 ==================================================================================
 ''')
     return dataadd
@@ -436,53 +384,32 @@ def rwonline(self, mnem):
     cpath = "m/44'/0'/0'/0/0"
     ppath = "m/49'/0'/0'/0/0"
     bpath = "m/84'/0'/0'/0/0"
-    source_code = get_balance(caddr)
-    received_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
-    receivedid = source_code.xpath(received_id)
-    totalReceived = str(receivedid[0].text_content())
-    sent_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[2]/td[2]'
-    sentid = source_code.xpath(sent_id)
-    totalSent = str(sentid[0].text_content())
-    balance_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[3]/td[2]'
-    balanceid = source_code.xpath(balance_id)
-    balance = str(balanceid[0].text_content())
-    txs_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
-    txsid = source_code.xpath(txs_id)
-    txs = str(txsid[0].text_content())
-    source_code2 = get_balance2(p2sh)
-    received_id2 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
-    receivedid2 = source_code2.xpath(received_id2)
-    totalReceived2 = str(receivedid2[0].text_content())
-    sent_id2 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[2]/td[2]'
-    sentid2 = source_code2.xpath(sent_id2)
-    totalSent2 = str(sentid2[0].text_content())
-    balance_id2 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[3]/td[2]'
-    balanceid2 = source_code2.xpath(balance_id2)
-    balance2 = str(balanceid2[0].text_content())
-    txs_id2 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
-    txsid2 = source_code2.xpath(txs_id2)
-    txs2 = str(txsid2[0].text_content())
-    source_code3 = get_balance3(bech32)
-    received_id3 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
-    receivedid3 = source_code3.xpath(received_id3)
-    totalReceived3 = str(receivedid3[0].text_content())
-    sent_id3 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[2]/td[2]'
-    sentid3 = source_code3.xpath(sent_id3)
-    totalSent3 = str(sentid3[0].text_content())
-    balance_id3 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[3]/td[2]'
-    balanceid3 = source_code3.xpath(balance_id3)
-    balance3 = str(balanceid3[0].text_content())
-    txs_id3 = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
-    txsid3 = source_code3.xpath(txs_id3)
-    txs3 = str(txsid3[0].text_content())
-    wordvartext = (f'''====================================================:Balance:Received:Sent:TXS:
-Bitcoin Address : {caddr} : [{balance}] : [{totalReceived}] : [{totalSent}] : [{txs}]
+    response = requests.get("https://blockstream.info/api/address/" + str(caddr))
+    balance = float(response.json()['chain_stats']['funded_txo_sum'])
+    totalSent = float(response.json()['chain_stats']['spent_txo_sum'])
+    txs = response.json()['chain_stats']['funded_txo_count']
+    
+    response2 = requests.get("https://blockstream.info/api/address/" + str(p2sh))
+    balance2 = float(response2.json()['chain_stats']['funded_txo_sum'])
+    totalSent2 = float(response2.json()['chain_stats']['spent_txo_sum'])
+    txs2 = response2.json()['chain_stats']['funded_txo_count']
+    
+    response3 = requests.get("https://blockstream.info/api/address/" + str(bech32))
+    balance3 = float(response3.json()['chain_stats']['funded_txo_sum'])
+    totalSent3 = float(response3.json()['chain_stats']['spent_txo_sum'])
+    txs3 = response3.json()['chain_stats']['funded_txo_count']
+
+    wordvartext = (f'''==================================================================================
+Bitcoin Address : {caddr} :
+TotalReceived = [{balance}] : TotalSent =  [{totalSent}] : Transactions = [{txs}]
 Hexadecimal Private Key : {HEX}
 
-Bitcoin Address : {p2sh} : [{balance2}] : [{totalReceived2}] : [{totalSent2}] : [{txs2}]
+Bitcoin Address : {p2sh} : 
+TotalReceived = [{balance2}] : TotalSent =  [{totalSent2}] : Transactions = [{txs2}]
 Hexadecimal Private Key : {HEX2}
 
-Bitcoin Address : {bech32} : [{balance3}] : [{totalReceived3}] : [{totalSent3}] : [{txs3}]
+Bitcoin Address : {bech32} :
+TotalReceived = [{balance3}] : TotalSent =  [{totalSent3}] : Transactions = [{txs3}]
 Hexadecimal Private Key : {HEX3}
 ==================================================================================
 ''')
@@ -708,26 +635,17 @@ def get_page(self, page):
 def rbonline(self, passphrase):
     wallet = BrainWallet()
     private_key, caddr = wallet.generate_address_from_passphrase(passphrase)
-    source_code = get_balance(caddr)
-    received_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[1]/td[2]'
-    receivedid = source_code.xpath(received_id)
-    totalReceived = str(receivedid[0].text_content())
-    sent_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[2]/td[2]'
-    sentid = source_code.xpath(sent_id)
-    totalSent = str(sentid[0].text_content())
-    balance_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[3]/td[2]'
-    balanceid = source_code.xpath(balance_id)
-    balance = str(balanceid[0].text_content())
-    txs_id = '/html/body/main/div/div[2]/div[1]/table/tbody/tr[4]/td[2]'
-    txsid = source_code.xpath(txs_id)
-    txs = str(txsid[0].text_content())
-    brainvartext = (f'\n Private Key In HEX : \n {private_key} \n Bitcoin Adress : {caddr} \n Balance  [{balance}] \n TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]')
+    response = requests.get("https://blockstream.info/api/address/" + str(caddr))
+    balance = float(response.json()['chain_stats']['funded_txo_sum'])
+    totalSent = float(response.json()['chain_stats']['spent_txo_sum'])
+    txs = response.json()['chain_stats']['funded_txo_count']
+    brainvartext = (f'\n Private Key In HEX : \n {private_key} \n Bitcoin Adress : {caddr} \n TotalReceived  [{balance}] TotalSent : [{totalSent}] Transactions : [{txs}]')
     if int(txs) > 0 :
         self.found+=1
         self.foundbw.config(text = f'{self.found}')
         with open("found.txt", "a") as f:
-            f.write(f'\n BrainWallet : {passphrase} \n Private Key In HEX : {private_key} \n Bitcoin Adress : {caddr} \n Balance  [{balance}] TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]')
-        self.WINTEXT = (f"BrainWallet : {passphrase}\n HEX Key: {private_key} \n BTC Address Compressed: {caddr}  \n \n Balance  [{balance}] \n TotalReceived : [{totalReceived}] TotalSent : [{totalSent}] Transactions : [{txs}]")
+            f.write(brainvartext)
+        self.WINTEXT = (brainvartext)
         self.popwinner()
     return brainvartext
     
@@ -1369,3 +1287,36 @@ def recovery_main(self, scan_IN, rec_IN, mode):
             self.foundbtc_recovery.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+
+#############################################################################################
+def super_bal(self, dec):
+    caddr = ice.privatekey_to_address(0, True, dec)
+    response = requests.get("https://blockstream.info/api/address/" + str(caddr))
+    balance = float(response.json()['chain_stats']['funded_txo_sum'])
+    totalSent = float(response.json()['chain_stats']['spent_txo_sum'])
+    txs = response.json()['chain_stats']['funded_txo_count']
+    #uaddr = ice.privatekey_to_address(0, False, dec)
+    HEX = "%064x" % dec
+    wifc = ice.btc_pvk_to_wif(HEX)
+    #wifu = ice.btc_pvk_to_wif(HEX, False)
+    #p2sh = ice.privatekey_to_address(1, True, dec)
+    #bech32 = ice.privatekey_to_address(2, True, dec)
+    length = len(bin(dec))
+    length -=2
+    baltext = f'''==================================================================================
+Bits: {length}
+Dec : {dec}
+Hex : {HEX}
+WIF : {wifc}
+Bitcoin Address : {caddr} :
+TotalReceived = [{balance}] : TotalSent =  [{totalSent}] : Transactions = [{txs}]
+==================================================================================
+'''
+    if int(txs) > 0:
+        self.found+=1
+        self.foundbtc.config(text = f'{self.found}')
+        self.WINTEXT = baltext
+        with open('found.txt', 'a', encoding='utf-8') as f:
+            f.write(f' \n {baltext}')
+        self.popwinner()
+    return baltext
