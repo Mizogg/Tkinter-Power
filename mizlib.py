@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 08.12.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 12.12.2022 https://t.me/CryptoCrackersUK
 import hmac, struct, codecs, sys, os, binascii, hashlib
 import webbrowser
 import random
@@ -229,21 +229,21 @@ class BrainWallet:
     @staticmethod
     def __public_to_address(public_key):
         public_key_bytes = codecs.decode(public_key, 'hex')
-        sha256_bpk = hashlib.sha256(public_key_bytes)
-        sha256_bpk_digest = sha256_bpk.digest()
-        ripemd160_bpk = hashlib.new('ripemd160')
-        ripemd160_bpk.update(sha256_bpk_digest)
-        ripemd160_bpk_digest = ripemd160_bpk.digest()
-        ripemd160_bpk_hex = codecs.encode(ripemd160_bpk_digest, 'hex')
+        sha256_bdec = hashlib.sha256(public_key_bytes)
+        sha256_bdec_digest = sha256_bdec.digest()
+        ripemd160_bdec = hashlib.new('ripemd160')
+        ripemd160_bdec.update(sha256_bdec_digest)
+        ripemd160_bdec_digest = ripemd160_bdec.digest()
+        ripemd160_bdec_hex = codecs.encode(ripemd160_bdec_digest, 'hex')
         network_byte = b'00'
-        network_bitcoin_public_key = network_byte + ripemd160_bpk_hex
+        network_bitcoin_public_key = network_byte + ripemd160_bdec_hex
         network_bitcoin_public_key_bytes = codecs.decode(
             network_bitcoin_public_key, 'hex')
-        sha256_nbpk = hashlib.sha256(network_bitcoin_public_key_bytes)
-        sha256_nbpk_digest = sha256_nbpk.digest()
-        sha256_2_nbpk = hashlib.sha256(sha256_nbpk_digest)
-        sha256_2_nbpk_digest = sha256_2_nbpk.digest()
-        sha256_2_hex = codecs.encode(sha256_2_nbpk_digest, 'hex')
+        sha256_nbdec = hashlib.sha256(network_bitcoin_public_key_bytes)
+        sha256_nbdec_digest = sha256_nbdec.digest()
+        sha256_2_nbdec = hashlib.sha256(sha256_nbdec_digest)
+        sha256_2_nbdec_digest = sha256_2_nbdec.digest()
+        sha256_2_hex = codecs.encode(sha256_2_nbdec_digest, 'hex')
         checksum = sha256_2_hex[:8]
         address_hex = (network_bitcoin_public_key + checksum).decode('utf-8')
         wallet = BrainWallet.base58(address_hex)
@@ -714,133 +714,124 @@ def btc_hunter(self):
         self.popwinner()
 
 def hexhunter(self, dec, dec0, dec1, dec2, dec3, dec4, dec5, dec6, dec7, dec8, dec9, dec10, dec11, dec12, dec13, dec14, dec15, dec16, dec17, dec18):
-    s = (hex(dec)[2:]).zfill(64)
-    s0 = (hex(dec0)[2:]).zfill(64)
-    s1 = (hex(dec1)[2:]).zfill(64)
-    s2 = (hex(dec2)[2:]).zfill(64)
-    s3 = (hex(dec3)[2:]).zfill(64)
-    s4 = (hex(dec4)[2:]).zfill(64)
-    s5 = (hex(dec5)[2:]).zfill(64)
-    s6 = (hex(dec6)[2:]).zfill(64)
-    s7 = (hex(dec7)[2:]).zfill(64)
-    s8 = (hex(dec8)[2:]).zfill(64)
-    s9 = (hex(dec9)[2:]).zfill(64)
-    s10 = (hex(dec10)[2:]).zfill(64)
-    s11 = (hex(dec11)[2:]).zfill(64)
-    s12 = (hex(dec12)[2:]).zfill(64)
-    s13 = (hex(dec13)[2:]).zfill(64)
-    s14 = (hex(dec14)[2:]).zfill(64)
-    s15 = (hex(dec15)[2:]).zfill(64)
-    s16 = (hex(dec16)[2:]).zfill(64)
-    s17 = (hex(dec17)[2:]).zfill(64)
-    s18 = (hex(dec18)[2:]).zfill(64)
-    for r in range(64):
-        pk= int((s[r:] + s[:r]),16)
-        pk0= int((s0[r:] + s0[:r]),16)
-        pk1= int((s1[r:] + s1[:r]),16)
-        pk2= int((s2[r:] + s2[:r]),16)
-        pk3= int((s0[r:] + s1[:r]),16)
-        pk4= int((s1[r:] + s0[:r]),16)
-        pk5= int((s3[r:] + s3[:r]),16)
-        pk6= int((s4[r:] + s4[:r]),16)
-        pk7= int((s5[r:] + s5[:r]),16)
-        pk8= int((s6[r:] + s6[:r]),16)
-        pk9= int((s7[r:] + s7[:r]),16)
-        pk10= int((s8[r:] + s8[:r]),16)
-        pk11= int((s9[r:] + s9[:r]),16)
-        pk12= int((s10[r:] + s10[:r]),16)
-        pk13= int((s11[r:] + s11[:r]),16)
-        pk14= int((s12[r:] + s12[:r]),16)
-        pk15= int((s13[r:] + s13[:r]),16)
-        pk14= int((s14[r:] + s14[:r]),16)
-        pk15= int((s15[r:] + s15[:r]),16)
-        pk16= int((s16[r:] + s16[:r]),16)
-        pk17= int((s17[r:] + s17[:r]),16)
-        pk18= int((s18[r:] + s17[:r]),16)
-        btcC = ice.privatekey_to_address(0, True, pk)
-        btcC0 = ice.privatekey_to_address(0, True, pk0)
-        btcC1 = ice.privatekey_to_address(0, True, pk1)
-        btcC2 = ice.privatekey_to_address(0, True, pk2)
-        btcC3 = ice.privatekey_to_address(0, True, pk3)
-        btcC4 = ice.privatekey_to_address(0, True, pk4)
-        btcC5 = ice.privatekey_to_address(0, True, pk5)
-        btcC6 = ice.privatekey_to_address(0, True, pk6)
-        btcC7 = ice.privatekey_to_address(0, True, pk7)
-        btcC8 = ice.privatekey_to_address(0, True, pk8)
-        btcC9 = ice.privatekey_to_address(0, True, pk9)
-        btcC10 = ice.privatekey_to_address(0, True, pk10)
-        btcC11 = ice.privatekey_to_address(0, True, pk11)
-        btcC12 = ice.privatekey_to_address(0, True, pk12)
-        btcC13 = ice.privatekey_to_address(0, True, pk13)
-        btcC14 = ice.privatekey_to_address(0, True, pk14)
-        btcC15 = ice.privatekey_to_address(0, True, pk15)
-        btcC16 = ice.privatekey_to_address(0, True, pk16)
-        btcC17 = ice.privatekey_to_address(0, True, pk17)
-        btcC18 = ice.privatekey_to_address(0, True, pk18)
-        btcU = ice.privatekey_to_address(0, False, pk)
-        btcU0 = ice.privatekey_to_address(0, False, pk0)
-        btcU1 = ice.privatekey_to_address(0, False, pk1)
-        btcU2 = ice.privatekey_to_address(0, False, pk2)
-        btcU3 = ice.privatekey_to_address(0, False, pk3)
-        btcU4 = ice.privatekey_to_address(0, False, pk4)
-        btcU5 = ice.privatekey_to_address(0, False, pk5)
-        btcU6 = ice.privatekey_to_address(0, False, pk6)
-        btcU7 = ice.privatekey_to_address(0, False, pk7)
-        btcU8 = ice.privatekey_to_address(0, False, pk8)
-        btcU9 = ice.privatekey_to_address(0, False, pk9)
-        btcU10 = ice.privatekey_to_address(0, False, pk10)
-        btcU11 = ice.privatekey_to_address(0, False, pk11)
-        btcU12 = ice.privatekey_to_address(0, False, pk12)
-        btcU13 = ice.privatekey_to_address(0, False, pk13)
-        btcU14 = ice.privatekey_to_address(0, False, pk14)
-        btcU15 = ice.privatekey_to_address(0, False, pk15)
-        btcU16 = ice.privatekey_to_address(0, False, pk16)
-        btcU17 = ice.privatekey_to_address(0, False, pk17)
-        btcU18 = ice.privatekey_to_address(0, False, pk18)
-        btcP = ice.privatekey_to_address(1, True, pk)
-        btcP0 = ice.privatekey_to_address(1, True, pk0)
-        btcP1 = ice.privatekey_to_address(1, True, pk1)
-        btcP2 = ice.privatekey_to_address(1, True, pk2)
-        btcP3 = ice.privatekey_to_address(1, True, pk3)
-        btcP4 = ice.privatekey_to_address(1, True, pk4)
-        btcP5 = ice.privatekey_to_address(1, True, pk5)
-        btcP6 = ice.privatekey_to_address(1, True, pk6)
-        btcP7 = ice.privatekey_to_address(1, True, pk7)
-        btcP8 = ice.privatekey_to_address(1, True, pk8)
-        btcP9 = ice.privatekey_to_address(1, True, pk9)
-        btcP10 = ice.privatekey_to_address(1, True, pk10)
-        btcP11 = ice.privatekey_to_address(1, True, pk11)
-        btcP12 = ice.privatekey_to_address(1, True, pk12)
-        btcP13 = ice.privatekey_to_address(1, True, pk13)
-        btcP14 = ice.privatekey_to_address(1, True, pk14)
-        btcP15 = ice.privatekey_to_address(1, True, pk15)
-        btcP16 = ice.privatekey_to_address(1, True, pk16)
-        btcP17 = ice.privatekey_to_address(1, True, pk17)
-        btcP18 = ice.privatekey_to_address(1, True, pk18)
-        btcB = ice.privatekey_to_address(2, True, pk)
-        btcB0 = ice.privatekey_to_address(2, True, pk0)
-        btcB1 = ice.privatekey_to_address(2, True, pk1)
-        btcB2 = ice.privatekey_to_address(2, True, pk2)
-        btcB3 = ice.privatekey_to_address(2, True, pk3)
-        btcB4 = ice.privatekey_to_address(2, True, pk4)
-        btcB5 = ice.privatekey_to_address(2, True, pk5)
-        btcB6 = ice.privatekey_to_address(2, True, pk6)
-        btcB7 = ice.privatekey_to_address(2, True, pk7)
-        btcB8 = ice.privatekey_to_address(2, True, pk8)
-        btcB9 = ice.privatekey_to_address(2, True, pk9)
-        btcB10 = ice.privatekey_to_address(2, True, pk10)
-        btcB11 = ice.privatekey_to_address(2, True, pk11)
-        btcB12 = ice.privatekey_to_address(2, True, pk12)
-        btcB13 = ice.privatekey_to_address(2, True, pk13)
-        btcB14 = ice.privatekey_to_address(2, True, pk14)
-        btcB15 = ice.privatekey_to_address(2, True, pk15)
-        btcB16 = ice.privatekey_to_address(2, True, pk16)
-        btcB17 = ice.privatekey_to_address(2, True, pk17)
-        btcB18 = ice.privatekey_to_address(2, True, pk18)
+    dec= int(dec)
+    dec0= int(dec0)
+    dec1= int(dec1)
+    dec2= int(dec2)
+    dec3= int(dec3)
+    dec4= int(dec4)
+    dec5= int(dec5)
+    dec6= int(dec6)
+    dec7= int(dec7)
+    dec8= int(dec8)
+    dec9= int(dec9)
+    dec10= int(dec10)
+    dec11= int(dec11)
+    dec12= int(dec12)
+    dec13= int(dec13)
+    dec14= int(dec14)
+    dec15= int(dec15)
+    dec16= int(dec16)
+    dec17= int(dec17)
+    dec18= int(dec18)
+    for r in range(0, 128):
+        btcC = ice.privatekey_to_address(0, True, dec)
+        btcC0 = ice.privatekey_to_address(0, True, dec0)
+        btcC1 = ice.privatekey_to_address(0, True, dec1)
+        btcC2 = ice.privatekey_to_address(0, True, dec2)
+        btcC3 = ice.privatekey_to_address(0, True, dec3)
+        btcC4 = ice.privatekey_to_address(0, True, dec4)
+        btcC5 = ice.privatekey_to_address(0, True, dec5)
+        btcC6 = ice.privatekey_to_address(0, True, dec6)
+        btcC7 = ice.privatekey_to_address(0, True, dec7)
+        btcC8 = ice.privatekey_to_address(0, True, dec8)
+        btcC9 = ice.privatekey_to_address(0, True, dec9)
+        btcC10 = ice.privatekey_to_address(0, True, dec10)
+        btcC11 = ice.privatekey_to_address(0, True, dec11)
+        btcC12 = ice.privatekey_to_address(0, True, dec12)
+        btcC13 = ice.privatekey_to_address(0, True, dec13)
+        btcC14 = ice.privatekey_to_address(0, True, dec14)
+        btcC15 = ice.privatekey_to_address(0, True, dec15)
+        btcC16 = ice.privatekey_to_address(0, True, dec16)
+        btcC17 = ice.privatekey_to_address(0, True, dec17)
+        btcC18 = ice.privatekey_to_address(0, True, dec18)
+        btcU = ice.privatekey_to_address(0, False, dec)
+        btcU0 = ice.privatekey_to_address(0, False, dec0)
+        btcU1 = ice.privatekey_to_address(0, False, dec1)
+        btcU2 = ice.privatekey_to_address(0, False, dec2)
+        btcU3 = ice.privatekey_to_address(0, False, dec3)
+        btcU4 = ice.privatekey_to_address(0, False, dec4)
+        btcU5 = ice.privatekey_to_address(0, False, dec5)
+        btcU6 = ice.privatekey_to_address(0, False, dec6)
+        btcU7 = ice.privatekey_to_address(0, False, dec7)
+        btcU8 = ice.privatekey_to_address(0, False, dec8)
+        btcU9 = ice.privatekey_to_address(0, False, dec9)
+        btcU10 = ice.privatekey_to_address(0, False, dec10)
+        btcU11 = ice.privatekey_to_address(0, False, dec11)
+        btcU12 = ice.privatekey_to_address(0, False, dec12)
+        btcU13 = ice.privatekey_to_address(0, False, dec13)
+        btcU14 = ice.privatekey_to_address(0, False, dec14)
+        btcU15 = ice.privatekey_to_address(0, False, dec15)
+        btcU16 = ice.privatekey_to_address(0, False, dec16)
+        btcU17 = ice.privatekey_to_address(0, False, dec17)
+        btcU18 = ice.privatekey_to_address(0, False, dec18)
+        btcP = ice.privatekey_to_address(1, True, dec)
+        btcP0 = ice.privatekey_to_address(1, True, dec0)
+        btcP1 = ice.privatekey_to_address(1, True, dec1)
+        btcP2 = ice.privatekey_to_address(1, True, dec2)
+        btcP3 = ice.privatekey_to_address(1, True, dec3)
+        btcP4 = ice.privatekey_to_address(1, True, dec4)
+        btcP5 = ice.privatekey_to_address(1, True, dec5)
+        btcP6 = ice.privatekey_to_address(1, True, dec6)
+        btcP7 = ice.privatekey_to_address(1, True, dec7)
+        btcP8 = ice.privatekey_to_address(1, True, dec8)
+        btcP9 = ice.privatekey_to_address(1, True, dec9)
+        btcP10 = ice.privatekey_to_address(1, True, dec10)
+        btcP11 = ice.privatekey_to_address(1, True, dec11)
+        btcP12 = ice.privatekey_to_address(1, True, dec12)
+        btcP13 = ice.privatekey_to_address(1, True, dec13)
+        btcP14 = ice.privatekey_to_address(1, True, dec14)
+        btcP15 = ice.privatekey_to_address(1, True, dec15)
+        btcP16 = ice.privatekey_to_address(1, True, dec16)
+        btcP17 = ice.privatekey_to_address(1, True, dec17)
+        btcP18 = ice.privatekey_to_address(1, True, dec18)
+        btcB = ice.privatekey_to_address(2, True, dec)
+        btcB0 = ice.privatekey_to_address(2, True, dec0)
+        btcB1 = ice.privatekey_to_address(2, True, dec1)
+        btcB2 = ice.privatekey_to_address(2, True, dec2)
+        btcB3 = ice.privatekey_to_address(2, True, dec3)
+        btcB4 = ice.privatekey_to_address(2, True, dec4)
+        btcB5 = ice.privatekey_to_address(2, True, dec5)
+        btcB6 = ice.privatekey_to_address(2, True, dec6)
+        btcB7 = ice.privatekey_to_address(2, True, dec7)
+        btcB8 = ice.privatekey_to_address(2, True, dec8)
+        btcB9 = ice.privatekey_to_address(2, True, dec9)
+        btcB10 = ice.privatekey_to_address(2, True, dec10)
+        btcB11 = ice.privatekey_to_address(2, True, dec11)
+        btcB12 = ice.privatekey_to_address(2, True, dec12)
+        btcB13 = ice.privatekey_to_address(2, True, dec13)
+        btcB14 = ice.privatekey_to_address(2, True, dec14)
+        btcB15 = ice.privatekey_to_address(2, True, dec15)
+        btcB16 = ice.privatekey_to_address(2, True, dec16)
+        btcB17 = ice.privatekey_to_address(2, True, dec17)
+        btcB18 = ice.privatekey_to_address(2, True, dec18)
+        scantext =f'''
+        
+{hex(dec)[2:].zfill(64)}    |   {hex(dec9)[2:].zfill(64)}
+{hex(dec0)[2:].zfill(64)}    |   {hex(dec10)[2:].zfill(64)}
+{hex(dec1)[2:].zfill(64)}    |   {hex(dec11)[2:].zfill(64)}
+{hex(dec2)[2:].zfill(64)}    |   {hex(dec12)[2:].zfill(64)}
+{hex(dec3)[2:].zfill(64)}    |   {hex(dec13)[2:].zfill(64)}
+{hex(dec4)[2:].zfill(64)}    |   {hex(dec14)[2:].zfill(64)}
+{hex(dec5)[2:].zfill(64)}    |   {hex(dec15)[2:].zfill(64)}
+{hex(dec6)[2:].zfill(64)}    |   {hex(dec16)[2:].zfill(64)}
+{hex(dec7)[2:].zfill(64)}    |   {hex(dec17)[2:].zfill(64)}
+{hex(dec8)[2:].zfill(64)}    |   {hex(dec18)[2:].zfill(64)}
+'''
         if  btcC in bloom_filterbtc or btcU in bloom_filterbtc or btcP in bloom_filterbtc or btcB in bloom_filterbtc:
             wintext = f'''
-PrivateKey  (hex):  {s}
-Decimal     (dec): {str(pk)}
+PrivateKey  (hex):  {hex(dec)[2:].zfill(64)}
+Decimal     (dec): {dec}
 BTCc        : {btcC}
 BTCu        : {btcU}
 BTC p2sh    : {btcP}
@@ -856,8 +847,8 @@ BTC BC1     : {btcB}
             self.popwinner()
         if btcC0 in bloom_filterbtc or btcU0 in bloom_filterbtc or btcP0 in bloom_filterbtc or btcB0 in bloom_filterbtc:
             wintext = f'''
-PrivateKey  (hex): {s0}
-Decimal     (dec): {str(pk0)}
+PrivateKey  (hex): {hex(dec0)[2:].zfill(64)}
+Decimal     (dec): {dec0}
 BTCc        : {btcC0}
 BTCu        : {btcU0}
 BTC p2sh    : {btcP0}
@@ -873,8 +864,8 @@ BTC BC1     : {btcB0}
             self.popwinner()
         if btcC1 in bloom_filterbtc or btcU1 in bloom_filterbtc or btcP1 in bloom_filterbtc or btcB1 in bloom_filterbtc:
             wintext = f'''
-PrivateKey  (hex): {s1}
-Decimal     (dec): {str(pk1)}
+PrivateKey  (hex): {hex(dec1)[2:].zfill(64)}
+Decimal     (dec): {dec1}
 BTCc        : {btcC1}
 BTCu        : {btcU1}
 BTC p2sh    : {btcP1}
@@ -890,8 +881,8 @@ BTC BC1     : {btcB1}
             self.popwinner()
         if btcC2 in bloom_filterbtc or btcU2 in bloom_filterbtc or btcP2 in bloom_filterbtc or btcB2 in bloom_filterbtc:
             wintext = f'''
-PrivateKey  (hex): {s2}
-Decimal     (dec): {str(pk2)}
+PrivateKey  (hex): {hex(dec2)[2:].zfill(64)}
+Decimal     (dec): {dec2}
 BTCc        : {btcC2}
 BTCu        : {btcU2}
 BTC p2sh    : {btcP2}
@@ -907,8 +898,8 @@ BTC BC1     : {btcB2}
             self.popwinner()
         if btcC3 in bloom_filterbtc or btcU3 in bloom_filterbtc or btcP3 in bloom_filterbtc or btcB3 in bloom_filterbtc:
             wintext = f'''
-PrivateKey  (hex): {s3}
-Decimal     (dec): {str(pk3)}
+PrivateKey  (hex): {hex(dec3)[2:].zfill(64)}
+Decimal     (dec): {dec3}
 BTCc        : {btcC3}
 BTCu        : {btcU3}
 BTC p2sh    : {btcP3}
@@ -924,8 +915,8 @@ BTC BC1     : {btcB3}
             self.popwinner()
         if btcC4 in bloom_filterbtc or btcU4 in bloom_filterbtc or btcP4 in bloom_filterbtc or btcB4 in bloom_filterbtc:
             wintext = f'''
-PrivateKey  (hex): {s4}
-Decimal     (dec): {str(pk4)}
+PrivateKey  (hex): {hex(dec4)[2:].zfill(64)}
+Decimal     (dec): {dec4}
 BTCc        : {btcC4}
 BTCu        : {btcU4}
 BTC p2sh    : {btcP4}
@@ -941,8 +932,8 @@ BTC BC1     : {btcB4}
             self.popwinner()
         if btcC5 in bloom_filterbtc or btcU5 in bloom_filterbtc or btcP5 in bloom_filterbtc or btcB5 in bloom_filterbtc:
             wintext = f'''
-PrivateKey  (hex): {s5}
-Decimal     (dec): {str(pk5)}
+PrivateKey  (hex): {hex(dec5)[2:].zfill(64)}
+Decimal     (dec): {dec5}
 BTCc        : {btcC5}
 BTCu        : {btcU5}
 BTC p2sh    : {btcP5}
@@ -958,8 +949,8 @@ BTC BC1     : {btcB5}
             self.popwinner()
         if btcC6 in bloom_filterbtc or btcU6 in bloom_filterbtc or btcP6 in bloom_filterbtc or btcB6 in bloom_filterbtc:
             wintext = f'''
-PrivateKey  (hex): {s6}
-Decimal     (dec): {str(pk6)}
+PrivateKey  (hex): {hex(dec6)[2:].zfill(64)}
+Decimal     (dec): {dec6}
 BTCc        : {btcC6}
 BTCu        : {btcU6}
 BTC p2sh    : {btcP6}
@@ -975,8 +966,8 @@ BTC BC1     : {btcB6}
             self.popwinner()
         if btcC7 in bloom_filterbtc or btcU7 in bloom_filterbtc or btcP7 in bloom_filterbtc or btcB7 in bloom_filterbtc:
             wintext = f'''
-PrivateKey  (hex): {s7}
-Decimal     (dec): {str(pk7)}
+PrivateKey  (hex): {hex(dec7)[2:].zfill(64)}
+Decimal     (dec): {dec7}
 BTCc        : {btcC7}
 BTCu        : {btcU7}
 BTC p2sh    : {btcP7}
@@ -992,8 +983,8 @@ BTC BC1     : {btcB7}
             self.popwinner()
         if btcC8 in bloom_filterbtc or btcU8 in bloom_filterbtc or btcP8 in bloom_filterbtc or btcB8 in bloom_filterbtc:
             wintext = f'''
-PrivateKey  (hex): {s8}
-Decimal     (dec): {str(pk8)}
+PrivateKey  (hex): {hex(dec8)[2:].zfill(64)}
+Decimal     (dec): {dec8}
 BTCc        : {btcC8}
 BTCu        : {btcU8}
 BTC p2sh    : {btcP8}
@@ -1009,8 +1000,8 @@ BTC BC1     : {btcB8}
             self.popwinner()
         if btcC9 in bloom_filterbtc or btcU9 in bloom_filterbtc or btcP9 in bloom_filterbtc or btcB9 in bloom_filterbtc:
             wintext = f'''
-PrivateKey  (hex): {s9}
-Decimal     (dec): {str(pk9)}
+PrivateKey  (hex): {hex(dec9)[2:].zfill(64)}
+Decimal     (dec): {dec9}
 BTCc        : {btcC9}
 BTCu        : {btcU9}
 BTC p2sh    : {btcP9}
@@ -1026,8 +1017,8 @@ BTC BC1     : {btcB9}
             self.popwinner()
         if btcC10 in bloom_filterbtc or btcU10 in bloom_filterbtc or btcP10 in bloom_filterbtc or btcB10 in bloom_filterbtc:
             wintext = f'''
-PrivateKey  (hex): {s10}
-Decimal     (dec): {str(pk10)}
+PrivateKey  (hex): {hex(dec10)[2:].zfill(64)}
+Decimal     (dec): {dec10}
 BTCc        : {btcC10}
 BTCu        : {btcU10}
 BTC p2sh    : {btcP10}
@@ -1043,8 +1034,8 @@ BTC BC1     : {btcB10}
             self.popwinner()
         if btcC11 in bloom_filterbtc or btcU11 in bloom_filterbtc or btcP11 in bloom_filterbtc or btcB11 in bloom_filterbtc:
             wintext = f'''
-PrivateKey  (hex): {s11}
-Decimal     (dec): {str(pk11)}
+PrivateKey  (hex): {hex(dec11)[2:].zfill(64)}
+Decimal     (dec): {dec11}
 BTCc        : {btcC11}
 BTCu        : {btcU11}
 BTC p2sh    : {btcP11}
@@ -1060,8 +1051,8 @@ BTC BC1     : {btcB11}
             self.popwinner()
         if btcC12 in bloom_filterbtc or btcU12 in bloom_filterbtc or btcP12 in bloom_filterbtc or btcB12 in bloom_filterbtc:
             wintext = f'''
-PrivateKey  (hex): {s12}
-Decimal     (dec): {str(pk12)}
+PrivateKey  (hex): {hex(dec12)[2:].zfill(64)}
+Decimal     (dec): {dec12}
 BTCc        : {btcC12}
 BTCu        : {btcU12}
 BTC p2sh    : {btcP12}
@@ -1077,8 +1068,8 @@ BTC BC1     : {btcB12}
             self.popwinner()
         if btcC13 in bloom_filterbtc or btcU13 in bloom_filterbtc or btcP13 in bloom_filterbtc or btcB13 in bloom_filterbtc:
             wintext = f'''
-PrivateKey  (hex): {s13}
-Decimal     (dec): {str(pk13)}
+PrivateKey  (hex): {hex(dec13)[2:].zfill(64)}
+Decimal     (dec): {dec13}
 BTCc        : {btcC13}
 BTCu        : {btcU13}
 BTC p2sh    : {btcP13}
@@ -1094,8 +1085,8 @@ BTC BC1     : {btcB13}
             self.popwinner()
         if btcC14 in bloom_filterbtc or btcU14 in bloom_filterbtc or btcP14 in bloom_filterbtc or btcB14 in bloom_filterbtc:
             wintext = f'''
-PrivateKey  (hex): {s14}
-Decimal     (dec): {str(pk14)}
+PrivateKey  (hex): {hex(dec14)[2:].zfill(64)}
+Decimal     (dec): {dec14}
 BTCc        : {btcC14}
 BTCu        : {btcU14}
 BTC p2sh    : {btcP14}
@@ -1111,8 +1102,8 @@ BTC BC1     : {btcB14}
             self.popwinner()
         if btcC15 in bloom_filterbtc or btcU15 in bloom_filterbtc or btcP15 in bloom_filterbtc or btcB15 in bloom_filterbtc:
             wintext = f'''
-PrivateKey  (hex): {s15}
-Decimal     (dec): {str(pk15)}
+PrivateKey  (hex): {hex(dec15)[2:].zfill(64)}
+Decimal     (dec): {dec15}
 BTCc        : {btcC15}
 BTCu        : {btcU15}
 BTC p2sh    : {btcP15}
@@ -1128,8 +1119,8 @@ BTC BC1     : {btcB15}
             self.popwinner()
         if btcC16 in bloom_filterbtc or btcU16 in bloom_filterbtc or btcP16 in bloom_filterbtc or btcB16 in bloom_filterbtc:
             wintext = f'''
-PrivateKey  (hex): {s16}
-Decimal     (dec): {str(pk16)}
+PrivateKey  (hex): {hex(dec16)[2:].zfill(64)}
+Decimal     (dec): {dec16}
 BTCc        : {btcC16}
 BTCu        : {btcU16}
 BTC p2sh    : {btcP16}
@@ -1145,8 +1136,8 @@ BTC BC1     : {btcB16}
             self.popwinner()
         if btcC17 in bloom_filterbtc or btcU17 in bloom_filterbtc or btcP17 in bloom_filterbtc or btcB17 in bloom_filterbtc:
             wintext = f'''
-PrivateKey  (hex): {s17}
-Decimal     (dec): {str(pk17)}
+PrivateKey  (hex): {hex(dec17)[2:].zfill(64)}
+Decimal     (dec): {dec17}
 BTCc        : {btcC17}
 BTCu        : {btcU17}
 BTC p2sh    : {btcP17}
@@ -1162,8 +1153,8 @@ BTC BC1     : {btcB17}
             self.popwinner()
         if btcC18 in bloom_filterbtc or btcU18 in bloom_filterbtc or btcP18 in bloom_filterbtc or btcB18 in bloom_filterbtc:
             wintext = f'''
-PrivateKey  (hex): {s18}
-Decimal     (dec): {str(pk18)}
+PrivateKey  (hex): {hex(dec18)[2:].zfill(64)}
+Decimal     (dec): {dec18}
 BTCc        : {btcC18}
 BTCu        : {btcU18}
 BTC p2sh    : {btcP18}
@@ -1177,20 +1168,26 @@ BTC BC1     : {btcB18}
             self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
-        scantext =f'''
-        
-{hex(pk)[2:].zfill(64)}    |   {hex(pk9)[2:].zfill(64)}
-{hex(pk0)[2:].zfill(64)}    |   {hex(pk10)[2:].zfill(64)}
-{hex(pk1)[2:].zfill(64)}    |   {hex(pk11)[2:].zfill(64)}
-{hex(pk2)[2:].zfill(64)}    |   {hex(pk12)[2:].zfill(64)}
-{hex(pk3)[2:].zfill(64)}    |   {hex(pk13)[2:].zfill(64)}
-{hex(pk4)[2:].zfill(64)}    |   {hex(pk14)[2:].zfill(64)}
-{hex(pk5)[2:].zfill(64)}    |   {hex(pk15)[2:].zfill(64)}
-{hex(pk6)[2:].zfill(64)}    |   {hex(pk16)[2:].zfill(64)}
-{hex(pk7)[2:].zfill(64)}    |   {hex(pk17)[2:].zfill(64)}
-{hex(pk8)[2:].zfill(64)}    |   {hex(pk18)[2:].zfill(64)}
-'''
-        #print(hex(pk0)[2:].zfill(64)) # //remove scan #text return
+        dec+=r 
+        dec0+=r
+        dec1+=r
+        dec2+=r
+        dec3+=r
+        dec4+=r
+        dec5+=r
+        dec6+=r
+        dec7+=r
+        dec8+=r
+        dec9+=r
+        dec10+=r
+        dec11+=r
+        dec12+=r
+        dec13+=r
+        dec14+=r
+        dec15+=r
+        dec16+=r
+        dec17+=r
+        dec18+=r
         return scantext
 
 # Recovery Program
