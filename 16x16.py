@@ -60,6 +60,8 @@ class App:
         self.on_cells = 0
         self.tick_delay = 0 #in ms
         self.seed_ratio = 33
+        self.jump_forward_timer = None
+        self.jump_backward_timer = None
 
     def cpu_met(self):
         self.cpu_use = psutil.cpu_percent()
@@ -87,6 +89,9 @@ class App:
         self.BH16x16.helpmenu.add_command(label="About Bit16x16", command=self.startpop)
         self.BH16x16.menubar.add_cascade(label="Help", menu=self.BH16x16.helpmenu)
         self.BH16x16.config(menu=self.BH16x16.menubar)
+        self.jump_increments = [1, 100, 1000, 10000, 100000, 1000000, 10000000]
+        self.jump_increment_var = StringVar(self.BH16x16)
+        self.jump_increment_var.set(self.jump_increments[0])
         self.my_notebook = ttk.Notebook(self.BH16x16)
         self.my_notebook.pack(pady=5)
         self.main_frame = Frame(self.my_notebook, width=1140, height=760)
@@ -165,11 +170,6 @@ class App:
         self.ram_label.place(x=740,y=720)
         self.ram_free_label = tkinter.Label(self.BH16x16,font = ('calibri', 14, 'bold'), bg= '#F0F0F0', fg= 'red')
         self.ram_free_label.place(x=900,y=720)
-        self.widget16x16 = tkinter.Label(self.BH16x16, compound='top')
-        self.widget16x16.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
-        self.widget16x16['text'] = "© MIZOGG 2018 - 2022"
-        self.widget16x16['image'] = self.widget16x16.miz_image_png
-        self.widget16x16.place(x=5,y=690)
         input_win = tkinter.Frame(self.hunter_win, bg = '#A1A1A1')
         input_win.pack(fill='both', expand='yes')
         self._txt_inputhex = tkinter.Entry(input_win, width=56, font=("Arial",10))
@@ -187,6 +187,81 @@ class App:
         self.editArea16 = tkst.ScrolledText(master = self.about16, wrap = tkinter.WORD, width  = 40, height = 16,font=("Arial",12))
         self.editArea16.pack(padx=10, pady=90, fill=tkinter.BOTH, expand=True)
         self.editArea16.insert(tkinter.INSERT, information16x16)
+        
+        self.jump_increment_combobox = Combobox(self.main_frame, textvariable=self.jump_increment_var, values=self.jump_increments)
+        self.jump_increment_combobox.grid(row=2, column=0, sticky=E)
+        self.jump_forward_active = False
+        self.btn_start_jump_forward = tkinter.Button(self.main_frame, text='Start Jump Forward', command=self.start_jump_forward, fg='purple')
+        self.btn_start_jump_forward.grid(row=3, column=1)
+        self.btn_stop_jump_forward = tkinter.Button(self.main_frame, text='Stop Jump Forward', command=self.stop_jump_forward, fg='red')
+        self.btn_stop_jump_forward.grid(row=3, column=2)
+
+        self.jump_backward_active = False
+        self.btn_start_jump_backward = tkinter.Button(self.main_frame, text='Start Jump Backward', command=self.start_jump_backward, fg='purple')
+        self.btn_start_jump_backward.grid(row=4, column=1)
+        self.btn_stop_jump_backward = tkinter.Button(self.main_frame, text='Stop Jump Backward', command=self.stop_jump_backward, fg='red')
+        self.btn_stop_jump_backward.grid(row=4, column=2)
+
+    def start_jump_forward(self):
+        self.jump_forward_active = True
+        self.jump_forward()
+
+    def stop_jump_forward(self):
+        self.jump_forward_active = False
+
+    def start_jump_backward(self):
+        self.jump_backward_active = True
+        self.jump_backward()
+
+    def stop_jump_backward(self):
+        self.jump_backward_active = False
+
+    
+    #######    
+    def jump_forward(self):
+        selected_increment = int(self.jump_increment_var.get())
+        hex_value = self._txt_inputhex.get()
+        int_value = int(hex_value, 16)
+        while self.jump_forward_active:
+            int_value += selected_increment
+            self.seed_inc(int_value)
+            
+    def jump_backward(self):
+        selected_increment = int(self.jump_increment_var.get())
+        hex_value = self._txt_inputhex.get()
+        int_value = int(hex_value, 16)
+        while self.jump_backward_active:
+            int_value -= selected_increment
+            self.seed_inc(int_value)
+        
+    def seed_inc(self, int_value):
+        if self.in_tick:
+            return
+        self.in_tick = True
+        self.on_cells = 0
+        self.off_cells = 0
+        self.canvas.delete('all')
+        binstring = "{0:b}".format(int_value)
+        binstring = binstring.rjust(self.rows * self.cols, "0")
+        for i in range(self.rows):
+            self.grid[i] = [int(binstring[j]) for j in range(i * self.cols, (i + 1) * self.cols)]
+            for rw in range(self.rows):
+                for cl in range(self.cols):
+                    if self.grid[rw][cl]:
+                        color = self.on_cell_color
+                        self.on_cells += 1
+                    else:
+                        color = self.off_cell_color
+                        self.off_cells += 1
+                    self.put_rect(rw, cl, color)
+        self.update_canvas()
+        self.in_tick = False
+        self.tick_count += 1
+        self.addr_count += 3
+        self.update_labels()
+        MIZ.btc_hunter(self)
+        if self.is_active:
+            self.BH16x16.after(self.tick_delay, self.tick)
         
     def init_grid(self):
         self.grid = [[0 for x in range(self.cols)] for y in range(self.rows)]
@@ -365,7 +440,7 @@ class App:
         self.widgetpop['text'] = "© MIZOGG 2018 - 2022"
         self.widgetpop['image'] = self.widgetpop.miz_image_png
         self.widgetpop.place(x=220,y=180)
-        self.label = tkinter.Label(self.pop, text='Welcome to 16x16.py...... \n\n Made By Mizogg.co.uk \n\n Version 1.2 13/11/22').pack(pady=10)
+        self.label = tkinter.Label(self.pop, text='Welcome to 16x16.py...... \n\n Made By Mizogg.co.uk \n\n Version 1.3 02/01/23').pack(pady=10)
         self.label1 = tkinter.Label(self.pop, text= "This window will get closed after 2 seconds...", font=('Helvetica 8 bold')).pack(pady=10)
         self.framepop = Frame(self.pop)
         self.framepop.pack(pady=10)
