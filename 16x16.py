@@ -12,6 +12,26 @@ import psutil
 
 information16x16 = ('''
             Look for Bitcoin with tkinter and python in GUI.
+ 
+ 16x16Hunter is a simple implementation of a cellular automaton, inspired by the classic game of Life. 
+ Each cell has two states, on and off, and the state of each cell is determined by the states of its eight neighboring cells according to a set of rules.
+ By setting the initial state of the cells and then letting the automaton run, complex patterns and behavior can emerge.
+ 
+ In this implementation, you canedit the grid by clicking on cells to toggle their state, or by using the options in the Grid Options frame.
+ You can start, pause, and step through the automaton using the Play Options frame. 
+ You can adjust the speed of the automaton using the Speed frame, and set the initial seed of the random generator using the Random Seed frame. 
+ You can also set the rules of the automaton using the Rule frame. 
+ The Info frame displays information about the current state of the automaton, including the current tick,
+ the number of on and off cells, and the binary, decimal, and hexadecimal representations of the current state.
+ 
+ In addition, you can enter a hexadecimal value in the Enter hex value field and click the Update grid button to set the grid to the corresponding state. 
+ This can be useful for exploring specific patterns or behavior.
+ 
+ 16x16Hunter was developed by Mizogg as a fun and educational project. The code is available on [GitHub/https://github.com/Mizogg/Tkinter-Power] for anyone to use or modify. If you have any questions or suggestions, feel free to contact me at [https://t.me/CryptoCrackersUK]. 
+            
+            Check out more of my programs.[Website/https://mizogg/.co.uk]
+ 
+ 
                         16x16Hunter
                     Made By Mizogg.co.uk
             Added Visualize Your own Private Key
