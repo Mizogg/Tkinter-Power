@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 25.11.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 02.01.2023 https://t.me/CryptoCrackersUK
 import random, sys, os
 from tkinter import *
 from tkinter import ttk
@@ -14,6 +14,9 @@ information16x16 = ('''
             Look for Bitcoin with tkinter and python in GUI.
                         16x16Hunter
                     Made By Mizogg.co.uk
+            Added Visualize Your own Private Key
+                    
+                    
                         Version = 1.2
                 Top Level Fixed CPU and Ram added
 
@@ -51,8 +54,8 @@ class App:
     def init_tk(self):
         self.BH16x16 = Tk()
         self.BH16x16.title('BitcoinHunter 16x16.py')
-        # self.BH16x16.iconbitmap('images/miz.ico')
-        self.BH16x16.geometry("1160x680")
+        #self.BH16x16.iconbitmap('images/miz.ico')
+        self.BH16x16.geometry("1160x780")
         self.BH16x16.menubar = Menu(self.BH16x16)
         self.BH16x16.filemenu = Menu(self.BH16x16.menubar, tearoff=0)
         self.BH16x16.filemenu.add_separator()
@@ -66,8 +69,8 @@ class App:
         self.BH16x16.config(menu=self.BH16x16.menubar)
         self.my_notebook = ttk.Notebook(self.BH16x16)
         self.my_notebook.pack(pady=5)
-        self.main_frame = Frame(self.my_notebook, width=1140, height=660)
-        self.about_frame = Frame(self.my_notebook, width=840, height=620)
+        self.main_frame = Frame(self.my_notebook, width=1140, height=760)
+        self.about_frame = Frame(self.my_notebook, width=840, height=720)
         self.main_frame.pack(fill="both", expand=1)
         self.about_frame.pack(fill="both", expand=1)
         self.my_notebook.add(self.main_frame, text=" 16x16Hunter ")
@@ -93,14 +96,6 @@ class App:
         self.on_cell_color = 'purple'
         self.off_cell_color = '#FFFFFF'
         self.grid_color = '#808080'
-        '''input_win = tkinter.Frame(self.content1, bg = '#A1A1A1')
-        input_win.pack(fill='both', expand='yes')
-        self._txt_inputhex = tkinter.Entry(input_win, width=56, font=("Arial",10))
-        self._txt_inputhex.insert(0, '1')
-        self._txt_inputhex.pack(padx=10, pady=3)
-        self._txt_inputhex.focus()
-        self._btc_bin = tkinter.Button(input_win, text="Visualize You Own Private Key", font=("Arial",10), command=self.evt_btc_hex)
-        self._btc_bin.pack(padx=10, pady=3)'''
         self.hunter_win = tkinter.Frame(self.content1, bg = '#A1A1A1')
         self.hunter_win.pack(fill='both', expand='yes')
         self.Binary_data = "Binary Data"
@@ -139,22 +134,30 @@ class App:
         self.bc1lable = tkinter.Label(self.hunter_win, text=self.bc1_data, font=("Arial",10),bg='#A1A1A1',fg="Black").pack(padx=10, pady=3)
         self.bech32string_update = tkinter.Label(self.hunter_win, bg="#F0F0F0",font=("Arial",9),text="", width=80, fg="Purple")
         self.bech32string_update.pack(padx=10, pady=2)
-        self.addcount = tkinter.Label(self.BH16x16, text=MIZ.countadd(), font=("Arial",14),bg="#F0F0F0",fg="purple").place(x=540,y=580)
+        self.addcount = tkinter.Label(self.BH16x16, text=MIZ.countadd(), font=("Arial",14),bg="#F0F0F0",fg="purple").place(x=540,y=680)
         self.lbl_tickno = tkinter.Label(self.hunter_win, text='Total Private Keys Scanned : 0', font=("Arial",10),bg='#A1A1A1',fg="Purple")
         self.lbl_tickno.pack(padx=3, pady=3)
         self.lbl_totalno = tkinter.Label(self.hunter_win, text='Total Addresses Scanned : 0', font=("Arial",10),bg='#A1A1A1',fg="Purple")
         self.lbl_totalno.pack(padx=3, pady=3)
         self.cpu_label = tkinter.Label(self.BH16x16,font = ('calibri', 14, 'bold'), bg= '#F0F0F0', fg= 'red')
-        self.cpu_label.place(x=580,y=620)
+        self.cpu_label.place(x=580,y=720)
         self.ram_label = tkinter.Label(self.BH16x16,font = ('calibri', 14, 'bold'), bg= '#F0F0F0', fg= 'red')
-        self.ram_label.place(x=740,y=620)
+        self.ram_label.place(x=740,y=720)
         self.ram_free_label = tkinter.Label(self.BH16x16,font = ('calibri', 14, 'bold'), bg= '#F0F0F0', fg= 'red')
-        self.ram_free_label.place(x=900,y=620)
+        self.ram_free_label.place(x=900,y=720)
         self.widget16x16 = tkinter.Label(self.BH16x16, compound='top')
         self.widget16x16.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
         self.widget16x16['text'] = "© MIZOGG 2018 - 2022"
         self.widget16x16['image'] = self.widget16x16.miz_image_png
-        self.widget16x16.place(x=5,y=590)
+        self.widget16x16.place(x=5,y=690)
+        input_win = tkinter.Frame(self.hunter_win, bg = '#A1A1A1')
+        input_win.pack(fill='both', expand='yes')
+        self._txt_inputhex = tkinter.Entry(input_win, width=56, font=("Arial",10))
+        self._txt_inputhex.insert(0, '1')
+        self._txt_inputhex.pack(padx=10, pady=3)
+        self._txt_inputhex.focus()
+        self._btc_bin = tkinter.Button(input_win, text="Visualize You Own Private Key", font=("Arial",10), command=self.update_grid)
+        self._btc_bin.pack(padx=10, pady=3)
         self.cpu_met()
         # =============================================================================
         # about_frame
@@ -261,23 +264,26 @@ class App:
             self.btn_seed.config(state=DISABLED)
             self.btn_clear.config(state=DISABLED)
             
-    '''def evt_btc_hex(self):
-        hex_value = self._txt_inputhex.get().strip().replace(" ", "")
-        bin_value = MIZ.hex2bin(hex_value).strip().replace("0b", "")
-        dec_value = MIZ.hex2dec(hex_value)
-        bit_value = MIZ.hex2bit(hex_value)
-        self.clear_canvas()
-        for rw in range(self.rows):
-            for cl in range(self.cols):
-                seed_chance = random.randint(1, 100)
-                if seed_chance <= self.seed_ratio:
-                    self.grid[rw][cl] = 1
-                else:
-                    self.grid[rw][cl] = 0
-        self.update_canvas()
-        self.btn_start_stop.config(state=NORMAL)
-        self.btn_tick.config(state=NORMAL)
-        print (bin_value)'''
+    def update_grid(self):
+        hex_value = self._txt_inputhex.get()
+        try:
+            int_value = int(hex_value, 16)
+            binstring = "{0:b}".format(int_value)
+            binstring = binstring.rjust(self.rows * self.cols, "0")
+            for i in range(self.rows):
+                self.grid[i] = [int(binstring[j]) for j in range(i * self.cols, (i + 1) * self.cols)]
+                for rw in range(self.rows):
+                    for cl in range(self.cols):
+                        if self.grid[rw][cl]:
+                            color = self.on_cell_color
+                            self.on_cells += 1
+                        else:
+                            color = self.off_cell_color
+                            self.off_cells += 1
+                        self.put_rect(rw, cl, color)
+            MIZ.btc_hunter(self)
+        except ValueError:
+            tkinter.messagebox.showerror("Invalid Hex Value", "Please enter a valid hexadecimal value")
 
     def update_labels(self):
         self.lbl_tickno.config(text='Total Private Keys Scanned : %d' %(self.tick_count))
@@ -310,7 +316,7 @@ class App:
     def popwinner(self):
         self.popwin = Toplevel()
         self.popwin.title("BitcoinHunter 16x16.py")
-        # self.popwin.iconbitmap('images/miz.ico')
+        #self.popwin.iconbitmap('images/miz.ico')
         self.popwin.geometry("700x250")
         self.widgetwinpop = tkinter.Label(self.popwin, compound='top')
         self.widgetwinpop.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
@@ -332,7 +338,7 @@ class App:
     def startpop(self):
         self.pop = Toplevel()
         self.pop.title("16x16.py")
-        # self.pop.iconbitmap('images/miz.ico')
+        #self.pop.iconbitmap('images/miz.ico')
         self.pop.geometry("700x250")
         self.widgetpop = tkinter.Label(self.pop, compound='top')
         self.widgetpop.miz_image_png = tkinter.PhotoImage(file='images/mizogg.png')
