@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 12.12.2022 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 02.01.2023 https://t.me/CryptoCrackersUK
 import hmac, struct, codecs, sys, os, binascii, hashlib
 import webbrowser
 import random
@@ -64,9 +64,12 @@ extranonce2_size = None
 with open('puzzle.bf', "rb") as fp:
     bloom_filterbtc = BloomFilter.load(fp)
 
+with open('eth.bf', "rb") as fp:
+    bloom_filtereth = BloomFilter.load(fp)
+    
 def countadd():
-    addr_count = len(bloom_filterbtc)
-    addr_count_print = (f'Total Bitcoin Addresses Loaded and Checking : {addr_count}')
+    addr_count = len(bloom_filterbtc) + len(bloom_filtereth)
+    addr_count_print = (f'Total BTC & ETH Addresses Loaded and Checking : {addr_count}')
     return addr_count_print
 
 lines = '=' * 70
@@ -281,8 +284,10 @@ def create_valid_mnemonics(strength):
     return " ".join(result)
 # WORD Wallet
 order	= 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
+
 with open('files/english.txt') as f:
     wordlist = f.read().split('\n')
+
 def mnem_to_seed(words):
     salt = 'mnemonic'
     seed = hashlib.pbkdf2_hmac("sha512",words.encode("utf-8"), salt.encode("utf-8"), 2048)
@@ -471,6 +476,7 @@ def brute_btc(self, dec):
     wifu = ice.btc_pvk_to_wif(HEX, False)
     p2sh = ice.privatekey_to_address(1, True, dec)
     bech32 = ice.privatekey_to_address(2, True, dec)
+    ethaddr = ice.privatekey_to_ETH_address(dec)
     length = len(bin(dec))
     length -=2
     if caddr in bloom_filterbtc:
@@ -505,6 +511,14 @@ def brute_btc(self, dec):
             result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address bech32: {bech32}')
         self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address bech32: {bech32}")
         self.popwinner()
+    if ethaddr[2:] in bloom_filtereth:
+        self.bfr.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address bech32: {bech32}')
+        self.found+=1
+        self.foundbtc.config(text = f'{self.found}')
+        with open('foundeth.txt', 'a') as result:
+            result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nETH Address : {ethaddr}')
+        self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nETH Address : {ethaddr}")
+        self.popwinner()
     scantext = f'''
             *** DEC Key ***
  {dec}
@@ -517,6 +531,7 @@ def brute_btc(self, dec):
         WIF Compressed: {wifu}
  BTC Address p2sh: {p2sh}
  BTC Address bech32: {bech32}
+ ETH Address : {ethaddr}
 {lines}'''
 
     return scantext
@@ -535,6 +550,7 @@ def get_page(self, page):
         uaddr = ice.privatekey_to_address(0, False, dec)
         p2sh = ice.privatekey_to_address(1, True, dec)
         bech32 = ice.privatekey_to_address(2, True, dec)
+        ethaddr = ice.privatekey_to_ETH_address(dec)
         length = len(bin(dec))
         length -=2
         if caddr in bloom_filterbtc:
@@ -615,6 +631,26 @@ def get_page(self, page):
                 f.write(output)
             self.WINTEXT = output
             self.popwinner()
+            
+        if ethaddr[2:] in bloom_filtereth:
+            output = f'''\n
+
+  : Private Key Page : {num}
+{lines}
+  : Private Key DEC : {startPrivKey} Bits : {length}
+{lines}
+  : Private Key HEX : {starting_key_hex}
+{lines}
+  : ETH Address : {ethaddr}
+{lines}
+'''
+            self.page_brute.config(text = output)
+            self.found+=1
+            self.foundbtc_page.config(text = f'{self.found}')
+            with open('foundeth.txt', 'a', encoding='utf-8') as f:
+                f.write(output)
+            self.WINTEXT = output
+            self.popwinner()
         startPrivKey += 1
     scantext = f'''
   : Private Key Page : 
@@ -629,6 +665,7 @@ def get_page(self, page):
  BTC Address Uncompressed: {uaddr}
  BTC Address p2sh: {p2sh}
  BTC Address bech32: {bech32}
+ ETH Address : {ethaddr}
 {lines}'''
     return scantext
 
@@ -1264,6 +1301,9 @@ def recovery_main(self, scan_IN, rec_IN, mode):
         dec = btc_address_from_private_key(potential_key, secret_type=secret_type)
         uaddr = ice.privatekey_to_address(0, False, dec)
         caddr = ice.privatekey_to_address(0, True, dec)
+        p2sh = ice.privatekey_to_address(1, True, dec)
+        bech32 = ice.privatekey_to_address(2, True, dec)
+        ethaddr = ice.privatekey_to_ETH_address(dec)
         self.labelWIF3.config(text = potential_key)
         self.labelWIF3.update()
         remaining -= 1
@@ -1271,7 +1311,7 @@ def recovery_main(self, scan_IN, rec_IN, mode):
         self.labelWIF4.update()
         if caddr in bloom_filterbtc:
             wintext = f"\n key: {potential_key} address: {caddr}"
-            f=open('found.txt','a')
+            f=open('foundcaddr.txt','a')
             f.write(wintext)
             self.found+=1
             self.foundbtc_recovery.config(text = f'{self.found}')
@@ -1279,12 +1319,35 @@ def recovery_main(self, scan_IN, rec_IN, mode):
             self.popwinner()
         if uaddr in bloom_filterbtc:
             wintext = f"\n key: {potential_key} address: {uaddr}"
-            f=open('found.txt','a')
+            f=open('founduaddr.txt','a')
             self.found+=1
             self.foundbtc_recovery.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
-
+        if p2sh in bloom_filterbtc:
+            wintext = f"\n key: {potential_key} address: {p2sh}"
+            f=open('foundp2sh.txt','a')
+            f.write(wintext)
+            self.found+=1
+            self.foundbtc_recovery.config(text = f'{self.found}')
+            self.WINTEXT = wintext
+            self.popwinner()
+        if bech32 in bloom_filterbtc:
+            wintext = f"\n key: {potential_key} address: {bech32}"
+            f=open('foundbech32.txt','a')
+            f.write(wintext)
+            self.found+=1
+            self.foundbtc_recovery.config(text = f'{self.found}')
+            self.WINTEXT = wintext
+            self.popwinner()
+        if ethaddr[2:] in bloom_filtereth:
+            wintext = f"\n key: {potential_key} address: {ethaddr}"
+            f=open('foundeth.txt','a')
+            f.write(wintext)
+            self.found+=1
+            self.foundbtc_recovery.config(text = f'{self.found}')
+            self.WINTEXT = wintext
+            self.popwinner()
 #############################################################################################
 def super_bal(self, dec):
     caddr = ice.privatekey_to_address(0, True, dec)
