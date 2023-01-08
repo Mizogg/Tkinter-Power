@@ -2,7 +2,9 @@
 
 New Version1.13 Recovery Tools and Fixes
 
-![image](https://user-images.githubusercontent.com/88630056/206264660-a0d4ab62-a4e8-4543-960a-92388a226cb9.png)
+
+![image](https://user-images.githubusercontent.com/88630056/211201899-46277e5c-58ac-4676-baf7-6b33a0125fa0.png)
+![image](https://user-images.githubusercontent.com/88630056/211201925-89baa178-d149-4f6d-9f6b-7473035d074c.png)
 
 Bitcoin private generator made with tkinter. Looks for Bitcoin in a nice GUI interface. Private key, Wallet Generation, Hex, Dec, WIF and Mnemonic.
 
@@ -16,9 +18,6 @@ Microsoft C++ Build Tools required on Windows
 https://visualstudio.microsoft.com/visual-cpp-build-tools/
 
 ## download and install 
-
-![image](https://user-images.githubusercontent.com/88630056/211201899-46277e5c-58ac-4676-baf7-6b33a0125fa0.png)
-![image](https://user-images.githubusercontent.com/88630056/211201925-89baa178-d149-4f6d-9f6b-7473035d074c.png)
 
 Install Libaries
 ```
