@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 02.01.2023 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 08.01.2023 https://t.me/CryptoCrackersUK
 from tkinter import * 
 from tkinter import ttk
 import tkinter.messagebox
@@ -819,7 +819,7 @@ class MainWindow():
         self._txt_inputadd_DEC.focus()
         self.labeladd_WORD = tkinter.Label(self.recovery_frame, text="Mnemonic HERE (Mnm Recovery Tool ****  MAX 5 MISSING  ****)  ", font=("Arial",14),fg="#FF6700").place(x=90,y=330)
         self._txt_inputadd_WORD = tkinter.Entry(self.recovery_frame, width=64, font=("Consolas", 14))
-        self._txt_inputadd_WORD.insert(0, 'COMING SOON !!!!!!!')
+        self._txt_inputadd_WORD.insert(0, 'pact crush hero laugh edit dolphin wink you broom fish spring *')
         self._txt_inputadd_WORD.place(x=20,y=360)
         self._txt_inputadd_WORD.focus()
         self.labelWIF1 = tkinter.Label(self.recovery_frame, bg="#F0F0F0",font=("Arial",12),text="")
@@ -834,13 +834,20 @@ class MainWindow():
         self.sqWIF= tkinter.Button(self.recovery_frame, text= "WIF SEQ",font=("Arial",12),bg="#F3F4F8", command= self.start_recovery_wif_S, fg='black').place(x=677,y=165)
         self.sqHEX= tkinter.Button(self.recovery_frame, text= "HEX SEQ",font=("Arial",12),bg="#F3F4F8", command= self.start_recovery_HEX_S, fg='black').place(x=677,y=230)
         self.sqDEC= tkinter.Button(self.recovery_frame, text= "DEC SEQ",font=("Arial",12),bg="#F3F4F8", command= self.start_recovery_DEC_S, fg='black').place(x=677,y=300)
+        self.sqMNEMO= tkinter.Button(self.recovery_frame, text= "Word SEQ",font=("Arial",12),bg="#F3F4F8", command= self.start_recovery_MNEMO_S, fg='black').place(x=677,y=370)
         self.ranWIF= tkinter.Button(self.recovery_frame, text= "WIF Random",font=("Arial",12),bg="#F3E4C8", command= self.start_recovery_wif_R, fg='black').place(x=767,y=165)
         self.ranHEX= tkinter.Button(self.recovery_frame, text= "HEX Random",font=("Arial",12),bg="#F3E4C8", command= self.start_recovery_HEX_R, fg='black').place(x=767,y=230)
         self.ranDEC= tkinter.Button(self.recovery_frame, text= "DEC Random",font=("Arial",12),bg="#F3E4C8", command= self.start_recovery_DEC_R, fg='black').place(x=767,y=300)
+        self.ranMNEMO= tkinter.Button(self.recovery_frame, text= "Word Random",font=("Arial",12),bg="#F3E4C8", command= self.start_recovery_MNEMO_R, fg='black').place(x=767,y=370)
         self.totalbtc_recovery = tkinter.Label(self.recovery_frame, text="Total Found ",font=("Arial",18),bg="#F0F0F0",fg="purple").place(x=690,y=70)
         self.foundbtc_recovery = tkinter.Label(self.recovery_frame, bg="#F0F0F0",font=("Arial",23),text="0")
         self.foundbtc_recovery.place(x=750,y=120)
         self.get_infoREC = tkinter.Button(self.recovery_frame, text="Information/Help", width=16, font=("arial", 10, "bold"), activebackground="#F0F0F0",fg="red",bg="#F0F0F0",command=self.informationREC, relief=RAISED, bd=3).place(x=710, y=535)
+        self.labeladd_ADD = tkinter.Label(self.recovery_frame, text="Address looking For", font=("Arial",11),fg="#FF6700").place(x=20,y=515)
+        self._txt_inputadd_look = tkinter.Entry(self.recovery_frame, width=64, font=("Consolas", 14))
+        self._txt_inputadd_look.insert(0, '0x4fa2345bd9ffb1275eaa2c047dbe56ab250bbaaa')
+        self._txt_inputadd_look.place(x=20,y=535)
+        self._txt_inputadd_look.focus()
 
     ########### Recovery Tools  ###########
     def start_recovery_wif_S(self):
@@ -860,6 +867,12 @@ class MainWindow():
         mode = 'sequential'
         rec_IN = self._txt_inputadd_DEC.get()
         MIZ.recovery_main(self, scan_IN, rec_IN, mode)
+    
+    def start_recovery_MNEMO_S(self):
+        scan_IN = 'mnemonic'
+        mode = 'sequential'
+        rec_IN = self._txt_inputadd_WORD.get()
+        MIZ.recovery_main(self, scan_IN, rec_IN, mode)
         
     def start_recovery_wif_R(self):
         scan_IN = 'WIF'
@@ -877,6 +890,12 @@ class MainWindow():
         scan_IN = 'DEC'
         mode = 'random'
         rec_IN = self._txt_inputadd_DEC.get()
+        MIZ.recovery_main(self, scan_IN, rec_IN, mode)
+    
+    def start_recovery_MNEMO_R(self):
+        scan_IN = 'mnemonic'
+        mode = 'random'
+        rec_IN = self._txt_inputadd_WORD.get()
         MIZ.recovery_main(self, scan_IN, rec_IN, mode)
     ########### Mining TOOL ###########   
     def StartMining(self) :
