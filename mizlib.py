@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 02.01.2023 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 08.01.2023 https://t.me/CryptoCrackersUK
 import hmac, struct, codecs, sys, os, binascii, hashlib
 import webbrowser
 import random
@@ -293,6 +293,7 @@ def mnem_to_seed(words):
     seed = hashlib.pbkdf2_hmac("sha512",words.encode("utf-8"), salt.encode("utf-8"), 2048)
     return seed
 
+
 def bip39seed_to_bip32masternode(seed):
     h = hmac.new(b'Bitcoin seed', seed, hashlib.sha512).digest()
     key, chain_code = h[:32], h[32:]
@@ -309,7 +310,7 @@ def parse_derivation_path(str_derivation_path="m/44'/0'/0'/0/0"):
             path.append(int(i))
     return path
 
-def parse_derivation_path2(str_derivation_path="m/49'/0'/0'/0/0"):
+def parse_derivation_path2(str_derivation_path="m/49'/0'/0'/0/0"):      
     path = []
     if str_derivation_path[0:2] != 'm/':
         raise ValueError("Can't recognize derivation path. It should look like \"m/49'/0'/0'/0\".")
@@ -371,102 +372,133 @@ def bip39seed_to_private_key3(bip39seed, n=1):
         private_key, chain_code = derive_bip32childkey(private_key, chain_code, i)
     return private_key
 
-derivation_total_path_to_check = 1
+def bip39seed_to_private_key4(bip39seed, n=1):
+    const = "m/44'/60'/0'/0/"
+#    str_derivation_path = const + str(n-1)
+    str_derivation_path = "m/44'/60'/0'/0/0"
+    derivation_path = parse_derivation_path2(str_derivation_path)
+    master_private_key, master_chain_code = bip39seed_to_bip32masternode(bip39seed)
+    private_key, chain_code = master_private_key, master_chain_code
+    for i in derivation_path:
+        private_key, chain_code = derive_bip32childkey(private_key, chain_code, i)
+    return private_key
+
 def rwonline(self, mnem):
     seed = mnem_to_seed(mnem)
-    pvk = bip39seed_to_private_key(seed, derivation_total_path_to_check)
-    pvk2 = bip39seed_to_private_key2(seed, derivation_total_path_to_check)
-    pvk3 = bip39seed_to_private_key3(seed, derivation_total_path_to_check)
-    caddr = ice.privatekey_to_address(0, True, (int.from_bytes(pvk, "big")))
-    p2sh = ice.privatekey_to_address(1, True, (int.from_bytes(pvk2, "big")))
-    bech32 = ice.privatekey_to_address(2, True, (int.from_bytes(pvk3, "big")))
-    dec = (int.from_bytes(pvk, "big"))
-    HEX = "%064x" % dec
-    dec2 = (int.from_bytes(pvk2, "big"))
-    HEX2 = "%064x" % dec2
-    dec3 = (int.from_bytes(pvk3, "big"))
-    HEX3 = "%064x" % dec3
-    cpath = "m/44'/0'/0'/0/0"
-    ppath = "m/49'/0'/0'/0/0"
-    bpath = "m/84'/0'/0'/0/0"
-    response = requests.get("https://blockstream.info/api/address/" + str(caddr))
-    balance = float(response.json()['chain_stats']['funded_txo_sum'])
-    totalSent = float(response.json()['chain_stats']['spent_txo_sum'])
-    txs = response.json()['chain_stats']['funded_txo_count']
-    
-    response2 = requests.get("https://blockstream.info/api/address/" + str(p2sh))
-    balance2 = float(response2.json()['chain_stats']['funded_txo_sum'])
-    totalSent2 = float(response2.json()['chain_stats']['spent_txo_sum'])
-    txs2 = response2.json()['chain_stats']['funded_txo_count']
-    
-    response3 = requests.get("https://blockstream.info/api/address/" + str(bech32))
-    balance3 = float(response3.json()['chain_stats']['funded_txo_sum'])
-    totalSent3 = float(response3.json()['chain_stats']['spent_txo_sum'])
-    txs3 = response3.json()['chain_stats']['funded_txo_count']
+    for r in range (1,2):
+        pvk = bip39seed_to_private_key(seed, r)
+        pvk2 = bip39seed_to_private_key2(seed, r)
+        pvk3 = bip39seed_to_private_key3(seed, r)
+        #pvk4 = bip39seed_to_private_key4(seed, r)
+        dec = (int.from_bytes(pvk, "big"))
+        HEX = "%064x" % dec
+        dec2 = (int.from_bytes(pvk2, "big"))
+        HEX2 = "%064x" % dec2
+        dec3 = (int.from_bytes(pvk3, "big"))
+        HEX3 = "%064x" % dec3
+        #dec4 = (int.from_bytes(pvk4, "big"))
+        #HEX4 = "%064x" % dec4
+        cpath = f"m/44'/0'/0'/0/{r}"
+        ppath = f"m/49'/0'/0'/0/{r}"
+        bpath = f"m/84'/0'/0'/0/{r}"
+        #epath = f"m/44'/60'/0'/0/{r}"
+        caddr = ice.privatekey_to_address(0, True, (int.from_bytes(pvk, "big")))
+        p2sh = ice.privatekey_to_address(1, True, (int.from_bytes(pvk2, "big")))
+        bech32 = ice.privatekey_to_address(2, True, (int.from_bytes(pvk3, "big")))
+        #ethaddr = ice.privatekey_to_ETH_address(int.from_bytes(pvk4, "big"))
+        response = requests.get("https://blockstream.info/api/address/" + str(caddr))
+        balance = float(response.json()['chain_stats']['funded_txo_sum'])
+        totalSent = float(response.json()['chain_stats']['spent_txo_sum'])
+        txs = response.json()['chain_stats']['funded_txo_count']
+        
+        response2 = requests.get("https://blockstream.info/api/address/" + str(p2sh))
+        balance2 = float(response2.json()['chain_stats']['funded_txo_sum'])
+        totalSent2 = float(response2.json()['chain_stats']['spent_txo_sum'])
+        txs2 = response2.json()['chain_stats']['funded_txo_count']
+        
+        response3 = requests.get("https://blockstream.info/api/address/" + str(bech32))
+        balance3 = float(response3.json()['chain_stats']['funded_txo_sum'])
+        totalSent3 = float(response3.json()['chain_stats']['spent_txo_sum'])
+        txs3 = response3.json()['chain_stats']['funded_txo_count']
 
-    wordvartext = (f'''==================================================================================
-Bitcoin Address : {caddr} :
-TotalReceived = [{balance}] : TotalSent =  [{totalSent}] : Transactions = [{txs}]
-Hexadecimal Private Key : {HEX}
+        wordvartext = (f'''==================================================================================
+    Bitcoin Address : {caddr} :
+    TotalReceived = [{balance}] : TotalSent =  [{totalSent}] : Transactions = [{txs}]
+    Hexadecimal Private Key : {HEX}
 
-Bitcoin Address : {p2sh} : 
-TotalReceived = [{balance2}] : TotalSent =  [{totalSent2}] : Transactions = [{txs2}]
-Hexadecimal Private Key : {HEX2}
+    Bitcoin Address : {p2sh} : 
+    TotalReceived = [{balance2}] : TotalSent =  [{totalSent2}] : Transactions = [{txs2}]
+    Hexadecimal Private Key : {HEX2}
 
-Bitcoin Address : {bech32} :
-TotalReceived = [{balance3}] : TotalSent =  [{totalSent3}] : Transactions = [{txs3}]
-Hexadecimal Private Key : {HEX3}
-==================================================================================
-''')
-    if int(txs) > 0 or int(txs2) > 0 or int(txs3) > 0:
-        self.found+=1
-        self.foundword.config(text = f'{self.found}')
-        self.WINTEXT = f'\n Mnemonic : {mnem} \n\n {wordvartext}'
-        with open('found.txt', 'a', encoding='utf-8') as f:
-            f.write(self.WINTEXT)
-        self.popwinner()
-    return wordvartext
+    Bitcoin Address : {bech32} :
+    TotalReceived = [{balance3}] : TotalSent =  [{totalSent3}] : Transactions = [{txs3}]
+    Hexadecimal Private Key : {HEX3}
+    ==================================================================================
+    ''')
+        if int(txs) > 0 or int(txs2) > 0 or int(txs3) > 0:
+            self.found+=1
+            self.foundword.config(text = f'{self.found}')
+            self.WINTEXT = f'\n Mnemonic : {mnem} \n\n {wordvartext}'
+            with open('found.txt', 'a', encoding='utf-8') as f:
+                f.write(self.WINTEXT)
+            self.popwinner()
+        r+=1
+        return wordvartext
 
 def rwoffline(self, mnem):
     seed = mnem_to_seed(mnem)
-    pvk = bip39seed_to_private_key(seed, derivation_total_path_to_check)
-    pvk2 = bip39seed_to_private_key2(seed, derivation_total_path_to_check)
-    pvk3 = bip39seed_to_private_key3(seed, derivation_total_path_to_check)
-    dec = (int.from_bytes(pvk, "big"))
-    HEX = "%064x" % dec
-    dec2 = (int.from_bytes(pvk2, "big"))
-    HEX2 = "%064x" % dec2
-    dec3 = (int.from_bytes(pvk3, "big"))
-    HEX3 = "%064x" % dec3
-    cpath = "m/44'/0'/0'/0/0"
-    ppath = "m/49'/0'/0'/0/0"
-    bpath = "m/84'/0'/0'/0/0"
-    caddr = ice.privatekey_to_address(0, True, (int.from_bytes(pvk, "big")))
-    p2sh = ice.privatekey_to_address(1, True, (int.from_bytes(pvk2, "big")))
-    bech32 = ice.privatekey_to_address(2, True, (int.from_bytes(pvk3, "big")))
-    wordvartext = (f' Bitcoin {cpath} :  {caddr} \n Bitcoin {cpath} : Decimal Private Key \n {dec} \n Bitcoin {cpath} : Hexadecimal Private Key \n {HEX}  \n Bitcoin {ppath} :  {p2sh}\n Bitcoin {ppath} : Decimal Private Key \n {dec2} \n Bitcoin {ppath} :  Hexadecimal Private Key \n {HEX2} \n Bitcoin {bpath} : {bech32}\n Bitcoin {bpath} : Decimal Private Key \n {dec3} \n Bitcoin {bpath} : Hexadecimal Private Key \n {HEX3} ')
-    if caddr in bloom_filterbtc:
-        self.found+=1
-        self.foundword.config(text = f'{self.found}')
-        self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {cpath} :  {caddr} \n Decimal Private Key \n {dec} \n Hexadecimal Private Key \n {HEX}  \n'
-        with open("foundcaddr.txt", "a") as f:
-            f.write(self.WINTEXT)
-        self.popwinner()
-    if p2sh in bloom_filterbtc:
-        self.found+=1
-        self.foundword.config(text = f'{self.found}')
-        self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {ppath} :  {p2sh}\nDecimal Private Key \n {dec2} \n Hexadecimal Private Key \n {HEX2} \n'
-        with open("foundp2sh.txt", "a") as f:
-            f.write(self.WINTEXT)
-        self.popwinner()
-    if bech32 in bloom_filterbtc:
-        self.found+=1
-        self.foundword.config(text = f'{self.found}')
-        self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {bpath} : {bech32}\n Decimal Private Key \n {dec3} \n Hexadecimal Private Key \n {HEX3} \n'
-        with open("foundbech32.txt", "a") as f:
-            f.write(self.WINTEXT)
-        self.popwinner()
-    return wordvartext
+    for r in range (1,5):
+        pvk = bip39seed_to_private_key(seed, r)
+        pvk2 = bip39seed_to_private_key2(seed, r)
+        pvk3 = bip39seed_to_private_key3(seed, r)
+        pvk4 = bip39seed_to_private_key4(seed, r)
+        dec = (int.from_bytes(pvk, "big"))
+        HEX = "%064x" % dec
+        dec2 = (int.from_bytes(pvk2, "big"))
+        HEX2 = "%064x" % dec2
+        dec3 = (int.from_bytes(pvk3, "big"))
+        HEX3 = "%064x" % dec3
+        dec4 = (int.from_bytes(pvk4, "big"))
+        HEX4 = "%064x" % dec4
+        cpath = f"m/44'/0'/0'/0/{r}"
+        ppath = f"m/49'/0'/0'/0/{r}"
+        bpath = f"m/84'/0'/0'/0/{r}"
+        epath = f"m/44'/60'/0'/0/{r}"
+        caddr = ice.privatekey_to_address(0, True, (int.from_bytes(pvk, "big")))
+        p2sh = ice.privatekey_to_address(1, True, (int.from_bytes(pvk2, "big")))
+        bech32 = ice.privatekey_to_address(2, True, (int.from_bytes(pvk3, "big")))
+        ethaddr = ice.privatekey_to_ETH_address(int.from_bytes(pvk4, "big"))
+        wordvartext = (f' Bitcoin {cpath} :  {caddr} \n Dec : {dec} \n   Hex : {HEX}  \n Bitcoin {ppath} :  {p2sh}\n Dec : {dec2} \n  Hex : {HEX2} \n Bitcoin {bpath} : {bech32}\n  Dec : {dec3} \n  Hex : {HEX3} \n ETH {epath} :  {ethaddr} \n Dec : {dec4} \n Hex: {HEX4}  ')
+        if caddr in bloom_filterbtc:
+            self.found+=1
+            self.foundword.config(text = f'{self.found}')
+            self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {cpath} :  {caddr} \n Decimal Private Key \n {dec} \n Hexadecimal Private Key \n {HEX}  \n'
+            with open("foundcaddr.txt", "a") as f:
+                f.write(self.WINTEXT)
+            self.popwinner()
+        if p2sh in bloom_filterbtc:
+            self.found+=1
+            self.foundword.config(text = f'{self.found}')
+            self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {ppath} :  {p2sh}\nDecimal Private Key \n {dec2} \n Hexadecimal Private Key \n {HEX2} \n'
+            with open("foundp2sh.txt", "a") as f:
+                f.write(self.WINTEXT)
+            self.popwinner()
+        if bech32 in bloom_filterbtc:
+            self.found+=1
+            self.foundword.config(text = f'{self.found}')
+            self.WINTEXT = f'\n Mnemonic: {mnem} \n Bitcoin {bpath} : {bech32}\n Decimal Private Key \n {dec3} \n Hexadecimal Private Key \n {HEX3} \n'
+            with open("foundbech32.txt", "a") as f:
+                f.write(self.WINTEXT)
+            self.popwinner()
+        if ethaddr[2:] in bloom_filtereth:
+            self.found+=1
+            self.foundword.config(text = f'{self.found}')
+            self.WINTEXT = f'\n Mnemonic: {mnem} \n ETH {epath} : {ethaddr}\n Decimal Private Key \n {dec4} \n Hexadecimal Private Key \n {HEX4} \n'
+            with open("foundeth.txt", "a") as f:
+                f.write(self.WINTEXT)
+            self.popwinner()
+        r+=1
+        return wordvartext
     
 def brute_btc(self, dec):
     caddr = ice.privatekey_to_address(0, True, dec)
@@ -1262,6 +1294,7 @@ def btc_address_from_private_key(my_secret, secret_type):
     return dec
 
 def recovery_main(self, scan_IN, rec_IN, mode):
+    add_find = self._txt_inputadd_look.get()
     missing_length = rec_IN.count('*')
     key_length = len(rec_IN)
     recoverytext = f'Looking for {missing_length} characters in {rec_IN}'
@@ -1278,9 +1311,8 @@ def recovery_main(self, scan_IN, rec_IN, mode):
             secret_type = 'DEC'
             allowed_characters = '0123456789'
         case _:
-            # Unknown Length
-            secret_type = 'unhandled'
-            allowed_characters = string.ascii_uppercase + string.ascii_lowercase + string.digits
+            secret_type = 'mnemonic'
+            allowed_characters = wordlist
 
     missing_letters_master_list = trotter.Amalgams(missing_length, allowed_characters)
     try:
@@ -1298,18 +1330,32 @@ def recovery_main(self, scan_IN, rec_IN, mode):
             potential_key = complete_key(rec_IN, missing_letters_master_list[i])
         elif mode == 'random':
             potential_key = complete_key(rec_IN, missing_letters_master_list.random())
-        dec = btc_address_from_private_key(potential_key, secret_type=secret_type)
-        uaddr = ice.privatekey_to_address(0, False, dec)
-        caddr = ice.privatekey_to_address(0, True, dec)
-        p2sh = ice.privatekey_to_address(1, True, dec)
-        bech32 = ice.privatekey_to_address(2, True, dec)
-        ethaddr = ice.privatekey_to_ETH_address(dec)
+        if secret_type == 'mnemonic':
+            seed = mnem_to_seed(potential_key)
+            for i in range (1,5):
+                pvk = bip39seed_to_private_key(seed, 1)
+                pvk2 = bip39seed_to_private_key2(seed, 1)
+                pvk3 = bip39seed_to_private_key3(seed, 1)
+                pvk4 = bip39seed_to_private_key4(seed, i)
+                caddr = ice.privatekey_to_address(0, True, (int.from_bytes(pvk, "big")))
+                uaddr = ice.privatekey_to_address(0, False, (int.from_bytes(pvk, "big")))
+                p2sh = ice.privatekey_to_address(1, True, (int.from_bytes(pvk2, "big")))
+                bech32 = ice.privatekey_to_address(2, True, (int.from_bytes(pvk3, "big")))
+                ethaddr = ice.privatekey_to_ETH_address(int.from_bytes(pvk4, "big"))
+                print(f" Path m/44'/60'/0'/0/{i} mnemonic: {potential_key}", end='\r')
+        else:
+            dec = btc_address_from_private_key(potential_key, secret_type=secret_type)
+            uaddr = ice.privatekey_to_address(0, False, dec)
+            caddr = ice.privatekey_to_address(0, True, dec)
+            p2sh = ice.privatekey_to_address(1, True, dec)
+            bech32 = ice.privatekey_to_address(2, True, dec)
+            ethaddr = ice.privatekey_to_ETH_address(dec)
         self.labelWIF3.config(text = potential_key)
         self.labelWIF3.update()
         remaining -= 1
         self.labelWIF4.config(text = remaining)
         self.labelWIF4.update()
-        if caddr in bloom_filterbtc:
+        if caddr in bloom_filterbtc or caddr in add_find:
             wintext = f"\n key: {potential_key} address: {caddr}"
             f=open('foundcaddr.txt','a')
             f.write(wintext)
@@ -1317,14 +1363,14 @@ def recovery_main(self, scan_IN, rec_IN, mode):
             self.foundbtc_recovery.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
-        if uaddr in bloom_filterbtc:
+        if uaddr in bloom_filterbtc or uaddr in add_find:
             wintext = f"\n key: {potential_key} address: {uaddr}"
             f=open('founduaddr.txt','a')
             self.found+=1
             self.foundbtc_recovery.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
-        if p2sh in bloom_filterbtc:
+        if p2sh in bloom_filterbtc or p2sh in add_find:
             wintext = f"\n key: {potential_key} address: {p2sh}"
             f=open('foundp2sh.txt','a')
             f.write(wintext)
@@ -1332,7 +1378,7 @@ def recovery_main(self, scan_IN, rec_IN, mode):
             self.foundbtc_recovery.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
-        if bech32 in bloom_filterbtc:
+        if bech32 in bloom_filterbtc or bech32 in add_find:
             wintext = f"\n key: {potential_key} address: {bech32}"
             f=open('foundbech32.txt','a')
             f.write(wintext)
@@ -1340,7 +1386,7 @@ def recovery_main(self, scan_IN, rec_IN, mode):
             self.foundbtc_recovery.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
-        if ethaddr[2:] in bloom_filtereth:
+        if ethaddr[2:] in bloom_filtereth or ethaddr in add_find.lower():
             wintext = f"\n key: {potential_key} address: {ethaddr}"
             f=open('foundeth.txt','a')
             f.write(wintext)
@@ -1348,6 +1394,7 @@ def recovery_main(self, scan_IN, rec_IN, mode):
             self.foundbtc_recovery.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            
 #############################################################################################
 def super_bal(self, dec):
     caddr = ice.privatekey_to_address(0, True, dec)
