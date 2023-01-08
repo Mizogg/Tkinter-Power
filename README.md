@@ -17,9 +17,8 @@ https://visualstudio.microsoft.com/visual-cpp-build-tools/
 
 ## download and install 
 
-![image](https://user-images.githubusercontent.com/88630056/200416296-e268a869-5353-432e-b572-82ef66400f97.png)
-
-
+![image](https://user-images.githubusercontent.com/88630056/211201899-46277e5c-58ac-4676-baf7-6b33a0125fa0.png)
+![image](https://user-images.githubusercontent.com/88630056/211201925-89baa178-d149-4f6d-9f6b-7473035d074c.png)
 
 Install Libaries
 ```
