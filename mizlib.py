@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 08.01.2023 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 06.02.2023 https://t.me/CryptoCrackersUK
 import hmac, struct, codecs, sys, os, binascii, hashlib
 import webbrowser
 import random
@@ -12,6 +12,7 @@ from tkinter.ttk import *
 import secp256k1 as ice
 import string
 import re
+import smtplib
 try:
     import base58
     import ecdsa
@@ -43,6 +44,34 @@ except ImportError:
     import numpy as np
     import trotter
 
+gmail_user = 'youremail'
+gmail_password = 'youremailpassword'
+
+def send_email(message_in):
+    sent_from = gmail_user
+    to = ['youremail']
+    subject = 'OMG Super Important Message'
+    body = f"  {message_in}"
+    
+    email_text = """\
+        From: %s
+        To: %s
+        Subject: %s
+
+        %s
+        """ % (sent_from, ", ".join(to), subject, body)
+
+    try:
+        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+        server.ehlo()
+        server.login(gmail_user, gmail_password)
+        server.sendmail(sent_from, to, email_text)
+        server.close()
+    
+        print ('Email sent!')
+    except:
+        print('Something went wrong...')
+        
 fShutdown = False
 listfThreadRunning = [False] * 2
 local_height = 0
@@ -442,6 +471,7 @@ def rwonline(self, mnem):
             with open('found.txt', 'a', encoding='utf-8') as f:
                 f.write(self.WINTEXT)
             self.popwinner()
+            send_email(self.WINTEXT)
         r+=1
         return wordvartext
 
@@ -476,6 +506,7 @@ def rwoffline(self, mnem):
             with open("foundcaddr.txt", "a") as f:
                 f.write(self.WINTEXT)
             self.popwinner()
+            send_email(self.WINTEXT)
         if p2sh in bloom_filterbtc:
             self.found+=1
             self.foundword.config(text = f'{self.found}')
@@ -483,6 +514,7 @@ def rwoffline(self, mnem):
             with open("foundp2sh.txt", "a") as f:
                 f.write(self.WINTEXT)
             self.popwinner()
+            send_email(self.WINTEXT)
         if bech32 in bloom_filterbtc:
             self.found+=1
             self.foundword.config(text = f'{self.found}')
@@ -490,6 +522,7 @@ def rwoffline(self, mnem):
             with open("foundbech32.txt", "a") as f:
                 f.write(self.WINTEXT)
             self.popwinner()
+            send_email(self.WINTEXT)
         if ethaddr[2:] in bloom_filtereth:
             self.found+=1
             self.foundword.config(text = f'{self.found}')
@@ -497,6 +530,7 @@ def rwoffline(self, mnem):
             with open("foundeth.txt", "a") as f:
                 f.write(self.WINTEXT)
             self.popwinner()
+            send_email(self.WINTEXT)
         r+=1
         return wordvartext
     
@@ -519,6 +553,7 @@ def brute_btc(self, dec):
             result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc}\n')
         self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc}")
         self.popwinner()
+        send_email(self.WINTEXT)
     if uaddr in bloom_filterbtc:
         self.bfr.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu}')
         self.found+=1
@@ -527,6 +562,7 @@ def brute_btc(self, dec):
             result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu}\n')
         self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu}")
         self.popwinner()
+        send_email(self.WINTEXT)
     if p2sh in bloom_filterbtc:
         self.bfr.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address p2sh: {p2sh}')
         self.found+=1
@@ -535,6 +571,7 @@ def brute_btc(self, dec):
             result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address p2sh: {p2sh} \n')
         self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address p2sh: {p2sh}")
         self.popwinner()
+        send_email(self.WINTEXT)
     if bech32 in bloom_filterbtc:
         self.bfr.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address bech32: {bech32}')
         self.found+=1
@@ -551,6 +588,7 @@ def brute_btc(self, dec):
             result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nETH Address : {ethaddr}')
         self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nETH Address : {ethaddr}")
         self.popwinner()
+        send_email(self.WINTEXT)
     scantext = f'''
             *** DEC Key ***
  {dec}
@@ -603,6 +641,7 @@ def get_page(self, page):
                 f.write(output)
             self.WINTEXT = output
             self.popwinner()
+            send_email(self.WINTEXT)
 
         if uaddr in bloom_filterbtc:
             output = f'''\n
@@ -623,6 +662,7 @@ def get_page(self, page):
                 f.write(output)
             self.WINTEXT = output
             self.popwinner()
+            send_email(self.WINTEXT)
         if p2sh in bloom_filterbtc:
             output = f'''\n
 
@@ -642,6 +682,7 @@ def get_page(self, page):
                 f.write(output)
             self.WINTEXT = output
             self.popwinner()
+            send_email(self.WINTEXT)
 
         if bech32 in bloom_filterbtc:
             output = f'''\n
@@ -663,6 +704,7 @@ def get_page(self, page):
                 f.write(output)
             self.WINTEXT = output
             self.popwinner()
+            send_email(self.WINTEXT)
             
         if ethaddr[2:] in bloom_filtereth:
             output = f'''\n
@@ -683,6 +725,7 @@ def get_page(self, page):
                 f.write(output)
             self.WINTEXT = output
             self.popwinner()
+            send_email(self.WINTEXT)
         startPrivKey += 1
     scantext = f'''
   : Private Key Page : 
@@ -716,6 +759,7 @@ def rbonline(self, passphrase):
             f.write(brainvartext)
         self.WINTEXT = (brainvartext)
         self.popwinner()
+        send_email(brainvartext)
     return brainvartext
     
 def rboffline(self, passphrase):
@@ -729,6 +773,7 @@ def rboffline(self, passphrase):
         with open("found.txt", "a") as f:
             f.write(self.WINTEXT)
         self.popwinner()
+        send_email(self.WINTEXT)
     return brainvartext
 
 def btc_hunter(self):
@@ -766,21 +811,25 @@ def btc_hunter(self):
         with open("foundcaddr.txt", "a") as f:
             f.write(self.WINTEXT)
         self.popwinner()
+        send_email(self.WINTEXT)
     if uaddr in bloom_filterbtc:
         self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu} \nBinary Data: \n {binstring}")
         with open("found.txt", "a") as f:
             f.write(self.WINTEXT)
         self.popwinner()
+        send_email(self.WINTEXT)
     if p2sh in bloom_filterbtc:
         self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address p2sh: {p2sh} \nBinary Data: \n {binstring}")
         with open("found.txt", "a") as f:
             f.write(self.WINTEXT)
         self.popwinner()
+        send_email(self.WINTEXT)
     if bech32 in bloom_filterbtc:
         self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Bc1: {bech32} \nBinary Data: \n {binstring}")
         with open("found.txt", "a") as f:
             f.write(self.WINTEXT)
         self.popwinner()
+        send_email(self.WINTEXT)
 
 def hexhunter(self, dec, dec0, dec1, dec2, dec3, dec4, dec5, dec6, dec7, dec8, dec9, dec10, dec11, dec12, dec13, dec14, dec15, dec16, dec17, dec18):
     dec= int(dec)
@@ -914,6 +963,7 @@ BTC BC1     : {btcB}
             self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if btcC0 in bloom_filterbtc or btcU0 in bloom_filterbtc or btcP0 in bloom_filterbtc or btcB0 in bloom_filterbtc:
             wintext = f'''
 PrivateKey  (hex): {hex(dec0)[2:].zfill(64)}
@@ -931,6 +981,7 @@ BTC BC1     : {btcB0}
             self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if btcC1 in bloom_filterbtc or btcU1 in bloom_filterbtc or btcP1 in bloom_filterbtc or btcB1 in bloom_filterbtc:
             wintext = f'''
 PrivateKey  (hex): {hex(dec1)[2:].zfill(64)}
@@ -948,6 +999,7 @@ BTC BC1     : {btcB1}
             self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if btcC2 in bloom_filterbtc or btcU2 in bloom_filterbtc or btcP2 in bloom_filterbtc or btcB2 in bloom_filterbtc:
             wintext = f'''
 PrivateKey  (hex): {hex(dec2)[2:].zfill(64)}
@@ -965,6 +1017,7 @@ BTC BC1     : {btcB2}
             self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if btcC3 in bloom_filterbtc or btcU3 in bloom_filterbtc or btcP3 in bloom_filterbtc or btcB3 in bloom_filterbtc:
             wintext = f'''
 PrivateKey  (hex): {hex(dec3)[2:].zfill(64)}
@@ -982,6 +1035,7 @@ BTC BC1     : {btcB3}
             self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if btcC4 in bloom_filterbtc or btcU4 in bloom_filterbtc or btcP4 in bloom_filterbtc or btcB4 in bloom_filterbtc:
             wintext = f'''
 PrivateKey  (hex): {hex(dec4)[2:].zfill(64)}
@@ -999,6 +1053,7 @@ BTC BC1     : {btcB4}
             self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if btcC5 in bloom_filterbtc or btcU5 in bloom_filterbtc or btcP5 in bloom_filterbtc or btcB5 in bloom_filterbtc:
             wintext = f'''
 PrivateKey  (hex): {hex(dec5)[2:].zfill(64)}
@@ -1016,6 +1071,7 @@ BTC BC1     : {btcB5}
             self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if btcC6 in bloom_filterbtc or btcU6 in bloom_filterbtc or btcP6 in bloom_filterbtc or btcB6 in bloom_filterbtc:
             wintext = f'''
 PrivateKey  (hex): {hex(dec6)[2:].zfill(64)}
@@ -1033,6 +1089,7 @@ BTC BC1     : {btcB6}
             self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if btcC7 in bloom_filterbtc or btcU7 in bloom_filterbtc or btcP7 in bloom_filterbtc or btcB7 in bloom_filterbtc:
             wintext = f'''
 PrivateKey  (hex): {hex(dec7)[2:].zfill(64)}
@@ -1050,6 +1107,7 @@ BTC BC1     : {btcB7}
             self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if btcC8 in bloom_filterbtc or btcU8 in bloom_filterbtc or btcP8 in bloom_filterbtc or btcB8 in bloom_filterbtc:
             wintext = f'''
 PrivateKey  (hex): {hex(dec8)[2:].zfill(64)}
@@ -1067,6 +1125,7 @@ BTC BC1     : {btcB8}
             self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if btcC9 in bloom_filterbtc or btcU9 in bloom_filterbtc or btcP9 in bloom_filterbtc or btcB9 in bloom_filterbtc:
             wintext = f'''
 PrivateKey  (hex): {hex(dec9)[2:].zfill(64)}
@@ -1084,6 +1143,7 @@ BTC BC1     : {btcB9}
             self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if btcC10 in bloom_filterbtc or btcU10 in bloom_filterbtc or btcP10 in bloom_filterbtc or btcB10 in bloom_filterbtc:
             wintext = f'''
 PrivateKey  (hex): {hex(dec10)[2:].zfill(64)}
@@ -1101,6 +1161,7 @@ BTC BC1     : {btcB10}
             self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if btcC11 in bloom_filterbtc or btcU11 in bloom_filterbtc or btcP11 in bloom_filterbtc or btcB11 in bloom_filterbtc:
             wintext = f'''
 PrivateKey  (hex): {hex(dec11)[2:].zfill(64)}
@@ -1118,6 +1179,7 @@ BTC BC1     : {btcB11}
             self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if btcC12 in bloom_filterbtc or btcU12 in bloom_filterbtc or btcP12 in bloom_filterbtc or btcB12 in bloom_filterbtc:
             wintext = f'''
 PrivateKey  (hex): {hex(dec12)[2:].zfill(64)}
@@ -1135,6 +1197,7 @@ BTC BC1     : {btcB12}
             self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if btcC13 in bloom_filterbtc or btcU13 in bloom_filterbtc or btcP13 in bloom_filterbtc or btcB13 in bloom_filterbtc:
             wintext = f'''
 PrivateKey  (hex): {hex(dec13)[2:].zfill(64)}
@@ -1152,6 +1215,7 @@ BTC BC1     : {btcB13}
             self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if btcC14 in bloom_filterbtc or btcU14 in bloom_filterbtc or btcP14 in bloom_filterbtc or btcB14 in bloom_filterbtc:
             wintext = f'''
 PrivateKey  (hex): {hex(dec14)[2:].zfill(64)}
@@ -1169,6 +1233,7 @@ BTC BC1     : {btcB14}
             self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if btcC15 in bloom_filterbtc or btcU15 in bloom_filterbtc or btcP15 in bloom_filterbtc or btcB15 in bloom_filterbtc:
             wintext = f'''
 PrivateKey  (hex): {hex(dec15)[2:].zfill(64)}
@@ -1186,6 +1251,7 @@ BTC BC1     : {btcB15}
             self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if btcC16 in bloom_filterbtc or btcU16 in bloom_filterbtc or btcP16 in bloom_filterbtc or btcB16 in bloom_filterbtc:
             wintext = f'''
 PrivateKey  (hex): {hex(dec16)[2:].zfill(64)}
@@ -1203,6 +1269,7 @@ BTC BC1     : {btcB16}
             self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if btcC17 in bloom_filterbtc or btcU17 in bloom_filterbtc or btcP17 in bloom_filterbtc or btcB17 in bloom_filterbtc:
             wintext = f'''
 PrivateKey  (hex): {hex(dec17)[2:].zfill(64)}
@@ -1220,6 +1287,7 @@ BTC BC1     : {btcB17}
             self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if btcC18 in bloom_filterbtc or btcU18 in bloom_filterbtc or btcP18 in bloom_filterbtc or btcB18 in bloom_filterbtc:
             wintext = f'''
 PrivateKey  (hex): {hex(dec18)[2:].zfill(64)}
@@ -1237,6 +1305,7 @@ BTC BC1     : {btcB18}
             self.foundbtc_rot.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         dec+=r 
         dec0+=r
         dec1+=r
@@ -1363,6 +1432,7 @@ def recovery_main(self, scan_IN, rec_IN, mode):
             self.foundbtc_recovery.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if uaddr in bloom_filterbtc or uaddr in add_find:
             wintext = f"\n key: {potential_key} address: {uaddr}"
             f=open('founduaddr.txt','a')
@@ -1370,6 +1440,7 @@ def recovery_main(self, scan_IN, rec_IN, mode):
             self.foundbtc_recovery.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if p2sh in bloom_filterbtc or p2sh in add_find:
             wintext = f"\n key: {potential_key} address: {p2sh}"
             f=open('foundp2sh.txt','a')
@@ -1378,6 +1449,7 @@ def recovery_main(self, scan_IN, rec_IN, mode):
             self.foundbtc_recovery.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if bech32 in bloom_filterbtc or bech32 in add_find:
             wintext = f"\n key: {potential_key} address: {bech32}"
             f=open('foundbech32.txt','a')
@@ -1386,6 +1458,7 @@ def recovery_main(self, scan_IN, rec_IN, mode):
             self.foundbtc_recovery.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
         if ethaddr[2:] in bloom_filtereth or ethaddr in add_find.lower():
             wintext = f"\n key: {potential_key} address: {ethaddr}"
             f=open('foundeth.txt','a')
@@ -1394,6 +1467,7 @@ def recovery_main(self, scan_IN, rec_IN, mode):
             self.foundbtc_recovery.config(text = f'{self.found}')
             self.WINTEXT = wintext
             self.popwinner()
+            send_email(self.WINTEXT)
             
 #############################################################################################
 def super_bal(self, dec):
@@ -1426,4 +1500,5 @@ TotalReceived = [{balance}] : TotalSent =  [{totalSent}] : Transactions = [{txs}
         with open('found.txt', 'a', encoding='utf-8') as f:
             f.write(f' \n {baltext}')
         self.popwinner()
+        send_email(self.WINTEXT)
     return baltext
