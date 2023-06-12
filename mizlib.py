@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 06.02.2023 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 12.06.2023 https://t.me/CryptoCrackersUK
 import hmac, struct, codecs, sys, os, binascii, hashlib
 import webbrowser
 import random
@@ -16,7 +16,7 @@ import smtplib
 try:
     import base58
     import ecdsa
-    from bloomfilter import BloomFilter, ScalableBloomFilter, SizeGrowthRate
+    from bloomfilter import BloomFilter
     import requests
     import bit
     from bit import Key
@@ -36,7 +36,7 @@ except ImportError:
     subprocess.check_call(["python", '-m', 'pip', 'install', 'trotter'])
     import base58
     import ecdsa
-    from bloomfilter import BloomFilter, ScalableBloomFilter, SizeGrowthRate
+    from bloomfilter import BloomFilter
     import requests
     import bit
     from bit import Key
@@ -44,8 +44,8 @@ except ImportError:
     import numpy as np
     import trotter
 
-gmail_user = 'youremail'
-gmail_password = 'youremailpassword'
+gmail_user = 'youremail@gmail.com'
+gmail_password = 'app password'
 
 def send_email(message_in):
     sent_from = gmail_user
@@ -90,14 +90,17 @@ sub_details = None
 extranonce1 = None
 extranonce2_size = None
     
-with open('puzzle.bf', "rb") as fp:
+with open('btc.bf', "rb") as fp:
     bloom_filterbtc = BloomFilter.load(fp)
 
 with open('eth.bf', "rb") as fp:
     bloom_filtereth = BloomFilter.load(fp)
+
+with open('eth1.bf', "rb") as fp:
+    bloom_filtereth1 = BloomFilter.load(fp)
     
 def countadd():
-    addr_count = len(bloom_filterbtc) + len(bloom_filtereth)
+    addr_count = len(bloom_filterbtc) + len(bloom_filtereth) + len(bloom_filtereth1)
     addr_count_print = (f'Total BTC & ETH Addresses Loaded and Checking : {addr_count}')
     return addr_count_print
 
@@ -523,7 +526,7 @@ def rwoffline(self, mnem):
                 f.write(self.WINTEXT)
             self.popwinner()
             send_email(self.WINTEXT)
-        if ethaddr[2:] in bloom_filtereth:
+        if ethaddr[2:] in bloom_filtereth or ethaddr[2:] in bloom_filtereth1:
             self.found+=1
             self.foundword.config(text = f'{self.found}')
             self.WINTEXT = f'\n Mnemonic: {mnem} \n ETH {epath} : {ethaddr}\n Decimal Private Key \n {dec4} \n Hexadecimal Private Key \n {HEX4} \n'
@@ -580,7 +583,7 @@ def brute_btc(self, dec):
             result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address bech32: {bech32}')
         self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address bech32: {bech32}")
         self.popwinner()
-    if ethaddr[2:] in bloom_filtereth:
+    if ethaddr[2:] in bloom_filtereth or ethaddr[2:] in bloom_filtereth1:
         self.bfr.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address bech32: {bech32}')
         self.found+=1
         self.foundbtc.config(text = f'{self.found}')
@@ -607,9 +610,7 @@ def brute_btc(self, dec):
     return scantext
 
 def get_page(self, page):
-    #max = 904625697166532776746648320380374280100293470930272690489102837043110636675
     num = page
-
     startPrivKey = (page - 1) * 128 + 1
     for i in range(0, 128):
         dec = int(startPrivKey)
@@ -706,7 +707,7 @@ def get_page(self, page):
             self.popwinner()
             send_email(self.WINTEXT)
             
-        if ethaddr[2:] in bloom_filtereth:
+        if ethaddr[2:] in bloom_filtereth or ethaddr[2:] in bloom_filtereth1:
             output = f'''\n
 
   : Private Key Page : {num}
@@ -807,25 +808,25 @@ def btc_hunter(self):
     self.bech32string_update.config(text = bech32)
     self.bech32string_update.update()
     if caddr in bloom_filterbtc:
-        self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc} \nBinary Data: \n {binstring}")
+        self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Compressed: {caddr} \nWIF Compressed: {wifc} \nBinary Data: \n {binstring} \n")
         with open("foundcaddr.txt", "a") as f:
             f.write(self.WINTEXT)
         self.popwinner()
         send_email(self.WINTEXT)
     if uaddr in bloom_filterbtc:
-        self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu} \nBinary Data: \n {binstring}")
+        self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Uncompressed: {uaddr} \nWIF Uncompressed: {wifu} \nBinary Data: \n {binstring} \n")
         with open("found.txt", "a") as f:
             f.write(self.WINTEXT)
         self.popwinner()
         send_email(self.WINTEXT)
     if p2sh in bloom_filterbtc:
-        self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address p2sh: {p2sh} \nBinary Data: \n {binstring}")
+        self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address p2sh: {p2sh} \nBinary Data: \n {binstring} \n")
         with open("found.txt", "a") as f:
             f.write(self.WINTEXT)
         self.popwinner()
         send_email(self.WINTEXT)
     if bech32 in bloom_filterbtc:
-        self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Bc1: {bech32} \nBinary Data: \n {binstring}")
+        self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address Bc1: {bech32} \nBinary Data: \n {binstring} \n")
         with open("found.txt", "a") as f:
             f.write(self.WINTEXT)
         self.popwinner()
@@ -1336,30 +1337,28 @@ def complete_key(rec_IN_string, missing_letters):
 
 def btc_address_from_private_key(my_secret, secret_type):
     assert secret_type in ['WIF', 'HEX', 'DEC', 'mnemonic']
-    match secret_type:
-        case 'WIF':
-            if my_secret.startswith('5H') or my_secret.startswith('5J') or my_secret.startswith('5K') or my_secret.startswith('K') or my_secret.startswith('L'):
-                if my_secret.startswith('5H') or my_secret.startswith('5J') or my_secret.startswith('5K'):
-                    first_encode = base58.b58decode(my_secret)
-                    private_key_full = binascii.hexlify(first_encode)
-                    private_key = private_key_full[2:-8]
-                    private_key_hex = private_key.decode("utf-8")
-                    dec = int(private_key_hex,16)
-                elif my_secret.startswith('K') or my_secret.startswith('L'):
-                    first_encode = base58.b58decode(my_secret)
-                    private_key_full = binascii.hexlify(first_encode)
-                    private_key = private_key_full[2:-8]
-                    private_key_hex = private_key.decode("utf-8")
-                    dec = int(private_key_hex[0:64],16)
-        case 'HEX':
-            dec = int(my_secret[0:64],16)
-        case 'mnemonic':
-            raise "Mnemonic secrets not implemented"
-        case 'DEC':
-            dec = int(my_secret)
-        case _:
-            raise "I don't know how to handle this type."
-
+    if secret_type == 'WIF':
+        if my_secret.startswith('5H') or my_secret.startswith('5J') or my_secret.startswith('5K') or my_secret.startswith('K') or my_secret.startswith('L'):
+            if my_secret.startswith('5H') or my_secret.startswith('5J') or my_secret.startswith('5K'):
+                first_encode = base58.b58decode(my_secret)
+                private_key_full = binascii.hexlify(first_encode)
+                private_key = private_key_full[2:-8]
+                private_key_hex = private_key.decode("utf-8")
+                dec = int(private_key_hex, 16)
+            elif my_secret.startswith('K') or my_secret.startswith('L'):
+                first_encode = base58.b58decode(my_secret)
+                private_key_full = binascii.hexlify(first_encode)
+                private_key = private_key_full[2:-8]
+                private_key_hex = private_key.decode("utf-8")
+                dec = int(private_key_hex[0:64], 16)
+    elif secret_type == 'HEX':
+        dec = int(my_secret[0:64], 16)
+    elif secret_type == 'mnemonic':
+        pass
+    elif secret_type == 'DEC':
+        dec = int(my_secret)
+    else:
+        raise Exception("I don't know how to handle this type.")
     return dec
 
 def recovery_main(self, scan_IN, rec_IN, mode):
@@ -1369,17 +1368,16 @@ def recovery_main(self, scan_IN, rec_IN, mode):
     recoverytext = f'Looking for {missing_length} characters in {rec_IN}'
     self.labelWIF1.config(text = recoverytext)
     self.labelWIF1.update()
-    match scan_IN:
-        case 'WIF':
+    if scan_IN == 'WIF':
             secret_type = 'WIF'
             allowed_characters = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
-        case 'HEX':
+    elif scan_IN == 'HEX':
             secret_type = 'HEX'
             allowed_characters = '0123456789abcdef'
-        case 'DEC':
+    elif scan_IN == 'DEC':
             secret_type = 'DEC'
             allowed_characters = '0123456789'
-        case _:
+    elif scan_IN == 'mnemonic':
             secret_type = 'mnemonic'
             allowed_characters = wordlist
 
@@ -1402,16 +1400,16 @@ def recovery_main(self, scan_IN, rec_IN, mode):
         if secret_type == 'mnemonic':
             seed = mnem_to_seed(potential_key)
             for i in range (1,5):
-                pvk = bip39seed_to_private_key(seed, 1)
-                pvk2 = bip39seed_to_private_key2(seed, 1)
-                pvk3 = bip39seed_to_private_key3(seed, 1)
+                pvk = bip39seed_to_private_key(seed, i)
+                pvk2 = bip39seed_to_private_key2(seed, i)
+                pvk3 = bip39seed_to_private_key3(seed, i)
                 pvk4 = bip39seed_to_private_key4(seed, i)
                 caddr = ice.privatekey_to_address(0, True, (int.from_bytes(pvk, "big")))
                 uaddr = ice.privatekey_to_address(0, False, (int.from_bytes(pvk, "big")))
                 p2sh = ice.privatekey_to_address(1, True, (int.from_bytes(pvk2, "big")))
                 bech32 = ice.privatekey_to_address(2, True, (int.from_bytes(pvk3, "big")))
                 ethaddr = ice.privatekey_to_ETH_address(int.from_bytes(pvk4, "big"))
-                print(f" Path m/44'/60'/0'/0/{i} mnemonic: {potential_key}", end='\r')
+                #print(f" Path m/44'/60'/0'/0/{i} mnemonic: {potential_key}", end='\r')
         else:
             dec = btc_address_from_private_key(potential_key, secret_type=secret_type)
             uaddr = ice.privatekey_to_address(0, False, dec)
@@ -1459,7 +1457,7 @@ def recovery_main(self, scan_IN, rec_IN, mode):
             self.WINTEXT = wintext
             self.popwinner()
             send_email(self.WINTEXT)
-        if ethaddr[2:] in bloom_filtereth or ethaddr in add_find.lower():
+        if ethaddr[2:] in bloom_filtereth or ethaddr[2:] in bloom_filtereth1 or ethaddr in add_find.lower():
             wintext = f"\n key: {potential_key} address: {ethaddr}"
             f=open('foundeth.txt','a')
             f.write(wintext)
