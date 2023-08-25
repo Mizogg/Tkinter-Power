@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 12.06.2023 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 25.08.2023 https://t.me/CryptoCrackersUK
 import hmac, struct, codecs, sys, os, binascii, hashlib
 import webbrowser
 import random
@@ -95,12 +95,9 @@ with open('btc.bf', "rb") as fp:
 
 with open('eth.bf', "rb") as fp:
     bloom_filtereth = BloomFilter.load(fp)
-
-with open('eth1.bf', "rb") as fp:
-    bloom_filtereth1 = BloomFilter.load(fp)
     
 def countadd():
-    addr_count = len(bloom_filterbtc) + len(bloom_filtereth) + len(bloom_filtereth1)
+    addr_count = len(bloom_filterbtc) + len(bloom_filtereth)
     addr_count_print = (f'Total BTC & ETH Addresses Loaded and Checking : {addr_count}')
     return addr_count_print
 
@@ -526,7 +523,7 @@ def rwoffline(self, mnem):
                 f.write(self.WINTEXT)
             self.popwinner()
             send_email(self.WINTEXT)
-        if ethaddr[2:] in bloom_filtereth or ethaddr[2:] in bloom_filtereth1:
+        if ethaddr[2:] in bloom_filtereth :
             self.found+=1
             self.foundword.config(text = f'{self.found}')
             self.WINTEXT = f'\n Mnemonic: {mnem} \n ETH {epath} : {ethaddr}\n Decimal Private Key \n {dec4} \n Hexadecimal Private Key \n {HEX4} \n'
@@ -583,7 +580,7 @@ def brute_btc(self, dec):
             result.write(f'\n Instance: Bruteforce \n DEC Key: {dec}\n Bits {length} \n HEX Key: {HEX} \nBTC Address bech32: {bech32}')
         self.WINTEXT = (f"DEC Key: {dec}\nHEX Key: {HEX} \nBTC Address bech32: {bech32}")
         self.popwinner()
-    if ethaddr[2:] in bloom_filtereth or ethaddr[2:] in bloom_filtereth1:
+    if ethaddr[2:] in bloom_filtereth:
         self.bfr.config(text = f' WINNER WINNER Check found.txt \n Instance: Bruteforce \n DEC Key: {dec} Bits {length} \n HEX Key: {HEX} \nBTC Address bech32: {bech32}')
         self.found+=1
         self.foundbtc.config(text = f'{self.found}')
@@ -707,7 +704,7 @@ def get_page(self, page):
             self.popwinner()
             send_email(self.WINTEXT)
             
-        if ethaddr[2:] in bloom_filtereth or ethaddr[2:] in bloom_filtereth1:
+        if ethaddr[2:] in bloom_filtereth:
             output = f'''\n
 
   : Private Key Page : {num}
@@ -1457,7 +1454,7 @@ def recovery_main(self, scan_IN, rec_IN, mode):
             self.WINTEXT = wintext
             self.popwinner()
             send_email(self.WINTEXT)
-        if ethaddr[2:] in bloom_filtereth or ethaddr[2:] in bloom_filtereth1 or ethaddr in add_find.lower():
+        if ethaddr[2:] in bloom_filtereth or ethaddr in add_find.lower():
             wintext = f"\n key: {potential_key} address: {ethaddr}"
             f=open('foundeth.txt','a')
             f.write(wintext)
