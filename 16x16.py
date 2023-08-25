@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Created by @Mizogg 02.01.2023 https://t.me/CryptoCrackersUK
+#Created by @Mizogg 25.08.2023 https://t.me/CryptoCrackersUK
 import random, sys, os
 from tkinter import *
 from tkinter import ttk
@@ -77,7 +77,7 @@ class App:
         self.BH16x16 = Tk()
         self.BH16x16.title('BitcoinHunter 16x16.py')
         #self.BH16x16.iconbitmap('images/miz.ico')
-        self.BH16x16.geometry("1160x780")
+        self.BH16x16.geometry("1260x760")
         self.BH16x16.menubar = Menu(self.BH16x16)
         self.BH16x16.filemenu = Menu(self.BH16x16.menubar, tearoff=0)
         self.BH16x16.filemenu.add_separator()
@@ -94,7 +94,7 @@ class App:
         self.jump_increment_var.set(self.jump_increments[0])
         self.my_notebook = ttk.Notebook(self.BH16x16)
         self.my_notebook.pack(pady=5)
-        self.main_frame = Frame(self.my_notebook, width=1140, height=760)
+        self.main_frame = Frame(self.my_notebook, width=1040, height=740)
         self.about_frame = Frame(self.my_notebook, width=840, height=720)
         self.main_frame.pack(fill="both", expand=1)
         self.about_frame.pack(fill="both", expand=1)
@@ -105,6 +105,10 @@ class App:
         self.canvas.bind('<Button-1>', self.canvas_click)
         self.content1 = Frame(self.main_frame, padding=(3))
         self.content1.grid(row =0, column=7)
+        widget_Logo = "BitcoinHunter 16x16.py "
+        self.widget_Logo = tkinter.Label(self.BH16x16, compound='top', text =widget_Logo, font=("Arial",16),bg="#F0F0F0",fg="purple").place(x=60,y=50)
+        widget_text = "mizogg.co.uk © MIZOGG 2018 - 2023"
+        self.widget_text = tkinter.Label(self.BH16x16, compound='top', text =widget_text, font=("Arial",12),bg="#F0F0F0",fg="red").place(x=340,y=50)
         self.lbl_edt_seed_ratio = Label(self.main_frame, text='Seed Ratio % start On ')
         self.lbl_edt_seed_ratio.grid(row=1, column=0, sticky=E)
         self.edt_seed_ratio = tkinter.Entry(self.main_frame, width=4, fg='red')
@@ -201,6 +205,7 @@ class App:
         self.btn_start_jump_backward.grid(row=4, column=1)
         self.btn_stop_jump_backward = tkinter.Button(self.main_frame, text='Stop Jump Backward', command=self.stop_jump_backward, fg='red')
         self.btn_stop_jump_backward.grid(row=4, column=2)
+        
 
     def start_jump_forward(self):
         self.jump_forward_active = True
